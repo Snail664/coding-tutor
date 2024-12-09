@@ -1,0 +1,77 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    auth0_sid            String  @unique
+    auth0_sub            String  @unique
+    auth0_given_name     String?
+    auth0_family_name    String?
+    auth0_name           String?
+    auth0_picture        String?
+    auth0_email          String?
+    auth0_email_verified Boolean @default(false)
+    id                   Int     @id @default(autoincrement())
+    chats                Chat[]
+}
+
+model Chat {
+    id          Int           @id @default(autoincrement())
+    dateStarted DateTime      @default(now())
+    messages    ChatMessage[]
+    userId      Int
+    user        User          @relation(fields: [userId], references: [id])
+}
+
+model ChatMessage {
+    id      Int    @id @default(autoincrement())
+    chatId  Int
+    chat    Chat   @relation(fields: [chatId], references: [id])
+    role    String
+    content String
+}
+
+enum QuestionDifficulty {
+    easy
+    medium
+    hard
+}
+
+model Question {
+    id            Int                @id @default(autoincrement())
+    name          String             @unique
+    difficulty    QuestionDifficulty
+    content       String
+    templateCodes TemplateCode[]
+    testCases     TestCase[]
+}
+
+enum LanguageName {
+    javascript
+    python
+    typescript
+    java
+    cpp
+}
+
+model TemplateCode {
+    id         Int          @id @default(autoincrement())
+    code       String
+    language   LanguageName
+    questionId Int
+    question   Question     @relation(fields: [questionId], references: [id])
+}
+
+model TestCase {
+    id             Int      @id @default(autoincrement())
+    input          String
+    expectedOutput String
+    description    String
+    questionId     Int
+    question       Question @relation(fields: [questionId], references: [id])
+}

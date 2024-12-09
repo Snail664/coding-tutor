@@ -2,16 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --menuBackground: #eeeeee;
+  --primary: #171717;
+  --contentBackground: #f4f4f4;
+  --radius: 0.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #0F0F0F;
+  --foreground: #ededed;
+  --menuBackground: #333333;
+  --primary: #ededed;
+  --contentBackground: #1E1E1E;
+  --radius: 0.5rem;
 }
 
 body {
@@ -20,8 +29,18 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
