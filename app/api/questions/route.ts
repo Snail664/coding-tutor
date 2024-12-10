@@ -10,7 +10,9 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(questions);
+    const response = NextResponse.json(questions);
+    response.headers.set("Cache-Control", "no-store");
+    return response;
   } catch (error) {
     console.error("Error fetching questions:", error);
     return NextResponse.json({ error: "Internal server error" });

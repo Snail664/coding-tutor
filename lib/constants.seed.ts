@@ -1,21 +1,15 @@
 import { LanguageName, QuestionDifficulty, QuestionT } from "./types";
-// import { readFileSync } from "fs";
-// import { join } from "path";
-import PurchaseTicketsContent from "../assets/questions/PurchaseTickets.md";
-import BrokenFirewallContent from "../assets/questions/BrokenFirewall.md";
-import HotelDoorCodeContent from "../assets/questions/HotelDoorCode.md";
-import ClosestStarSystemsContent from "../assets/questions/ClosestStarSystems.md";
-import BusyMoonRoversContent from "../assets/questions/BusyMoonRovers.md";
-import TimeToPlayFairContent from "../assets/questions/TimeToPlayFair.md";
-import ThePurgeContent from "../assets/questions/ThePurge.md";
-import ConnectingCitiesContent from "../assets/questions/ConnectingCities.md";
-import MiningTunnelsContent from "../assets/questions/MiningTunnels.md";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 export const QUESTIONS: QuestionT[] = [
   {
     name: "Purchase Tickets",
     difficulty: QuestionDifficulty.Easy,
-    content: PurchaseTicketsContent,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/PurchaseTickets.md"),
+      "utf8"
+    ),
     testCases: [
       {
         input: [
@@ -56,56 +50,80 @@ export const QUESTIONS: QuestionT[] = [
   {
     name: "Broken Firewall",
     difficulty: QuestionDifficulty.Medium,
-    content: BrokenFirewallContent,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/BrokenFirewall.md"),
+      "utf-8"
+    ),
     templateCodes: [],
     testCases: [],
   },
   {
     name: "Hotel Door Code",
     difficulty: QuestionDifficulty.Hard,
-    content: HotelDoorCodeContent,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/HotelDoorCode.md"),
+      "utf-8"
+    ),
     templateCodes: [],
     testCases: [],
   },
   {
     name: "Closest Star Systems",
     difficulty: QuestionDifficulty.Hard,
-    content: ClosestStarSystemsContent,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/ClosestStarSystems.md"),
+      "utf-8"
+    ),
     templateCodes: [],
     testCases: [],
   },
   {
     name: "Busy Moon Rovers",
     difficulty: QuestionDifficulty.Hard,
-    content: BusyMoonRoversContent,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/BusyMoonRovers.md"),
+      "utf-8"
+    ),
     templateCodes: [],
     testCases: [],
   },
   {
     name: "Time To Play Fair",
     difficulty: QuestionDifficulty.Hard,
-    content: TimeToPlayFairContent,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/TimeToPlayFair.md"),
+      "utf-8"
+    ),
     templateCodes: [],
     testCases: [],
   },
   {
     name: "The Purge",
     difficulty: QuestionDifficulty.Hard,
-    content: ThePurgeContent,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/ThePurge.md"),
+      "utf-8"
+    ),
     templateCodes: [],
     testCases: [],
   },
   {
     name: "Connecting Cities",
     difficulty: QuestionDifficulty.Hard,
-    content: ConnectingCitiesContent,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/ConnectingCities.md"),
+      "utf-8"
+    ),
     templateCodes: [],
     testCases: [],
   },
   {
     name: "Mining Tunnels",
     difficulty: QuestionDifficulty.Hard,
-    content: MiningTunnelsContent,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/MiningTunnels.md"),
+      "utf-8"
+    ),
     templateCodes: [],
     testCases: [],
   },
