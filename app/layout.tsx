@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import "./markdown.css";
-import { ThemeProvider } from "next-themes";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
+import Providers from "./providers";
 
 const geistSans = localFont({
   src: "../assets/fonts/GeistVF.woff",
@@ -23,21 +22,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  const theme = "light";
+}) {
   return (
     <html lang="en">
-      <UserProvider>
-        <ThemeProvider attribute="class" defaultTheme="dark">
-          <body
-            className={`${theme} ${geistSans.variable} ${geistMono.variable} antialiased min-h-[800px] min-w-[1024px]`}
-          >
-            {children}
-          </body>
-        </ThemeProvider>
-      </UserProvider>
+      <Providers>
+        <body
+          className={`$${geistSans.variable} ${geistMono.variable} antialiased min-h-[800px] min-w-[1024px]`}
+        >
+          {children}
+        </body>
+      </Providers>
     </html>
   );
 }
