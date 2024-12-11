@@ -42,8 +42,6 @@ export default function Page() {
     }
   }, [user, isLoading, dispatch]);
 
-  console.log("auth user: ", authUser);
-
   return (
     <div
       style={{

@@ -25,7 +25,6 @@ export async function POST(request: Request) {
 
   try {
     const { chatId, messages } = await request.json();
-    console.log("api data: ", chatId, messages);
 
     // Validate the presence of required fields
     if (!chatId || !Array.isArray(messages) || messages.length === 0) {

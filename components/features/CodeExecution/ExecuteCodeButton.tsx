@@ -24,7 +24,6 @@ export default function ExecuteCodeButton() {
     const runner = RunnerFactory.getRunner(programmingLanguage.name);
     const completeCode = runner.prepareCode(sourceCode, question.testCases);
     const result = await runner.runCode(completeCode);
-    console.log("coming result: ", result);
     dispatch(setCodeExecuteResponse(result));
     setLoading(false);
   };

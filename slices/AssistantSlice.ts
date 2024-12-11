@@ -26,10 +26,6 @@ async function ensureChatExists(
     assistant: { chatId },
   } = state;
 
-  console.log("question: ", question);
-  console.log("previousQuestion: ", previousQuestion);
-  console.log("chatId: ", chatId);
-
   if (!chatId || previousQuestion?.name !== question?.name) {
     const response = await apiClient.post("/chat/create", {
       messages: [
@@ -77,7 +73,6 @@ export const getHintThunk = createAsyncThunk<
     const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
     const audioBlob = new Blob([bytes], { type: "audio/mpeg" });
     const audioUrl = URL.createObjectURL(audioBlob);
-    console.log("here 1");
     // Perform the chat/add-message call in the background
     (async () => {
       try {
@@ -93,7 +88,6 @@ export const getHintThunk = createAsyncThunk<
       }
     })();
 
-    console.log("here 2");
     return { audioUrl, textHint };
   } catch (error: any) {
     console.error("Error in getHintThunk:", error);

@@ -5,7 +5,6 @@ import { NextRequest } from "next/server";
 
 const afterCallback = async (req: NextRequest, session: Session) => {
   // state param omitted from function signature
-  console.log("afterCallback: ", session.user);
   const userFields = {
     auth0_sid: session.user.sid,
     auth0_sub: session.user.sub,
@@ -19,12 +18,11 @@ const afterCallback = async (req: NextRequest, session: Session) => {
 
   // create or update user in database
   try {
-    const user = await prisma.user.upsert({
+    await prisma.user.upsert({
       where: { auth0_sid: session.user.sid },
       update: userFields,
       create: userFields,
     });
-    console.log("user: ", user);
     return session;
   } catch (error) {
     console.error("Error in afterCallback:", error);

@@ -11,12 +11,14 @@ export async function GET() {
 // Handle POST requests (if needed)
 export async function POST(request: Request) {
   const data = await request.json();
-  console.log('coming: ', data)
-  const pistonResponse = await axios.post("https://emkc.org/api/v2/piston/execute", {
+  const pistonResponse = await axios.post(
+    "https://emkc.org/api/v2/piston/execute",
+    {
       language: data["language"],
-      version: data['version'],
+      version: data["version"],
       files: [{ name: "script", content: data["code"] }],
-    });
+    }
+  );
 
   return NextResponse.json(pistonResponse.data);
 }

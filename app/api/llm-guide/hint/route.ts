@@ -19,11 +19,9 @@ interface HintRequestData {
   testCases: TestResult[];
 }
 
-
 // Handle POST requests (if needed)
 export async function POST(request: Request) {
   const data: HintRequestData = await request.json();
-  console.log("debug data", data);
 
   const completion = await openai.chat.completions.create({
     model: "gpt-4o",
@@ -48,18 +46,17 @@ export async function POST(request: Request) {
   const audioBlob = await speechResponse.blob();
   const arrayBuffer = await audioBlob.arrayBuffer();
   const byteArray = new Uint8Array(arrayBuffer);
-  
+
   let binaryString = "";
   for (let i = 0; i < byteArray.length; i++) {
     binaryString += String.fromCharCode(byteArray[i]);
   }
   const base64Audio = btoa(binaryString);
-  
+
   return NextResponse.json({
     textHint: hintText,
     audioHintBase64: base64Audio,
   });
-  
 }
 
 function get_hint_user_prompt(code: string, testCases: TestResult[]) {
@@ -68,14 +65,18 @@ function get_hint_user_prompt(code: string, testCases: TestResult[]) {
 ${code}
 
 !!<<Test Cases>>!!
-${testCases.map(testCase => `
+${testCases
+  .map(
+    (testCase) => `
 description: ${testCase.testCase.description}
 input: ${testCase.testCase.input}
 actual: ${testCase.actualOutput}
 passed: ${testCase.passed ? "Passed" : "Failed"}
 error: ${testCase.error}
 expected: ${testCase.testCase.expectedOutput}
-`).join("\n")}
+`
+  )
+  .join("\n")}
 `;
 }
 
@@ -108,12 +109,12 @@ function parse_result(result: OpenAI.Chat.Completions.ChatCompletion) {
   try {
     const content = result.choices[0].message.content;
     if (content) {
-      return JSON.parse(content.slice(8, -4))['hint'];
+      return JSON.parse(content.slice(8, -4))["hint"];
     }
   } catch {
     const content = result.choices[0].message.content;
     if (content) {
-      return JSON.parse(content)['hint'];
+      return JSON.parse(content)["hint"];
     }
   }
 }

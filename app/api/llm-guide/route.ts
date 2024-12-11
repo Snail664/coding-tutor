@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
-import OpenAI from 'openai'
+import OpenAI from "openai";
 
-const OPEN_AI_API_KEY = process.env.OPEN_AI_API_KEY
-const openai = new OpenAI({apiKey: OPEN_AI_API_KEY})
+const OPEN_AI_API_KEY = process.env.OPEN_AI_API_KEY;
+const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
 
 export async function GET() {
   return NextResponse.json({
-    message: "Post to this endpoint to prompt the openai api to get guidance from the LLM",
+    message:
+      "Post to this endpoint to prompt the openai api to get guidance from the LLM",
   });
 }
 
@@ -20,23 +21,17 @@ export async function POST(request: Request) {
     {
       role: "user",
       content: get_gpt_prompt(
-        data['question'].content,
-        data['sourceCode'],
-        data['userAudioTranscript']
+        data["question"].content,
+        data["sourceCode"],
+        data["userAudioTranscript"]
       ),
     },
   ];
-
-  console.log('messages: ', messages);
-
-  console.log('prompt used: ', get_gpt_prompt(data['question'].content, data['sourceCode'], data['userAudioTranscript']));
 
   const completion = await openai.chat.completions.create({
     model: "gpt-4o",
     messages: messages,
   });
-
-  console.log('response: ', completion.choices[0].message.content);
 
   return NextResponse.json({ response: completion.choices[0].message.content });
 }
@@ -56,9 +51,13 @@ const system_prompt = `
     5. When guiding the student, use an instructive and encouraging tone like how a teacher would use with their students
     6. Keep your response short as though you are speaking directly to the user, not writing a full solution.
     7. Do not bombard the students with multiple steps to a solution. Only give one step.
-`
+`;
 
-function get_gpt_prompt(question: string, source_code: string, user_audio_transcript: string) {
+function get_gpt_prompt(
+  question: string,
+  source_code: string,
+  user_audio_transcript: string
+) {
   return `
     !!<<Section 1>>!!
     ${question}

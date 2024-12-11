@@ -22,8 +22,6 @@ export async function POST(request: Request) {
     );
   }
 
-  console.log("coming session: ", session);
-
   try {
     const { messages } = await request.json();
 
