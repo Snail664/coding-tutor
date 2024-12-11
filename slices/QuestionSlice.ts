@@ -12,6 +12,7 @@ export const fetchQuestions = createAsyncThunk(
 );
 
 const initialState = {
+  previousQuestion: null as QuestionT | null,
   question: null as QuestionT | null,
   questionList: [] as QuestionT[],
   status: "idle",
@@ -23,6 +24,7 @@ export const QuestionSlice = createSlice({
   initialState,
   reducers: {
     updateQuestion: (state, action) => {
+      state.previousQuestion = state.question;
       state.question = action.payload;
     },
   },
@@ -34,6 +36,7 @@ export const QuestionSlice = createSlice({
       .addCase(fetchQuestions.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.questionList = action.payload;
+        state.previousQuestion = action.payload[0];
         state.question = action.payload[0]; // Set the first question as the initial question
       })
       .addCase(fetchQuestions.rejected, (state, action) => {

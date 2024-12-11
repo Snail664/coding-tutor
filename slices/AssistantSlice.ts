@@ -10,20 +10,56 @@ interface AssistantState {
   hintLoading: boolean;
   hintError: string;
   chatHistory: MessageT[];
+  chatId: string;
 }
 
 const initialChatHistory: MessageT[] = [];
+
+// Utility function to ensure a chat exists
+async function ensureChatExists(
+  dispatch: any,
+  getState: () => RootState
+): Promise<string> {
+  const state = getState();
+  const {
+    question: { question, previousQuestion },
+    assistant: { chatId },
+  } = state;
+
+  console.log("question: ", question);
+  console.log("previousQuestion: ", previousQuestion);
+  console.log("chatId: ", chatId);
+
+  if (!chatId || previousQuestion?.name !== question?.name) {
+    const response = await apiClient.post("/chat/create", {
+      messages: [
+        {
+          role: "system",
+          content: `Starting chat for question: ${question?.name}`,
+        },
+      ],
+    });
+    const newChatId = response.data.id;
+    dispatch(setChatId(newChatId));
+    return newChatId;
+  }
+  return chatId;
+}
 
 export const getHintThunk = createAsyncThunk<
   { audioUrl: string; textHint: string },
   void,
   { state: RootState }
->("assistant/getHint", async (_, { getState, rejectWithValue }) => {
+>("assistant/getHint", async (_, { getState, dispatch, rejectWithValue }) => {
   try {
+    // Ensure chat exists
+    const validChatId = await ensureChatExists(dispatch, getState);
+
+    const state = getState();
     const {
       question: { question },
       code: { sourceCode, codeExecuteResponse },
-    } = getState();
+    } = state;
 
     const response = await apiClient.post("/llm-guide/hint", {
       question,
@@ -31,19 +67,33 @@ export const getHintThunk = createAsyncThunk<
       testCases: codeExecuteResponse.testCases,
     });
 
-    // response.data should be JSON: { textHint: string, audioHintBase64: string }
     const { textHint, audioHintBase64 } = response.data;
 
     if (!textHint || !audioHintBase64) {
       throw new Error("Missing textHint or audioHintBase64 in response");
     }
 
-    // Convert base64 to binary
     const binary = atob(audioHintBase64);
     const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
     const audioBlob = new Blob([bytes], { type: "audio/mpeg" });
     const audioUrl = URL.createObjectURL(audioBlob);
+    console.log("here 1");
+    // Perform the chat/add-message call in the background
+    (async () => {
+      try {
+        await apiClient.post("/chat/add-message", {
+          chatId: validChatId,
+          messages: [
+            { role: "user", content: "hint button pressed" },
+            { role: "assistant", content: textHint },
+          ],
+        });
+      } catch (error) {
+        console.error("Error adding message to chat:", error);
+      }
+    })();
 
+    console.log("here 2");
     return { audioUrl, textHint };
   } catch (error: any) {
     console.error("Error in getHintThunk:", error);
@@ -55,14 +105,17 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
   { assistantMsg: string; userMsg: string },
   void,
   { state: RootState }
->("assistant/getAssistantFeedback", async (_, { getState }) => {
+>("assistant/getAssistantFeedback", async (_, { getState, dispatch }) => {
+  // Ensure chat exists
+  const validChatId = await ensureChatExists(dispatch, getState);
+
+  const state = getState();
   const {
     question: { question },
     code: { sourceCode, codeExecuteResponse },
     assistant: { userAudioTranscript, chatHistory },
-  } = getState();
+  } = state;
 
-  // Append the new user message to the chat history copy before sending it
   const updatedChatHistory = [
     ...chatHistory,
     { role: "user", content: userAudioTranscript },
@@ -76,8 +129,18 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
     chatHistory: updatedChatHistory,
   });
 
+  const assistantMsg = response.data["response"];
+
+  await apiClient.post("/chat/add-message", {
+    chatId: validChatId,
+    messages: [
+      { role: "user", content: userAudioTranscript },
+      { role: "assistant", content: assistantMsg },
+    ],
+  });
+
   return {
-    assistantMsg: response.data["response"],
+    assistantMsg,
     userMsg: userAudioTranscript,
   };
 });
@@ -89,6 +152,7 @@ const initialState: AssistantState = {
   hintLoading: false,
   hintError: "",
   chatHistory: initialChatHistory,
+  chatId: "",
 };
 
 const AssistantSlice = createSlice({
@@ -100,6 +164,9 @@ const AssistantSlice = createSlice({
     },
     setUserAudioTranscript: (state, action: PayloadAction<string>) => {
       state.userAudioTranscript = action.payload;
+    },
+    setChatId: (state, action: PayloadAction<string>) => {
+      state.chatId = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -133,6 +200,6 @@ const AssistantSlice = createSlice({
   },
 });
 
-export const { setLLMResponse, setUserAudioTranscript } =
+export const { setLLMResponse, setUserAudioTranscript, setChatId } =
   AssistantSlice.actions;
 export default AssistantSlice.reducer;

@@ -28,6 +28,10 @@ export default function QuestionSelector() {
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  if (!question) {
+    return null;
+  }
+
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
