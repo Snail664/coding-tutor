@@ -10,10 +10,12 @@ import {
 import { useAppDispatch, useAppSelector } from "@/store";
 import { getHintThunk } from "@/slices/AssistantSlice";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AssistantWindow() {
   const { user } = useUser();
   const dispatch = useAppDispatch();
+  const { toast } = useToast();
   const {
     LLMResponse,
     userAudioTranscript,
@@ -27,7 +29,10 @@ export default function AssistantWindow() {
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   if (hintError) {
-    alert(hintError);
+    toast({
+      title: "Error",
+      description: hintError,
+    });
   }
 
   const handleSpeechResult = async (e: SpeechRecognitionEvent) => {
@@ -60,12 +65,20 @@ export default function AssistantWindow() {
   };
 
   const onHint = () => {
-    if (!user) return alert("Please login to get hint");
+    if (!user)
+      return toast({
+        title: "Error",
+        description: "Please login to get hint",
+      });
     dispatch(getHintThunk());
   };
 
   const onSend = () => {
-    if (!user) return alert("Please login to send message");
+    if (!user)
+      return toast({
+        title: "Error",
+        description: "Please login to send message",
+      });
     dispatch(getAssistantFeedbackThunk());
   };
 

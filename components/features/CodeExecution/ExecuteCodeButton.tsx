@@ -6,7 +6,7 @@ import { RunnerFactory } from "@/lib/runners";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { setCodeExecuteResponse } from "@/slices/CodeSlice";
 import { useUser } from "@auth0/nextjs-auth0/client";
-
+import { useToast } from "@/hooks/use-toast";
 export default function ExecuteCodeButton() {
   const {
     question: { question },
@@ -16,9 +16,14 @@ export default function ExecuteCodeButton() {
 
   const dispatch = useAppDispatch();
   const { user } = useUser();
+  const { toast } = useToast();
 
   const runCode = async () => {
-    if (!user) return alert("Please login to run code");
+    if (!user)
+      return toast({
+        title: "Error",
+        description: "Please login to run code",
+      });
     if (loading) return;
     setLoading(true);
     const runner = RunnerFactory.getRunner(programmingLanguage.name);
