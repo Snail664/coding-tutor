@@ -20,6 +20,7 @@ export default function AssistantWindow() {
     audioHintUrl,
     hintLoading,
     hintError,
+    LLMFeedbackLoading,
   } = useAppSelector((state) => state.assistant);
 
   const [isRecording, setIsRecording] = useState(false);
@@ -82,6 +83,7 @@ export default function AssistantWindow() {
           onSend={onSend}
           onHint={onHint}
           hintLoading={hintLoading}
+          LLMFeedbackLoading={LLMFeedbackLoading}
         />
         <LLMFeedback LLMResponse={LLMResponse} />
       </div>

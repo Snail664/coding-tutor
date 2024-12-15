@@ -11,6 +11,7 @@ interface AssistantState {
   hintError: string;
   chatHistory: MessageT[];
   chatId: string;
+  LLMFeedbackLoading: boolean;
 }
 
 const initialChatHistory: MessageT[] = [];
@@ -147,6 +148,7 @@ const initialState: AssistantState = {
   hintError: "",
   chatHistory: initialChatHistory,
   chatId: "",
+  LLMFeedbackLoading: false,
 };
 
 const AssistantSlice = createSlice({
@@ -164,33 +166,46 @@ const AssistantSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getAssistantFeedbackThunk.fulfilled, (state, action) => {
-      state.LLMResponse = action.payload.assistantMsg;
-      // Add the user and assistant messages to the chatHistory
-      state.chatHistory.push({ role: "user", content: action.payload.userMsg });
-      state.chatHistory.push({
-        role: "assistant",
-        content: action.payload.assistantMsg,
+    builder
+      .addCase(getAssistantFeedbackThunk.pending, (state) => {
+        state.LLMFeedbackLoading = true;
+      })
+      .addCase(getAssistantFeedbackThunk.fulfilled, (state, action) => {
+        state.LLMResponse = action.payload.assistantMsg;
+        state.chatHistory.push({
+          role: "user",
+          content: action.payload.userMsg,
+        });
+        state.chatHistory.push({
+          role: "assistant",
+          content: action.payload.assistantMsg,
+        });
+        state.LLMFeedbackLoading = false;
+      })
+      .addCase(getAssistantFeedbackThunk.rejected, (state) => {
+        state.LLMFeedbackLoading = false;
+      })
+      .addCase(getHintThunk.pending, (state) => {
+        state.hintLoading = true;
+        state.hintError = "";
+      })
+      .addCase(getHintThunk.fulfilled, (state, action) => {
+        state.hintLoading = false;
+        state.audioHintUrl = action.payload.audioUrl;
+        state.LLMResponse = action.payload.textHint;
+        state.chatHistory.push({
+          role: "user",
+          content: "hint button pressed",
+        });
+        state.chatHistory.push({
+          role: "assistant",
+          content: action.payload.textHint,
+        });
+      })
+      .addCase(getHintThunk.rejected, (state) => {
+        state.hintLoading = false;
+        state.hintError = "Error in generating hint";
       });
-    });
-    builder.addCase(getHintThunk.pending, (state) => {
-      state.hintLoading = true;
-      state.hintError = "";
-    });
-    builder.addCase(getHintThunk.fulfilled, (state, action) => {
-      state.hintLoading = false;
-      state.audioHintUrl = action.payload.audioUrl;
-      state.LLMResponse = action.payload.textHint;
-      state.chatHistory.push({ role: "user", content: "hint button pressed" });
-      state.chatHistory.push({
-        role: "assistant",
-        content: action.payload.textHint,
-      });
-    });
-    builder.addCase(getHintThunk.rejected, (state) => {
-      state.hintLoading = false;
-      state.hintError = "Error in generating hint";
-    });
   },
 });
 

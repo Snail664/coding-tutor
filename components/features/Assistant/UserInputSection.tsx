@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { SendHorizontal } from "lucide-react";
 import RecordButton from "./RecordButton";
 import HintButton from "./HintButton";
+import Loading from "@/components/ui/loading";
 
 interface UserInputSectionProps {
   userAudioTranscript: string;
@@ -14,6 +15,7 @@ interface UserInputSectionProps {
   onSend: () => void;
   onHint: () => void;
   hintLoading: boolean;
+  LLMFeedbackLoading: boolean;
 }
 
 export default function UserInputSection({
@@ -25,7 +27,10 @@ export default function UserInputSection({
   onSend,
   onHint,
   hintLoading,
+  LLMFeedbackLoading,
 }: UserInputSectionProps) {
+  const isAnyLoading = hintLoading || LLMFeedbackLoading;
+
   return (
     <div className="flex-[1] flex-col flex items-center">
       <div className="w-10/12">
@@ -33,7 +38,7 @@ export default function UserInputSection({
           <Input
             placeholder="Ask a question..."
             value={userAudioTranscript}
-            disabled={isRecording}
+            disabled={isRecording || isAnyLoading}
             onChange={(e) => {
               setUserAudioTranscript(e.target.value);
             }}
@@ -42,9 +47,14 @@ export default function UserInputSection({
             isRecording={isRecording}
             startRecording={onRecordStart}
             stopRecording={onRecordStop}
+            disabled={isAnyLoading}
           />
-          <Button onClick={onSend}>
-            <SendHorizontal />
+          <Button onClick={onSend} disabled={isAnyLoading}>
+            {LLMFeedbackLoading ? (
+              <Loading className="h-5 w-5" />
+            ) : (
+              <SendHorizontal />
+            )}
           </Button>
         </div>
 
@@ -55,7 +65,11 @@ export default function UserInputSection({
         </div>
 
         <div className="flex items-center justify-between">
-          <HintButton onClick={onHint} loading={hintLoading} />
+          <HintButton
+            onClick={onHint}
+            loading={hintLoading}
+            disabled={isAnyLoading}
+          />
           <div>unlimited hints left</div>
         </div>
       </div>
