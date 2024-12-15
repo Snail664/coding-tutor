@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BotMessageSquare } from "lucide-react";
 import CollapsiblePanel from "../../layout/CollapsiblePanel";
 import UserInputSection from "./UserInputSection";
@@ -81,6 +81,20 @@ export default function AssistantWindow() {
       });
     dispatch(getAssistantFeedbackThunk());
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.metaKey && event.key === "h") {
+        event.preventDefault();
+        onHint();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [user]);
 
   return (
     <CollapsiblePanel icon={<BotMessageSquare />} title="LLM Assistant">

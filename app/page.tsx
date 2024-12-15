@@ -12,7 +12,8 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { clearUser } from "@/slices/AuthSlice";
 import { setUser } from "@/slices/AuthSlice";
 import { useEffect } from "react";
-
+import NavbarHelpModal from "@/components/features/NavbarHelpModal";
+import NavbarUserModal from "@/components/features/NavbarUserModal";
 export type WindowProps = {
   isCollapsed: boolean;
   setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
@@ -59,14 +60,16 @@ export default function Page() {
         <div>The Coding Tutor</div>
         {/* header right */}
         <div className="flex flex-row gap-2 items-center">
-          {!user && <a href="/api/auth/login">Login</a>}
-          {user && <a href="/api/auth/logout">Logout</a>}
+          <NavbarHelpModal />
           <Button
+            size="icon"
             variant="ghost"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           >
             {theme === "dark" ? <Sun /> : <Moon />}
           </Button>
+          {user && <NavbarUserModal />}
+          {!user && <a href="/api/auth/login">Login</a>}
         </div>
       </div>
       <div

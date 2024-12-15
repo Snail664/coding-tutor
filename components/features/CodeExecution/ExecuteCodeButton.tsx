@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Loading from "@/components/ui/loading";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Play } from "lucide-react";
 import { RunnerFactory } from "@/lib/runners";
 import { useAppSelector, useAppDispatch } from "@/store";
@@ -32,6 +32,20 @@ export default function ExecuteCodeButton() {
     dispatch(setCodeExecuteResponse(result));
     setLoading(false);
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.metaKey && event.key === "r") {
+        event.preventDefault();
+        runCode();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [user]);
 
   return (
     <Button onClick={runCode}>
