@@ -15,6 +15,10 @@ export default function OutputWindow({
 }: OutputWindowProps) {
   return (
     <div className="p-4">
+      <p>
+        Below are compiler errors and user prints to stdout. For test case
+        results, or run-time errors refer to Test Case Window
+      </p>
       {codeError && (
         <pre className="text-red-500 whitespace-pre-wrap">{codeError}</pre>
       )}
