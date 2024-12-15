@@ -22,7 +22,7 @@ export const QUESTIONS: QuestionT[] = [
           "AAA: Discount 3103",
           "DDD: Rebate 967",
         ],
-        expectedOutput: 2454,
+        expectedOutput: 2533,
         description: "",
       },
       {
@@ -34,7 +34,7 @@ export const QUESTIONS: QuestionT[] = [
           "BBB: Fee 9378",
           "AAA: Discount 3103",
         ],
-        expectedOutput: 200,
+        expectedOutput: 3500,
         description: "",
       },
     ],
