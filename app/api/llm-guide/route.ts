@@ -16,7 +16,6 @@ export async function POST(request: Request) {
 
   const messages = [
     { role: "system", content: system_prompt },
-    // Incorporate the entire chat history:
     ...(data.chatHistory || []),
     {
       role: "user",
@@ -33,7 +32,15 @@ export async function POST(request: Request) {
     messages: messages,
   });
 
-  return NextResponse.json({ response: completion.choices[0].message.content });
+  let responseContent = completion.choices[0].message.content;
+  const answerMatch = responseContent?.match(/!!<<Answer>>!!([\s\S]*)/);
+  if (answerMatch && answerMatch[1]) {
+    responseContent = answerMatch[1].trim();
+  } else {
+    console.warn("No !!<Answer>!! found in the response");
+  }
+
+  return NextResponse.json({ response: responseContent });
 }
 
 const system_prompt = `    
