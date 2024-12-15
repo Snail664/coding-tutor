@@ -7,7 +7,17 @@ export const fetchQuestions = createAsyncThunk(
   "questions/fetchQuestions",
   async () => {
     const response = await apiClient.get("/questions");
-    return response.data;
+    const questions = response.data;
+
+    // Parse testCases for each question
+    return questions.map((question: QuestionT) => ({
+      ...question,
+      testCases: question.testCases.map((testCase: any) => ({
+        ...testCase,
+        input: JSON.parse(testCase.input),
+        expectedOutput: JSON.parse(testCase.expectedOutput),
+      })),
+    }));
   }
 );
 
