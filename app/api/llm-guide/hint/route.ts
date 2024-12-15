@@ -1,4 +1,4 @@
-import { TestResult } from "@/lib/types";
+import { QuestionT, TestResult } from "@/lib/types";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
@@ -14,7 +14,7 @@ export async function GET() {
 }
 
 interface HintRequestData {
-  question: string;
+  question: QuestionT;
   sourceCode: string;
   testCases: TestResult[];
 }
@@ -26,7 +26,10 @@ export async function POST(request: Request) {
   const completion = await openai.chat.completions.create({
     model: "gpt-4o",
     messages: [
-      { role: "system", content: get_hint_system_prompt(data["question"]) },
+      {
+        role: "system",
+        content: get_hint_system_prompt(data["question"]["content"]),
+      },
       {
         role: "user",
         content: get_hint_user_prompt(data["sourceCode"], data["testCases"]),
