@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       select: { userId: true },
     });
 
-    if (!chat || chat.userId !== session.user.sid) {
+    if (!chat || chat.userId !== session.user.sub) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

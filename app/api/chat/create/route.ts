@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     // Create a new chat entry
     const chat = await prisma.chat.create({
       data: {
-        userId: session.user.sid,
+        userId: session.user.sub,
         messages: {
           create: messages.map((msg: { role: string; content: string }) => ({
             role: msg.role,

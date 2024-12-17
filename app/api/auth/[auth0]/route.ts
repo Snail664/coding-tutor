@@ -19,7 +19,7 @@ const afterCallback = async (req: NextRequest, session: Session) => {
   // create or update user in database
   try {
     await prisma.user.upsert({
-      where: { auth0_sid: session.user.sid },
+      where: { auth0_sub: session.user.sub },
       update: userFields,
       create: userFields,
     });

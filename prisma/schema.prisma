@@ -8,8 +8,8 @@ datasource db {
 }
 
 model User {
-    auth0_sid            String  @id
-    auth0_sub            String  @unique
+    auth0_sid            String  @unique
+    auth0_sub            String  @id
     auth0_given_name     String?
     auth0_family_name    String?
     auth0_name           String?
@@ -24,7 +24,7 @@ model Chat {
     dateStarted DateTime      @default(now())
     messages    ChatMessage[]
     userId      String
-    user        User          @relation(fields: [userId], references: [auth0_sid])
+    user        User          @relation(fields: [userId], references: [auth0_sub])
 }
 
 model ChatMessage {

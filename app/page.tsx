@@ -31,7 +31,7 @@ export default function Page() {
         dispatch(
           setUser({
             sid: user.sid as string,
-            sub: user.sub ?? "",
+            sub: user.sub as string,
             name: user.name ?? "",
             email: user.email ?? "",
             picture: user.picture ?? "",
