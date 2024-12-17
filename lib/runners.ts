@@ -96,11 +96,14 @@ if __name__ == "__main__":
     return completeCode;
   }
 
-  async runCode(code: string): Promise<CodeExecuteResponseT> {
+  async runCode(
+    preparedCode: string,
+    originalCode: string
+  ): Promise<CodeExecuteResponseT> {
     const response = await apiClient.post("/execute-code", {
       language: this.language?.name,
       version: this.language?.version,
-      code: code,
+      code: preparedCode,
     });
 
     let numPassed = 0;
@@ -118,6 +121,7 @@ if __name__ == "__main__":
       numFailed: numFailed,
       stdout: response.data.run["stdout"],
       stderr: response.data.run["stderr"],
+      sourceCode: originalCode,
       category: response.data.run["stderr"]
         ? CodeExecuteResponseCategory.Error
         : CodeExecuteResponseCategory.Success,

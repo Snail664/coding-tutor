@@ -15,10 +15,10 @@ export default function NavbarHelpModal() {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Help</DialogTitle>
+          <DialogTitle className="text-4xl font-bold">Help</DialogTitle>
         </DialogHeader>
         <div>
-          <section>
+          <section className="mt-4">
             <h2 className="text-2xl font-bold">About</h2>
             <p className="mt-2">
               Coding Tutor is an AI-powered platform that helps you to learn

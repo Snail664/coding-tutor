@@ -1,7 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { ProgrammingLanguageT, LanguageName, CodeExecuteResponseT, CodeExecuteResponseCategory } from "@/lib/types";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  ProgrammingLanguageT,
+  LanguageName,
+  CodeExecuteResponseT,
+  CodeExecuteResponseCategory,
+} from "@/lib/types";
 import { getTemplateCode } from "@/lib/utils";
 import { QUESTIONS } from "@/lib/constants";
+import { RunnerFactory } from "@/lib/runners";
+import { RootState } from "@/store";
 
 export const LANGUAGES: ProgrammingLanguageT[] = [
   {
@@ -15,7 +22,7 @@ export const LANGUAGES: ProgrammingLanguageT[] = [
     icon: "js",
     version: "1.32.3",
     defaultCode: "// insert code below",
-  }
+  },
 ];
 
 // Define the initial state with the default value
@@ -27,31 +34,84 @@ const initialCodeExecuteResponse: CodeExecuteResponseT = {
   stdout: "",
   stderr: "",
   message: "",
+  sourceCode: "",
   category: CodeExecuteResponseCategory.Error,
 };
-const initialSourceCode: string = getTemplateCode(LANGUAGES[0].name, QUESTIONS[0]);
+const initialSourceCode: string = getTemplateCode(
+  LANGUAGES[0].name,
+  QUESTIONS[0]
+);
 
-export const CodeSlice = createSlice({
-    name: "code",
-    initialState: {
-      programmingLanguage: initialState,
-      programmingLanguageList: LANGUAGES,
-      sourceCode: initialSourceCode,
-      codeExecuteResponse: initialCodeExecuteResponse,
-    },
-    reducers: {
-      updateProgrammingLanguage: (state, action) => {
-        state.programmingLanguage = action.payload.programmingLanguage;
-        state.sourceCode = getTemplateCode(action.payload.programmingLanguage.name, action.payload.question);
-      },
-      setSourceCode: (state, action) => {
-        state.sourceCode = action.payload;
-      },
-      setCodeExecuteResponse: (state, action) => {
-        state.codeExecuteResponse = action.payload;
-      }
+export const runCodeThunk = createAsyncThunk<
+  CodeExecuteResponseT,
+  void,
+  { state: RootState }
+>("code/runCode", async (_, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    const { sourceCode, codeExecuteResponse, programmingLanguage } = state.code;
+    const { question } = state.question;
+    if (!question) {
+      return rejectWithValue("No question selected");
     }
+
+    // Check if the code output is already updated
+    if (codeExecuteResponse.sourceCode === sourceCode) {
+      return codeExecuteResponse; // Return existing response if code is up-to-date
+    }
+
+    const runner = RunnerFactory.getRunner(programmingLanguage.name);
+    const completeCode = runner.prepareCode(sourceCode, question.testCases);
+    const result = await runner.runCode(completeCode, sourceCode);
+    return result;
+  } catch (error: any) {
+    return rejectWithValue(error.message || "Failed to run code");
+  }
 });
 
-export const { updateProgrammingLanguage, setSourceCode, setCodeExecuteResponse } = CodeSlice.actions;
+export const CodeSlice = createSlice({
+  name: "code",
+  initialState: {
+    programmingLanguage: initialState,
+    programmingLanguageList: LANGUAGES,
+    sourceCode: initialSourceCode,
+    codeExecuteResponse: initialCodeExecuteResponse,
+    runCodeLoading: false,
+  },
+  reducers: {
+    updateProgrammingLanguage: (state, action) => {
+      state.programmingLanguage = action.payload.programmingLanguage;
+      state.sourceCode = getTemplateCode(
+        action.payload.programmingLanguage.name,
+        action.payload.question
+      );
+    },
+    setSourceCode: (state, action) => {
+      state.sourceCode = action.payload;
+    },
+    setCodeExecuteResponse: (state, action) => {
+      state.codeExecuteResponse = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(runCodeThunk.pending, (state) => {
+        state.runCodeLoading = true;
+      })
+      .addCase(runCodeThunk.fulfilled, (state, action) => {
+        state.codeExecuteResponse = action.payload;
+        state.runCodeLoading = false;
+      })
+      .addCase(runCodeThunk.rejected, (state) => {
+        state.runCodeLoading = false;
+        // Handle error if needed
+      });
+  },
+});
+
+export const {
+  updateProgrammingLanguage,
+  setSourceCode,
+  setCodeExecuteResponse,
+} = CodeSlice.actions;
 export default CodeSlice.reducer;
