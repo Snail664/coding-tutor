@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import apiClient from "@/lib/APIClient";
 import { RootState } from "@/store";
 import { MessageT } from "@/lib/types";
+import { runCodeThunk } from "@/slices/CodeSlice";
 
 interface AssistantState {
   LLMResponse: string;
@@ -49,6 +50,9 @@ export const getHintThunk = createAsyncThunk<
   { state: RootState }
 >("assistant/getHint", async (_, { getState, dispatch, rejectWithValue }) => {
   try {
+    // Ensure the code is executed and up-to-date
+    const runCodeResult = await dispatch(runCodeThunk()).unwrap();
+
     // Ensure chat exists
     const validChatId = await ensureChatExists(dispatch, getState);
 
