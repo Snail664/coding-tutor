@@ -4,15 +4,15 @@ export interface MessageT {
 }
 
 export enum QuestionDifficulty {
-    Easy = "easy",
-    Medium = "medium",
-    Hard = "hard"
-  }
+  Easy = "easy",
+  Medium = "medium",
+  Hard = "hard",
+}
 
 export interface TestCase {
-    input: string[] | number[];
-    expectedOutput: string | number | boolean;
-    description: string;
+  input: string[] | number[];
+  expectedOutput: string | number | boolean;
+  description: string;
 }
 
 export interface TestResult {
@@ -30,45 +30,47 @@ export interface CodeExecuteResponseT {
   stdout: string;
   stderr: string;
   message: string;
+  sourceCode: string;
   category: CodeExecuteResponseCategory;
 }
 
 export interface LanguageRunner {
   prepareCode(userCode: string, testCase: TestCase[]): string;
-  runCode(code: string): Promise<CodeExecuteResponseT>;
+  runCode(
+    preparedCode: string,
+    originalCode: string
+  ): Promise<CodeExecuteResponseT>;
 }
 
-
 export enum LanguageName {
-  Javascript = 'javascript',
-  Python = 'python',
-  Typescript = 'typescript',
-  Java = 'java',
-  Cpp = 'c++'
+  Javascript = "javascript",
+  Python = "python",
+  Typescript = "typescript",
+  Java = "java",
+  Cpp = "c++",
 }
 
 export type TemplateCodeT = {
   code: string;
   language: LanguageName;
-}
+};
 
 export type QuestionT = {
-    name: string;
-    difficulty: QuestionDifficulty;
-    content: string;
-    templateCodes: TemplateCodeT[];
-    testCases: TestCase[];
-  };
+  name: string;
+  difficulty: QuestionDifficulty;
+  content: string;
+  templateCodes: TemplateCodeT[];
+  testCases: TestCase[];
+};
 
+export enum CodeExecuteResponseCategory {
+  Error = "error",
+  Success = "success",
+}
 
-  export enum CodeExecuteResponseCategory {
-    Error = "error",
-    Success = "success",
-  }
-
-  export type ProgrammingLanguageT = {
-    name: LanguageName;
-    icon: string;
-    version: string;
-    defaultCode: string;
-  };
+export type ProgrammingLanguageT = {
+  name: LanguageName;
+  icon: string;
+  version: string;
+  defaultCode: string;
+};
