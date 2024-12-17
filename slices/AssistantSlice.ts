@@ -105,6 +105,9 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
   void,
   { state: RootState }
 >("assistant/getAssistantFeedback", async (_, { getState, dispatch }) => {
+  // run code first
+  const runCodeResult = await dispatch(runCodeThunk()).unwrap();
+
   // Ensure chat exists
   const validChatId = await ensureChatExists(dispatch, getState);
 
