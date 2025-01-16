@@ -60,7 +60,6 @@ export default function Page() {
 
         width: "100vw",
       }}
-      className=""
     >
       <div className="flex flex-row gap-2 items-center justify-between mb-2 text-lg font-bold">
         {/* header left */}
