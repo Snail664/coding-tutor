@@ -12,7 +12,6 @@ import { getHintThunk } from "@/slices/AssistantSlice";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useToast } from "@/hooks/use-toast";
 import AssistantSpeaking from "./AssistantSpeaking";
-
 export default function AssistantWindow() {
   const { user } = useUser();
   const dispatch = useAppDispatch();
@@ -106,13 +105,13 @@ export default function AssistantWindow() {
     };
   }, [user, onHint]);
 
+  // console.log("assistantPopupText: ", assistantPopupText);
   return (
     <CollapsiblePanel icon={<BotMessageSquare />} title="LLM Assistant">
       {audioHintUrl && <audio className="hidden" src={audioHintUrl} autoPlay />}
       <AssistantSpeaking
         isHidden={isAssistantSpeakingHidden}
         setIsHidden={setIsAssistantSpeakingHidden}
-        message={assistantPopupText}
       />
 
       <div className="flex flex-row w-full mt-5 px-3">

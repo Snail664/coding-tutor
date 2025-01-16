@@ -173,6 +173,9 @@ const AssistantSlice = createSlice({
     setChatId: (state, action: PayloadAction<string>) => {
       state.chatId = action.payload;
     },
+    setAssistantPopupText: (state, action: PayloadAction<string>) => {
+      state.assistantPopupText = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -218,6 +221,10 @@ const AssistantSlice = createSlice({
   },
 });
 
-export const { setLLMResponse, setUserAudioTranscript, setChatId } =
-  AssistantSlice.actions;
+export const {
+  setLLMResponse,
+  setUserAudioTranscript,
+  setChatId,
+  setAssistantPopupText,
+} = AssistantSlice.actions;
 export default AssistantSlice.reducer;

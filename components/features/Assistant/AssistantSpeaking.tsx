@@ -1,16 +1,15 @@
 import robotSpeakingGif from "@/assets/images/robot-speaking.gif";
-import TypingEffect from "@/components/ui/typing-effect";
+import { useAppSelector } from "@/store";
 import { XIcon } from "lucide-react";
 import Image from "next/image";
 export default function AssistantSpeaking({
   isHidden,
   setIsHidden,
-  message,
 }: {
   isHidden: boolean;
-  message: string;
   setIsHidden: (isHidden: boolean) => void;
 }) {
+  const { assistantPopupText } = useAppSelector((state) => state.assistant);
   return (
     <div
       className={`fixed top-0 left-1/2 transform -translate-x-1/2 mt-4 z-50 ${
@@ -29,9 +28,7 @@ export default function AssistantSpeaking({
             unoptimized
             height={100}
           />
-          <div className="text-lg">
-            <TypingEffect text={message} speed={50} onComplete={() => {}} />
-          </div>
+          <div className="text-lg">{assistantPopupText}</div>
         </div>
       </div>
     </div>
