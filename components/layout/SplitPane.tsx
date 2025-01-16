@@ -44,6 +44,7 @@ export default function SplitPane({
 
     const handleMouseUp = () => {
       setIsResizing(false);
+      document.body.style.userSelect = "auto";
     };
 
     if (isResizing) {
@@ -55,12 +56,14 @@ export default function SplitPane({
       if (isResizing) {
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
+        document.body.style.userSelect = "auto";
       }
     };
   }, [isResizing, minSize, maxSize, split]);
 
   const handleMouseDown = () => {
     setIsResizing(true);
+    document.body.style.userSelect = "none";
   };
 
   return (
