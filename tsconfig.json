@@ -29,7 +29,8 @@
     ".next/types/**/*.ts",
     "global.d.ts",
     "app/api/auth/[auth0]/route.js",
-    "prisma/seed.ts"
+    "prisma/seed.ts",
+    "lib/prisma.js"
   ],
   "exclude": ["node_modules"]
 }

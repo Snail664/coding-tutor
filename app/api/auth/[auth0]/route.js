@@ -1,9 +1,8 @@
 import { handleAuth, handleCallback } from "@auth0/nextjs-auth0";
-import { Session } from "@auth0/nextjs-auth0/edge";
-import prisma from "@/lib/prisma";
-import { NextRequest } from "next/server";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
-const afterCallback = async (req: NextRequest, session: Session) => {
+const afterCallback = async (req, session) => {
   // state param omitted from function signature
   const userFields = {
     auth0_sid: session.user.sid,
@@ -36,7 +35,7 @@ export const GET = handleAuth({
       return await handleCallback(req, res, { afterCallback });
     } catch (error) {
       console.error("Error in handleAuth callback:", error);
-      return res.status(500).json({ error: "Internal server error" });
+      res.status(500).json({ error: "Internal server error" });
     }
   },
 });

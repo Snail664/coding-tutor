@@ -104,7 +104,7 @@ export default function AssistantWindow() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [user]);
+  }, [user, onHint]);
 
   return (
     <CollapsiblePanel icon={<BotMessageSquare />} title="LLM Assistant">

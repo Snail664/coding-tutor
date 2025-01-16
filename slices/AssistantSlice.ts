@@ -52,7 +52,7 @@ export const getHintThunk = createAsyncThunk<
 >("assistant/getHint", async (_, { getState, dispatch, rejectWithValue }) => {
   try {
     // Ensure the code is executed and up-to-date
-    const runCodeResult = await dispatch(runCodeThunk()).unwrap();
+    await dispatch(runCodeThunk()).unwrap();
 
     // Ensure chat exists
     const validChatId = await ensureChatExists(dispatch, getState);
@@ -107,7 +107,7 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
   { state: RootState }
 >("assistant/getAssistantFeedback", async (_, { getState, dispatch }) => {
   // run code first
-  const runCodeResult = await dispatch(runCodeThunk()).unwrap();
+  await dispatch(runCodeThunk()).unwrap();
 
   // Ensure chat exists
   const validChatId = await ensureChatExists(dispatch, getState);
@@ -156,6 +156,7 @@ const initialState: AssistantState = {
   hintError: "",
   chatHistory: initialChatHistory,
   chatId: "",
+  assistantPopupText: "",
   LLMFeedbackLoading: false,
 };
 

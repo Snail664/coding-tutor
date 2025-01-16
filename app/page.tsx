@@ -7,11 +7,11 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import SplitPane from "../components/layout/SplitPane";
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch } from "@/store";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { clearUser } from "@/slices/AuthSlice";
 import { setUser } from "@/slices/AuthSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import NavbarHelpModal from "@/components/features/NavbarHelpModal";
 import NavbarUserModal from "@/components/features/NavbarUserModal";
 export type WindowProps = {
@@ -23,7 +23,7 @@ export default function Page() {
   const { theme, setTheme } = useTheme();
   const { user, isLoading } = useUser();
   const dispatch = useAppDispatch();
-  const { user: authUser } = useAppSelector((state) => state.auth);
+  const [dimensions, setDimensions] = useState({ width: 1024, height: 800 });
 
   useEffect(() => {
     if (!isLoading) {
@@ -42,6 +42,13 @@ export default function Page() {
       }
     }
   }, [user, isLoading, dispatch]);
+
+  useEffect(() => {
+    setDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  }, []);
 
   return (
     <div
@@ -83,15 +90,15 @@ export default function Page() {
         <SplitPane
           split="vertical"
           minSize={500}
-          defaultSize={window.innerWidth / 2}
-          maxSize={window.innerWidth - 500}
+          defaultSize={dimensions.width / 2}
+          maxSize={dimensions.width - 500}
         >
           <QuestionWindow />
           <SplitPane
             split="horizontal"
             minSize={53}
-            defaultSize={(window.innerHeight - 20) / 2}
-            maxSize={window.innerHeight - 308}
+            defaultSize={(dimensions.height - 20) / 2}
+            maxSize={dimensions.height - 308}
           >
             <EditorWindow />
             <ExecutionWindow />

@@ -1,6 +1,7 @@
-import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { authMiddleware } from "@/app/middleware/auth";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 /**
  * Handles POST requests to create a new chat.
