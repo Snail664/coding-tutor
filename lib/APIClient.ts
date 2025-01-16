@@ -3,7 +3,7 @@ import axios from "axios";
 // Create an axios instance
 const apiClient = axios.create({
   baseURL:
-    `https://${process.env.VERCEL_URL}/api` || "http://localhost:3000/api",
+    `https://coding-tutor-psi.vercel.app/api` || "http://localhost:3000/api",
   timeout: 10000, // Set a timeout (optional)
   headers: {
     "Content-Type": "application/json",
