@@ -13,6 +13,7 @@ interface AssistantState {
   chatHistory: MessageT[];
   chatId: string;
   LLMFeedbackLoading: boolean;
+  assistantPopupText: string;
 }
 
 const initialChatHistory: MessageT[] = [];
@@ -199,7 +200,7 @@ const AssistantSlice = createSlice({
       .addCase(getHintThunk.fulfilled, (state, action) => {
         state.hintLoading = false;
         state.audioHintUrl = action.payload.audioUrl;
-        state.LLMResponse = action.payload.textHint;
+        state.assistantPopupText = action.payload.textHint;
         state.chatHistory.push({
           role: "user",
           content: "hint button pressed",

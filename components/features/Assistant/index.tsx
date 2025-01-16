@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { getHintThunk } from "@/slices/AssistantSlice";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useToast } from "@/hooks/use-toast";
+import AssistantSpeaking from "./AssistantSpeaking";
 
 export default function AssistantWindow() {
   const { user } = useUser();
@@ -23,9 +24,18 @@ export default function AssistantWindow() {
     hintLoading,
     hintError,
     LLMFeedbackLoading,
+    assistantPopupText,
   } = useAppSelector((state) => state.assistant);
 
+  useEffect(() => {
+    if (assistantPopupText) {
+      setIsAssistantSpeakingHidden(false);
+    }
+  }, [assistantPopupText]);
+
   const [isRecording, setIsRecording] = useState(false);
+  const [isAssistantSpeakingHidden, setIsAssistantSpeakingHidden] =
+    useState(true);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   if (hintError) {
@@ -99,6 +109,11 @@ export default function AssistantWindow() {
   return (
     <CollapsiblePanel icon={<BotMessageSquare />} title="LLM Assistant">
       {audioHintUrl && <audio className="hidden" src={audioHintUrl} autoPlay />}
+      <AssistantSpeaking
+        isHidden={isAssistantSpeakingHidden}
+        setIsHidden={setIsAssistantSpeakingHidden}
+        message={assistantPopupText}
+      />
 
       <div className="flex flex-row w-full mt-5 px-3">
         <UserInputSection
