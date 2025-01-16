@@ -1,11 +1,14 @@
-import axios from 'axios';
+import axios from "axios";
+// change git user
 
 // Create an axios instance
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api',
+  baseURL:
+    `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/api` ||
+    "http://localhost:3000/api",
   timeout: 10000, // Set a timeout (optional)
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
