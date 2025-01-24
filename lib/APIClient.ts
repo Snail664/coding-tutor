@@ -1,9 +1,6 @@
 import axios from "axios";
 
-const baseURL =
-  process.env.NODE_ENV === "production"
-    ? "https://coding-tutor-psi.vercel.app/api"
-    : "http://localhost:3000/api";
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL + "/api";
 
 // Create an axios instance
 const apiClient = axios.create({

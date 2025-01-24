@@ -5,15 +5,17 @@ import { MessageT } from "@/lib/types";
 import { runCodeThunk } from "@/slices/CodeSlice";
 
 interface AssistantState {
-  LLMResponse: string;
+  LLMResponse: string; // for llm chat feature response
   userAudioTranscript: string;
-  audioHintUrl: string;
+  assistantAudioUrl: string; // Consolidated audio URL
   hintLoading: boolean;
   hintError: string;
   chatHistory: MessageT[];
   chatId: string;
   LLMFeedbackLoading: boolean;
   assistantPopupText: string;
+  proactiveFeedback: string;
+  isPolling: boolean;
 }
 
 const initialChatHistory: MessageT[] = [];
@@ -44,6 +46,62 @@ async function ensureChatExists(
   }
   return chatId;
 }
+
+export const getProactiveFeedbackThunk = createAsyncThunk<
+  { audioUrl: string; textFeedback: string },
+  void,
+  { state: RootState }
+>(
+  "assistant/getProactiveFeedback",
+  async (_, { getState, dispatch, rejectWithValue }) => {
+    try {
+      // ensure chat exists
+      const validChatId = await ensureChatExists(dispatch, getState);
+      const state = getState();
+      const {
+        question: { question },
+        code: { sourceCode },
+        assistant: { assistantPopupText },
+      } = state;
+
+      // get proactive feedback
+      const response = await apiClient.post("/llm-guide/proactive", {
+        question,
+        sourceCode,
+        previousHint: assistantPopupText,
+      });
+      const { audioProactiveFeedbackBase64, proactiveFeedback } = response.data;
+
+      // if there is no feedback, return empty strings without saving to chat
+      if (!proactiveFeedback || !audioProactiveFeedbackBase64) {
+        return { audioUrl: "", textFeedback: "" };
+      }
+
+      // Perform the chat/add-message call in the background
+      (async () => {
+        try {
+          await apiClient.post("/chat/add-message", {
+            chatId: validChatId,
+            messages: [{ role: "assistant", content: proactiveFeedback }],
+          });
+        } catch (error) {
+          console.error("Error adding message to chat:", error);
+        }
+      })();
+
+      // Fix the audio blob creation to match getHintThunk
+      const binary = atob(audioProactiveFeedbackBase64);
+      const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+      const audioBlob = new Blob([bytes], { type: "audio/mpeg" });
+      const audioUrl = URL.createObjectURL(audioBlob);
+
+      return { audioUrl, textFeedback: proactiveFeedback };
+    } catch (error: any) {
+      console.error("Error in getHintThunk:", error);
+      return rejectWithValue(error.message || "Unknown error occurred");
+    }
+  }
+);
 
 export const getHintThunk = createAsyncThunk<
   { audioUrl: string; textHint: string },
@@ -93,6 +151,10 @@ export const getHintThunk = createAsyncThunk<
         console.error("Error adding message to chat:", error);
       }
     })();
+
+    // Start polling after hint is received
+    dispatch(setIsPolling(true));
+    dispatch(startPolling());
 
     return { audioUrl, textHint };
   } catch (error: any) {
@@ -151,14 +213,39 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
 const initialState: AssistantState = {
   LLMResponse: "",
   userAudioTranscript: "",
-  audioHintUrl: "",
+  assistantAudioUrl: "",
   hintLoading: false,
   hintError: "",
   chatHistory: initialChatHistory,
   chatId: "",
   assistantPopupText: "",
   LLMFeedbackLoading: false,
+  proactiveFeedback: "",
+  isPolling: false,
 };
+
+export const startPolling = createAsyncThunk<void, void, { state: RootState }>(
+  "assistant/startPolling",
+  async (_, { dispatch, getState }) => {
+    const poll = async () => {
+      console.log("polling proactive feedback...");
+      const state = getState();
+      if (!state.assistant.isPolling) return;
+
+      const result = await dispatch(getProactiveFeedbackThunk()).unwrap();
+
+      // If we got meaningful feedback, stop polling
+      if (result.textFeedback) {
+        dispatch(setIsPolling(false));
+      } else {
+        // Continue polling after delay
+        setTimeout(poll, 5000); // Poll every 5 seconds
+      }
+    };
+
+    poll();
+  }
+);
 
 const AssistantSlice = createSlice({
   name: "assistant",
@@ -175,6 +262,9 @@ const AssistantSlice = createSlice({
     },
     setAssistantPopupText: (state, action: PayloadAction<string>) => {
       state.assistantPopupText = action.payload;
+    },
+    setIsPolling: (state, action: PayloadAction<boolean>) => {
+      state.isPolling = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -203,7 +293,7 @@ const AssistantSlice = createSlice({
       })
       .addCase(getHintThunk.fulfilled, (state, action) => {
         state.hintLoading = false;
-        state.audioHintUrl = action.payload.audioUrl;
+        state.assistantAudioUrl = action.payload.audioUrl;
         state.assistantPopupText = action.payload.textHint;
         state.chatHistory.push({
           role: "user",
@@ -217,6 +307,19 @@ const AssistantSlice = createSlice({
       .addCase(getHintThunk.rejected, (state) => {
         state.hintLoading = false;
         state.hintError = "Error in generating hint";
+      })
+      .addCase(getProactiveFeedbackThunk.fulfilled, (state, action) => {
+        if (action.payload.textFeedback) {
+          state.proactiveFeedback = action.payload.textFeedback;
+          state.assistantAudioUrl = action.payload.audioUrl;
+          state.assistantPopupText = action.payload.textFeedback;
+          state.chatHistory.push({
+            role: "assistant",
+            content: action.payload.textFeedback,
+          });
+          // Stop polling once we get feedback
+          state.isPolling = false;
+        }
       });
   },
 });
@@ -226,5 +329,6 @@ export const {
   setUserAudioTranscript,
   setChatId,
   setAssistantPopupText,
+  setIsPolling,
 } = AssistantSlice.actions;
 export default AssistantSlice.reducer;

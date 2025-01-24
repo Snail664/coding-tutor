@@ -19,12 +19,17 @@ export default function AssistantWindow() {
   const {
     LLMResponse,
     userAudioTranscript,
-    audioHintUrl,
     hintLoading,
     hintError,
     LLMFeedbackLoading,
     assistantPopupText,
+    proactiveFeedback,
+    assistantAudioUrl,
   } = useAppSelector((state) => state.assistant);
+
+  useEffect(() => {
+    console.log("proactiveFeedback: ", proactiveFeedback);
+  }, [proactiveFeedback]);
 
   useEffect(() => {
     if (assistantPopupText) {
@@ -108,7 +113,9 @@ export default function AssistantWindow() {
   // console.log("assistantPopupText: ", assistantPopupText);
   return (
     <CollapsiblePanel icon={<BotMessageSquare />} title="LLM Assistant">
-      {audioHintUrl && <audio className="hidden" src={audioHintUrl} autoPlay />}
+      {assistantAudioUrl && (
+        <audio className="hidden" src={assistantAudioUrl} autoPlay />
+      )}
       <AssistantSpeaking
         isHidden={isAssistantSpeakingHidden}
         setIsHidden={setIsAssistantSpeakingHidden}
