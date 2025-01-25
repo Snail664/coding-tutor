@@ -91,7 +91,7 @@ export default function Page() {
         <SplitPane
           split="vertical"
           minSize={500}
-          defaultSize={dimensions.width / 2}
+          defaultSize={dimensions.width * 0.9}
           maxSize={dimensions.width - 500}
         >
           <QuestionWindow />
