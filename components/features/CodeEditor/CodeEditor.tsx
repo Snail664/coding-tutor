@@ -19,7 +19,7 @@ const CodeEditor: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full code-editor">
       <Editor
         height="100%"
         width="100%"

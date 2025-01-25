@@ -34,7 +34,7 @@ export default function UserInputSection({
   return (
     <div className="flex-[1] flex-col flex items-center">
       <div className="w-10/12">
-        <div className="flex items-center">
+        <div className="flex items-center assistant-input">
           <Input
             placeholder="Ask a question..."
             value={userAudioTranscript}

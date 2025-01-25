@@ -39,7 +39,7 @@ export default function ExecuteCodeButton() {
   }, [user]);
 
   return (
-    <Button onClick={runCode}>
+    <Button className="execution-button" onClick={runCode}>
       {!runCodeLoading && <Play fill="white" className="mr-2 h-4 w-4" />}
       {runCodeLoading && <Loading />}
       Run

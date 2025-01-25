@@ -15,7 +15,7 @@ export default function HintButton({
   disabled,
 }: HintButtonProps) {
   return (
-    <Button onClick={onClick} disabled={disabled}>
+    <Button className="hint-button" onClick={onClick} disabled={disabled}>
       {loading ? (
         <Loading className="text-yellow-500" />
       ) : (

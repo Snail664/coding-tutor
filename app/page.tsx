@@ -14,6 +14,7 @@ import { setUser } from "@/slices/AuthSlice";
 import { useEffect, useState } from "react";
 import NavbarHelpModal from "@/components/features/NavbarHelpModal";
 import NavbarUserModal from "@/components/features/NavbarUserModal";
+import Walkthrough from "@/components/features/Walkthrough";
 export type WindowProps = {
   isCollapsed: boolean;
   setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
@@ -61,6 +62,7 @@ export default function Page() {
         width: "100vw",
       }}
     >
+      <Walkthrough />
       <div className="flex flex-row gap-2 items-center justify-between mb-2 text-lg font-bold">
         {/* header left */}
         <div>The Coding Tutor</div>

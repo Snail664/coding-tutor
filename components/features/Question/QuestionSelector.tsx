@@ -37,7 +37,7 @@ export default function QuestionSelector() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="default"
-          className="w-[300px] justify-between bg-menuBackground text-primary hover:bg-primary hover:text-background"
+          className="question-button w-[300px] justify-between bg-menuBackground text-primary hover:bg-primary hover:text-background"
         >
           <span className="flex items-center overflow-hidden">
             <QuestionDifficultyTag difficulty={question.difficulty} />
