@@ -21,8 +21,8 @@ export default function Page() {
   const { isLoading: dbLoading } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const [dimensions, setDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: 1024,
+    height: 800,
   });
 
   useEffect(() => {
