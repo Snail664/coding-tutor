@@ -17,11 +17,19 @@ const afterCallback = async (req, session) => {
 
   // create or update user in database
   try {
-    await prisma.user.upsert({
+    const user = await prisma.user.upsert({
       where: { auth0_sub: session.user.sub },
       update: userFields,
-      create: userFields,
+      create: {
+        ...userFields,
+        isWalkthroughEnabled: true,
+      },
+      select: {
+        isWalkthroughEnabled: true,
+      },
     });
+
+    session.user.isWalkthroughEnabled = user.isWalkthroughEnabled;
     return session;
   } catch (error) {
     console.error("Error in afterCallback:", error);

@@ -17,6 +17,7 @@ model User {
     auth0_email          String?
     auth0_email_verified Boolean @default(false)
     chats                Chat[]
+    isWalkthroughEnabled Boolean @default(true)
 }
 
 model Chat {

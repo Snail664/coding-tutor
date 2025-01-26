@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Joyride, { Step, CallBackProps } from "react-joyride";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { disableWalkthroughThunk } from "@/slices/AuthSlice";
 
 export default function Walkthrough() {
-  const [run, setRun] = useState(true);
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, isLoading } = useAppSelector((state) => state.auth);
+  const [run, setRun] = useState(user?.isWalkthroughEnabled ?? true);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!isLoading && user) {
+      setRun(user.isWalkthroughEnabled);
+    } else if (!isLoading && !user) {
+      setRun(true);
+    }
+  }, [isLoading, user]);
 
   const steps: Step[] = [
     {
@@ -36,11 +46,12 @@ export default function Walkthrough() {
     const { status } = data;
     if (status === "finished" || status === "skipped") {
       setRun(false);
+      dispatch(disableWalkthroughThunk());
     }
   };
 
   // Only show tour for new users
-  if (!user) return null;
+  if (isLoading || !user) return null;
 
   return (
     <Joyride

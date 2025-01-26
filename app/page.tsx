@@ -7,49 +7,48 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import SplitPane from "../components/layout/SplitPane";
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { clearUser } from "@/slices/AuthSlice";
-import { setUser } from "@/slices/AuthSlice";
 import { useEffect, useState } from "react";
 import NavbarHelpModal from "@/components/features/NavbarHelpModal";
 import NavbarUserModal from "@/components/features/NavbarUserModal";
 import Walkthrough from "@/components/features/Walkthrough";
-export type WindowProps = {
-  isCollapsed: boolean;
-  setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
-};
+import { fetchUserDataThunk } from "@/slices/AuthSlice";
 
 export default function Page() {
   const { theme, setTheme } = useTheme();
-  const { user, isLoading } = useUser();
+  const { user: auth0User, isLoading: auth0Loading } = useUser();
+  const { isLoading: dbLoading } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  const [dimensions, setDimensions] = useState({ width: 1024, height: 800 });
+  const [dimensions, setDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
   useEffect(() => {
-    if (!isLoading) {
-      if (user) {
-        dispatch(
-          setUser({
-            sid: user.sid as string,
-            sub: user.sub as string,
-            name: user.name ?? "",
-            email: user.email ?? "",
-            picture: user.picture ?? "",
-          })
-        );
-      } else {
-        dispatch(clearUser());
+    if (!auth0Loading) {
+      if (auth0User) {
+        dispatch(fetchUserDataThunk());
       }
     }
-  }, [user, isLoading, dispatch]);
+  }, [auth0User, auth0Loading, dispatch]);
 
   useEffect(() => {
-    setDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
+    const handleResize = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Show loading state while either Auth0 or DB data is loading
+  if (auth0Loading || dbLoading) {
+    return <div>Loading...</div>; // Or your loading component
+  }
 
   return (
     <div
@@ -58,7 +57,6 @@ export default function Page() {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
-
         width: "100vw",
       }}
     >
@@ -76,8 +74,8 @@ export default function Page() {
           >
             {theme === "dark" ? <Sun /> : <Moon />}
           </Button>
-          {user && <NavbarUserModal />}
-          {!user && <a href="/api/auth/login">Login</a>}
+          {auth0User && <NavbarUserModal />}
+          {!auth0User && <a href="/api/auth/login">Login</a>}
         </div>
       </div>
       <div
@@ -91,15 +89,15 @@ export default function Page() {
         <SplitPane
           split="vertical"
           minSize={500}
-          defaultSize={dimensions.width * 0.9}
-          maxSize={dimensions.width - 500}
+          defaultSize={dimensions.width * 0.5}
+          maxSize={Math.max(dimensions.width - 500, 500)}
         >
           <QuestionWindow />
           <SplitPane
             split="horizontal"
             minSize={53}
-            defaultSize={(dimensions.height - 20) / 2}
-            maxSize={dimensions.height - 308}
+            defaultSize={dimensions.height / 2}
+            maxSize={Math.max(dimensions.height - 308, 53)}
           >
             <EditorWindow />
             <ExecutionWindow />
