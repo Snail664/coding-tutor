@@ -14,6 +14,7 @@ import NavbarHelpModal from "@/components/features/NavbarHelpModal";
 import NavbarUserModal from "@/components/features/NavbarUserModal";
 import Walkthrough from "@/components/features/Walkthrough";
 import { fetchUserDataThunk } from "@/slices/AuthSlice";
+import LoadingScreen from "@/components/layout/LoadingScreen";
 
 export default function Main() {
   const { theme, setTheme } = useTheme();
@@ -47,7 +48,7 @@ export default function Main() {
 
   // Show loading state while either Auth0 or DB data is loading
   if (auth0Loading || dbLoading) {
-    return <div>Loading...</div>; // Or your loading component
+    return <LoadingScreen />;
   }
 
   return (
