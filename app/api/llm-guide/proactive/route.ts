@@ -1,7 +1,7 @@
 import { QuestionT } from "@/lib/types";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-
+import { parseLLMResponse } from "@/lib/utils";
 const OPEN_AI_API_KEY = process.env.OPEN_AI_API_KEY;
 const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
 
@@ -40,9 +40,7 @@ export async function POST(request: Request) {
     ],
   });
 
-  console.log("debug proactive message: ", completion.choices[0].message);
-
-  const llmResponse = parse_result(completion);
+  const llmResponse = parseLLMResponse(completion, "positive_feedback");
 
   if (llmResponse === "") {
     return NextResponse.json({
@@ -104,18 +102,4 @@ positive_feedback: <answer string>
 !!<<Question>>!!
 ${question}
     `;
-}
-
-function parse_result(result: OpenAI.Chat.Completions.ChatCompletion) {
-  try {
-    const content = result.choices[0].message.content;
-    if (content) {
-      return JSON.parse(content.slice(8, -4))["positive_feedback"];
-    }
-  } catch {
-    const content = result.choices[0].message.content;
-    if (content) {
-      return JSON.parse(content)["positive_feedback"];
-    }
-  }
 }

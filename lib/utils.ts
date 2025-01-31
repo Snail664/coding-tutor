@@ -2,6 +2,28 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { LanguageName, QuestionT } from "./types";
 import { LANGUAGES } from "@/slices/CodeSlice";
+import { OpenAI } from "openai";
+
+export function parseLLMResponse(
+  result: OpenAI.Chat.Completions.ChatCompletion,
+  key: string
+): string {
+  try {
+    const content = result.choices[0].message.content;
+    if (!content) return "";
+
+    // Try parsing with potential wrapper text
+    try {
+      return JSON.parse(content.slice(8, -4))[key];
+    } catch {
+      // Try direct JSON parse if first attempt fails
+      return JSON.parse(content)[key];
+    }
+  } catch (error) {
+    console.error("Error parsing LLM response:", error);
+    return "";
+  }
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

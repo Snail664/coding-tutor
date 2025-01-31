@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { rateLimitMiddleware } from "@/app/middleware/rateLimitMiddleware";
+import { parseLLMResponse } from "@/lib/utils";
 const OPEN_AI_API_KEY = process.env.OPEN_AI_API_KEY;
 const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
 
@@ -43,7 +44,7 @@ export async function POST(request: Request) {
     )
   );
 
-  const responseContent = parse_result(completion);
+  const responseContent = parseLLMResponse(completion, "answer");
   console.log("responseContent: ", responseContent);
 
   return NextResponse.json({ response: responseContent });
@@ -85,18 +86,4 @@ function get_gpt_prompt(
     !!<<Section 3>>!!
     ${user_audio_transcript}
   `;
-}
-
-function parse_result(result: OpenAI.Chat.Completions.ChatCompletion) {
-  try {
-    const content = result.choices[0].message.content;
-    if (content) {
-      return JSON.parse(content.slice(8, -4))["answer"];
-    }
-  } catch {
-    const content = result.choices[0].message.content;
-    if (content) {
-      return JSON.parse(content)["answer"];
-    }
-  }
 }

@@ -2,6 +2,8 @@ import { QuestionT, TestResult } from "@/lib/types";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { rateLimitMiddleware } from "@/app/middleware/rateLimitMiddleware";
+import { parseLLMResponse } from "@/lib/utils";
+
 const OPEN_AI_API_KEY = process.env.OPEN_AI_API_KEY;
 const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
 
@@ -39,7 +41,7 @@ export async function POST(request: Request) {
     ],
   });
 
-  const hintText = parse_result(completion);
+  const hintText = parseLLMResponse(completion, "hint");
 
   // Convert the text hint into speech
   const speechResponse = await openai.audio.speech.create({
@@ -108,18 +110,4 @@ hint: <answer string>
 !!<<Question>>!!
 ${question}
     `;
-}
-
-function parse_result(result: OpenAI.Chat.Completions.ChatCompletion) {
-  try {
-    const content = result.choices[0].message.content;
-    if (content) {
-      return JSON.parse(content.slice(8, -4))["hint"];
-    }
-  } catch {
-    const content = result.choices[0].message.content;
-    if (content) {
-      return JSON.parse(content)["hint"];
-    }
-  }
 }
