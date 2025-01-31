@@ -23,8 +23,6 @@ interface ProactiveRequestData {
 export async function POST(request: Request) {
   const data: ProactiveRequestData = await request.json();
 
-  console.log("debug proactive hint: ", data["previousHint"]);
-
   const completion = await openai.chat.completions.create({
     model: "gpt-4o",
     messages: [
@@ -99,6 +97,7 @@ If the student has correctly implemented the hint, provide positive feedback to 
 If the student has not yet implemented the hint, or wrongly implement it then say nothing and return an empty string.
 
 Return your answer in the JSON format with the following keys. ONLY RETURN JSON OBJECT. No other text outside it. ENSURE YOU RETURN VALID JSON:
+thought_process: <your thought process on whether the hint is implemented correctly>
 is_hint_implemented: <answer boolean>
 positive_feedback: <answer string>
 
