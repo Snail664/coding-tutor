@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     )
   );
 
-  let responseContent = parse_result(completion);
+  const responseContent = parse_result(completion);
   console.log("responseContent: ", responseContent);
 
   return NextResponse.json({ response: responseContent });
