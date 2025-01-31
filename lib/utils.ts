@@ -124,3 +124,10 @@ export function areCodesEquivalentNaive(
 
   return processCode(code1) === processCode(code2);
 }
+
+export function base64ToAudioUrl(base64Audio: string): string {
+  const binary = atob(base64Audio);
+  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  const audioBlob = new Blob([bytes], { type: "audio/mpeg" });
+  return URL.createObjectURL(audioBlob);
+}

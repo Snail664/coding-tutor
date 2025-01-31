@@ -3,7 +3,7 @@ import apiClient from "@/lib/APIClient";
 import { RootState } from "@/store";
 import { MessageT } from "@/lib/types";
 import { runCodeThunk } from "@/slices/CodeSlice";
-import { areCodesEquivalentNaive } from "@/lib/utils";
+import { areCodesEquivalentNaive, base64ToAudioUrl } from "@/lib/utils";
 
 interface AssistantState {
   LLMResponse: string; // for llm chat feature response
@@ -109,11 +109,7 @@ export const getProactiveFeedbackThunk = createAsyncThunk<
         }
       })();
 
-      // Fix the audio blob creation to match getHintThunk
-      const binary = atob(audioProactiveFeedbackBase64);
-      const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
-      const audioBlob = new Blob([bytes], { type: "audio/mpeg" });
-      const audioUrl = URL.createObjectURL(audioBlob);
+      const audioUrl = base64ToAudioUrl(audioProactiveFeedbackBase64);
 
       return { audioUrl, textFeedback: proactiveFeedback };
     } catch (error: any) {
@@ -153,10 +149,7 @@ export const getHintThunk = createAsyncThunk<
       throw new Error("Missing textHint or audioHintBase64 in response");
     }
 
-    const binary = atob(audioHintBase64);
-    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
-    const audioBlob = new Blob([bytes], { type: "audio/mpeg" });
-    const audioUrl = URL.createObjectURL(audioBlob);
+    const audioUrl = base64ToAudioUrl(audioHintBase64);
     // Perform the chat/add-message call in the background
     (async () => {
       try {
