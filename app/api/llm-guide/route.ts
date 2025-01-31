@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   const data = await request.json();
 
   const messages = [
-    { role: "system", content: system_prompt },
+    { role: "user", content: system_prompt },
     ...(data.chatHistory || []),
     {
       role: "user",
@@ -28,11 +28,21 @@ export async function POST(request: Request) {
   ];
 
   const completion = await openai.chat.completions.create({
-    model: "gpt-4o",
+    model: "o1-mini",
     messages: messages,
   });
 
+  console.log(
+    "prompt: ",
+    get_gpt_prompt(
+      data["question"]["content"],
+      data["sourceCode"],
+      data["userAudioTranscript"]
+    )
+  );
+
   let responseContent = completion.choices[0].message.content;
+  console.log("responseContent: ", responseContent);
   const answerMatch = responseContent?.match(/!!<<Answer>>!!([\s\S]*)/);
   if (answerMatch && answerMatch[1]) {
     responseContent = answerMatch[1].trim();
