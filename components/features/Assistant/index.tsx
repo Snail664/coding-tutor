@@ -18,6 +18,7 @@ export default function AssistantWindow() {
   const { toast } = useToast();
   const {
     LLMResponse,
+    LLMResponseError,
     userAudioTranscript,
     hintLoading,
     hintError,
@@ -42,12 +43,20 @@ export default function AssistantWindow() {
     useState(true);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
-  if (hintError) {
-    toast({
-      title: "Error",
-      description: hintError,
-    });
-  }
+  useEffect(() => {
+    if (hintError) {
+      toast({
+        title: "Error",
+        description: hintError,
+      });
+    }
+    if (LLMResponseError) {
+      toast({
+        title: "Error",
+        description: LLMResponseError,
+      });
+    }
+  }, [toast, hintError, LLMResponseError]);
 
   const handleSpeechResult = async (e: SpeechRecognitionEvent) => {
     let transcript = "";

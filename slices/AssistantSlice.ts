@@ -7,6 +7,7 @@ import { areCodesEquivalentNaive } from "@/lib/utils";
 
 interface AssistantState {
   LLMResponse: string; // for llm chat feature response
+  LLMResponseError: string;
   userAudioTranscript: string;
   assistantAudioUrl: string; // Consolidated audio URL
   hintLoading: boolean;
@@ -177,7 +178,11 @@ export const getHintThunk = createAsyncThunk<
 
     return { audioUrl, textHint };
   } catch (error: any) {
-    console.error("Error in getHintThunk:", error);
+    // Handle axios error responses
+    if (error.response) {
+      return rejectWithValue(error.response.data.error || "An error occurred");
+    }
+    // Handle other errors
     return rejectWithValue(error.message || "Unknown error occurred");
   }
 });
@@ -186,51 +191,67 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
   { assistantMsg: string; userMsg: string },
   void,
   { state: RootState }
->("assistant/getAssistantFeedback", async (_, { getState, dispatch }) => {
-  // run code first
-  await dispatch(runCodeThunk()).unwrap();
+>(
+  "assistant/getAssistantFeedback",
+  async (_, { getState, dispatch, rejectWithValue }) => {
+    try {
+      // run code first
+      await dispatch(runCodeThunk()).unwrap();
 
-  // Ensure chat exists
-  const validChatId = await ensureChatExists(dispatch, getState);
+      // Ensure chat exists
+      const validChatId = await ensureChatExists(dispatch, getState);
 
-  const state = getState();
-  const {
-    question: { question },
-    code: { sourceCode, codeExecuteResponse },
-    assistant: { userAudioTranscript, chatHistory },
-  } = state;
+      const state = getState();
+      const {
+        question: { question },
+        code: { sourceCode, codeExecuteResponse },
+        assistant: { userAudioTranscript, chatHistory },
+      } = state;
 
-  const updatedChatHistory = [
-    ...chatHistory,
-    { role: "user", content: userAudioTranscript },
-  ];
+      const updatedChatHistory = [
+        ...chatHistory,
+        { role: "user", content: userAudioTranscript },
+      ];
 
-  const response = await apiClient.post("/llm-guide", {
-    question,
-    sourceCode,
-    userAudioTranscript,
-    codeExecuteResponse,
-    chatHistory: updatedChatHistory,
-  });
+      const response = await apiClient.post("/llm-guide", {
+        question,
+        sourceCode,
+        userAudioTranscript,
+        codeExecuteResponse,
+        chatHistory: updatedChatHistory,
+      });
 
-  const assistantMsg = response.data["response"];
+      const assistantMsg = response.data["response"];
 
-  await apiClient.post("/chat/add-message", {
-    chatId: validChatId,
-    messages: [
-      { role: "user", content: userAudioTranscript },
-      { role: "assistant", content: assistantMsg },
-    ],
-  });
+      await apiClient.post("/chat/add-message", {
+        chatId: validChatId,
+        messages: [
+          { role: "user", content: userAudioTranscript },
+          { role: "assistant", content: assistantMsg },
+        ],
+      });
 
-  return {
-    assistantMsg,
-    userMsg: userAudioTranscript,
-  };
-});
+      return {
+        assistantMsg,
+        userMsg: userAudioTranscript,
+      };
+    } catch (error: any) {
+      // Handle axios error responses
+      if (error.response) {
+        // Return the error message from our API
+        return rejectWithValue(
+          error.response.data.error || "An error occurred"
+        );
+      }
+      // Handle other errors
+      return rejectWithValue(error.message || "Unknown error occurred");
+    }
+  }
+);
 
 const initialState: AssistantState = {
   LLMResponse: "",
+  LLMResponseError: "",
   userAudioTranscript: "",
   assistantAudioUrl: "",
   hintLoading: false,
@@ -310,8 +331,10 @@ const AssistantSlice = createSlice({
         });
         state.LLMFeedbackLoading = false;
       })
-      .addCase(getAssistantFeedbackThunk.rejected, (state) => {
+      .addCase(getAssistantFeedbackThunk.rejected, (state, action) => {
         state.LLMFeedbackLoading = false;
+        state.LLMResponseError =
+          (action.payload as string) || "Error in getting assistant feedback";
       })
       .addCase(getHintThunk.pending, (state) => {
         state.hintLoading = true;
@@ -330,9 +353,11 @@ const AssistantSlice = createSlice({
           content: action.payload.textHint,
         });
       })
-      .addCase(getHintThunk.rejected, (state) => {
+      .addCase(getHintThunk.rejected, (state, action) => {
+        console.log("getHintThunk.rejected", action);
         state.hintLoading = false;
-        state.hintError = "Error in generating hint";
+        state.hintError =
+          (action.payload as string) || "Error in generating hint";
       })
       .addCase(getProactiveFeedbackThunk.fulfilled, (state, action) => {
         if (action.payload.textFeedback) {

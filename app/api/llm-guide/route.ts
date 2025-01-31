@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-
+import { rateLimitMiddleware } from "@/app/middleware/rateLimitMiddleware";
 const OPEN_AI_API_KEY = process.env.OPEN_AI_API_KEY;
 const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
 
@@ -12,6 +12,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const { error, response } = await rateLimitMiddleware(request, "chat");
+  if (error) return response;
   const data = await request.json();
 
   const messages = [

@@ -1,7 +1,7 @@
 import { QuestionT, TestResult } from "@/lib/types";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-
+import { rateLimitMiddleware } from "@/app/middleware/rateLimitMiddleware";
 const OPEN_AI_API_KEY = process.env.OPEN_AI_API_KEY;
 const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
 
@@ -21,6 +21,8 @@ interface HintRequestData {
 
 // Handle POST requests (if needed)
 export async function POST(request: Request) {
+  const { error, response } = await rateLimitMiddleware(request, "hint");
+  if (error) return response;
   const data: HintRequestData = await request.json();
 
   const completion = await openai.chat.completions.create({
