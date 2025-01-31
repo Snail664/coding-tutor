@@ -43,14 +43,8 @@ export async function POST(request: Request) {
     )
   );
 
-  let responseContent = completion.choices[0].message.content;
+  let responseContent = parse_result(completion);
   console.log("responseContent: ", responseContent);
-  const answerMatch = responseContent?.match(/!!<<Answer>>!!([\s\S]*)/);
-  if (answerMatch && answerMatch[1]) {
-    responseContent = answerMatch[1].trim();
-  } else {
-    console.warn("No !!<Answer>!! found in the response");
-  }
 
   return NextResponse.json({ response: responseContent });
 }
@@ -71,7 +65,9 @@ const system_prompt = `
     5. In all other cases, break down the student's main question into several steps and ask them 
        follow-up questions one at a time to guide the student. Make sure your questions help the student
        understand the original question, one step at a time.
-    6. Return the following to sections: !!<<Thought>>!! for your thought process and !!<<Answer>>!! for your final response to the student.
+    6. Return a json object with the following keys:
+       - thought: <for your thought process on which rules apply and how to respond>
+       - answer: <for your final response to the student>
 `;
 
 function get_gpt_prompt(
@@ -89,4 +85,18 @@ function get_gpt_prompt(
     !!<<Section 3>>!!
     ${user_audio_transcript}
   `;
+}
+
+function parse_result(result: OpenAI.Chat.Completions.ChatCompletion) {
+  try {
+    const content = result.choices[0].message.content;
+    if (content) {
+      return JSON.parse(content.slice(8, -4))["answer"];
+    }
+  } catch {
+    const content = result.choices[0].message.content;
+    if (content) {
+      return JSON.parse(content)["answer"];
+    }
+  }
 }
