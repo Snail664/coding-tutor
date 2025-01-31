@@ -3,6 +3,7 @@ import apiClient from "@/lib/APIClient";
 import { RootState } from "@/store";
 import { MessageT } from "@/lib/types";
 import { runCodeThunk } from "@/slices/CodeSlice";
+import { areCodesEquivalentNaive } from "@/lib/utils";
 
 interface AssistantState {
   LLMResponse: string; // for llm chat feature response
@@ -16,6 +17,7 @@ interface AssistantState {
   assistantPopupText: string;
   proactiveFeedback: string;
   isPolling: boolean;
+  lastSourceCodeForProactiveFeedback: string; // TODO: ensure current source code is different from last source code for proactive feedback, before making api request.
 }
 
 const initialChatHistory: MessageT[] = [];
@@ -55,14 +57,28 @@ export const getProactiveFeedbackThunk = createAsyncThunk<
   "assistant/getProactiveFeedback",
   async (_, { getState, dispatch, rejectWithValue }) => {
     try {
-      // ensure chat exists
-      const validChatId = await ensureChatExists(dispatch, getState);
       const state = getState();
       const {
         question: { question },
-        code: { sourceCode },
-        assistant: { assistantPopupText },
+        code: { sourceCode, programmingLanguage },
+        assistant: { assistantPopupText, lastSourceCodeForProactiveFeedback },
       } = state;
+
+      // Check if the current code is equivalent to the last checked code
+      if (
+        lastSourceCodeForProactiveFeedback &&
+        lastSourceCodeForProactiveFeedback.length > 0 &&
+        areCodesEquivalentNaive(
+          sourceCode,
+          lastSourceCodeForProactiveFeedback,
+          programmingLanguage.name
+        )
+      ) {
+        return { audioUrl: "", textFeedback: "" };
+      }
+
+      // ensure chat exists
+      const validChatId = await ensureChatExists(dispatch, getState);
 
       // get proactive feedback
       const response = await apiClient.post("/llm-guide/proactive", {
@@ -71,6 +87,9 @@ export const getProactiveFeedbackThunk = createAsyncThunk<
         previousHint: assistantPopupText,
       });
       const { audioProactiveFeedbackBase64, proactiveFeedback } = response.data;
+
+      // Update the last source code regardless of feedback result
+      dispatch(setLastSourceCodeForProactiveFeedback(sourceCode));
 
       // if there is no feedback, return empty strings without saving to chat
       if (!proactiveFeedback || !audioProactiveFeedbackBase64) {
@@ -222,6 +241,7 @@ const initialState: AssistantState = {
   LLMFeedbackLoading: false,
   proactiveFeedback: "",
   isPolling: false,
+  lastSourceCodeForProactiveFeedback: "",
 };
 
 export const startPolling = createAsyncThunk<void, void, { state: RootState }>(
@@ -265,6 +285,12 @@ const AssistantSlice = createSlice({
     },
     setIsPolling: (state, action: PayloadAction<boolean>) => {
       state.isPolling = action.payload;
+    },
+    setLastSourceCodeForProactiveFeedback: (
+      state,
+      action: PayloadAction<string>
+    ) => {
+      state.lastSourceCodeForProactiveFeedback = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -330,5 +356,6 @@ export const {
   setChatId,
   setAssistantPopupText,
   setIsPolling,
+  setLastSourceCodeForProactiveFeedback,
 } = AssistantSlice.actions;
 export default AssistantSlice.reducer;
