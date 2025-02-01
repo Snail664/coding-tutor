@@ -7,7 +7,9 @@
     "postinstall": "prisma generate",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
+    "prisma:migrate:deploy": "dotenv -e .env.production -- npx prisma migrate deploy"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.5.0",
@@ -48,6 +50,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/react-resizable": "^3.0.8",
+    "dotenv-cli": "^8.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.8",
     "postcss": "^8",
