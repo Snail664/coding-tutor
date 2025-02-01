@@ -50,11 +50,13 @@ def closest_point(root, point, depth=0, best=float('inf')):
     return best
 
 def solution(data):
-    # Parse input data
+    # Parse input data into 3D coordinates
     points = []
     for line in data:
-        x, y, z = map(float, line.split(',')[1:])
-        points.append([x, y, z])
+        # Split by ':' first, then by ',' and convert to float
+        parts = line.split(': ')[1].strip().split(',')
+        # Correctly using x, y, z coordinates (indices 0, 1, 2)
+        points.append([float(parts[0]), float(parts[1]), float(parts[2])])
     
     # Build k-d tree
     root = build_kdtree(points[:])
@@ -67,13 +69,12 @@ def solution(data):
     
     return round(min_distance, 3)
 
-
 if __name__ == '__main__':
     data = [
-        '45000377000000008306f39f0A000bc1d7253441',
-        '4500007f0000000005065de1c0a800b833c555ee',
-        '450002e50000000008061ef5c0a8796698721661',
-        '4500017e00000000b206e54e88c7fd4f0A00244c',
-        '45000164000000009d06d73c0A0000b7e0b143b8'
+        "Proxima Centauri: 4.247, 2.945, -3.056, -0.143",
+        "Barnard's star: 5.963, 4.958, 2.980, 1.449",
+        "Luhman 16 A: 6.503, 1.697, -6.249, 0.600",
+        "WISE J085510.83-071442.5: 7.532, -3.967, -5.664, 2.985",
+        "Wolf 359: 7.856, -1.916, -3.938, 6.522"
     ]
     print(solution(data))

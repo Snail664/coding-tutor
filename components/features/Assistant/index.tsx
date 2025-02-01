@@ -28,8 +28,16 @@ export default function AssistantWindow() {
   } = useAppSelector((state) => state.assistant);
 
   useEffect(() => {
-    console.log("proactiveFeedback: ", proactiveFeedback);
-  }, [proactiveFeedback]);
+  //   console.log("proactiveFeedback: ", proactiveFeedback);
+  // }, [proactiveFeedback]);
+  
+    if (hintError) {
+      toast({
+        title: "Error",
+        description: hintError,
+      });
+    }
+  }, [hintError, toast]);
 
   useEffect(() => {
     if (assistantPopupText) {
@@ -41,13 +49,6 @@ export default function AssistantWindow() {
   const [isAssistantSpeakingHidden, setIsAssistantSpeakingHidden] =
     useState(true);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
-
-  if (hintError) {
-    toast({
-      title: "Error",
-      description: hintError,
-    });
-  }
 
   const handleSpeechResult = async (e: SpeechRecognitionEvent) => {
     let transcript = "";
@@ -79,20 +80,28 @@ export default function AssistantWindow() {
   };
 
   const onHint = () => {
-    if (!user)
-      return toast({
+    // if (!user)
+    //   return toast({
+    if (!user) {
+      toast({
         title: "Error",
         description: "Please login to get hint",
       });
+      return;
+    }
     dispatch(getHintThunk());
   };
 
   const onSend = () => {
-    if (!user)
-      return toast({
+    // if (!user)
+    //   return toast({
+    if (!user) {
+      toast({
         title: "Error",
         description: "Please login to send message",
       });
+      return;
+    }
     dispatch(getAssistantFeedbackThunk());
   };
 
