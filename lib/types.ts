@@ -76,8 +76,10 @@ export type ProgrammingLanguageT = {
 };
 
 export interface Auth0User {
-  name: string;
-  email: string;
-  sub: string;
-  picture?: string;
+  auth0_sid: string;
+  auth0_sub: string;
+  auth0_name: string | null;
+  auth0_email: string | null;
+  auth0_picture: string | null;
+  isWalkthroughEnabled: boolean;
 }

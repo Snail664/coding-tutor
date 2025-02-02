@@ -1,10 +1,10 @@
 import NavbarHelpModal from "@/components/Navbar/NavbarHelpModal";
 import NavbarUserModal from "@/components/Navbar/NavbarUserModal";
 import ThemeSelectButton from "@/components/Navbar/ThemeSelectButton";
-import { Auth0User } from "@/lib/types";
+import { Claims } from "@auth0/nextjs-auth0";
 
 interface NavbarProps {
-  auth0User?: Auth0User; // Make it optional since it might be null
+  auth0User?: Claims; // Use Auth0's Claims type
 }
 
 export default function Navbar({ auth0User }: NavbarProps) {
@@ -19,9 +19,9 @@ export default function Navbar({ auth0User }: NavbarProps) {
         <ThemeSelectButton />
         {auth0User && (
           <NavbarUserModal
-            name={auth0User.name}
-            email={auth0User.email}
-            sub={auth0User.sub}
+            name={auth0User.name ?? ""}
+            email={auth0User.email ?? ""}
+            sub={auth0User.sub ?? ""}
           />
         )}
         {!auth0User && <a href="/api/auth/login">Login</a>}

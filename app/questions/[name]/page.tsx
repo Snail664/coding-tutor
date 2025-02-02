@@ -28,6 +28,7 @@ export default async function QuestionPage({
     userData = await prisma.user.findUnique({
       where: { auth0_sub: session.user.sub },
       select: {
+        auth0_sid: true,
         auth0_sub: true,
         auth0_name: true,
         auth0_email: true,
