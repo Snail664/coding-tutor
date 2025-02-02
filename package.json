@@ -9,7 +9,9 @@
     "start": "next start",
     "lint": "next lint",
     "prisma:migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
-    "prisma:migrate:deploy": "dotenv -e .env.production -- npx prisma migrate deploy"
+    "prisma:migrate:deploy": "dotenv -e .env.production -- npx prisma migrate deploy",
+    "db:seed:dev": "dotenv -e .env.development -- ts-node --files --project tsconfig.seed.json prisma/seed.ts",
+    "db:seed:prod": "dotenv -e .env.production -- ts-node --files --project tsconfig.seed.json prisma/seed.ts"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.5.0",
