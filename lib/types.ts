@@ -74,3 +74,10 @@ export type ProgrammingLanguageT = {
   version: string;
   defaultCode: string;
 };
+
+export interface Auth0User {
+  name: string;
+  email: string;
+  sub: string;
+  picture?: string;
+}

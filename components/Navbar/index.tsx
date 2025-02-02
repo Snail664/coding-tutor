@@ -1,9 +1,10 @@
 import NavbarHelpModal from "@/components/Navbar/NavbarHelpModal";
 import NavbarUserModal from "@/components/Navbar/NavbarUserModal";
 import ThemeSelectButton from "@/components/Navbar/ThemeSelectButton";
+import { Auth0User } from "@/lib/types";
 
 interface NavbarProps {
-  auth0User: any; // Type this properly based on your auth0 user type
+  auth0User?: Auth0User; // Make it optional since it might be null
 }
 
 export default function Navbar({ auth0User }: NavbarProps) {

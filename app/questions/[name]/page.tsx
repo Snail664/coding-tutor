@@ -21,6 +21,8 @@ export default async function QuestionPage({
     }),
   ]);
 
+  console.log("question", question);
+
   let userData = null;
   if (session?.user?.sub) {
     userData = await prisma.user.findUnique({
