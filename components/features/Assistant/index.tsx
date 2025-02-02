@@ -89,20 +89,28 @@ export default function AssistantWindow() {
   };
 
   const onHint = () => {
-    if (!user)
-      return toast({
+    // if (!user)
+    //   return toast({
+    if (!user) {
+      toast({
         title: "Error",
         description: "Please login to get hint",
       });
+      return;
+    }
     dispatch(getHintThunk());
   };
 
   const onSend = () => {
-    if (!user)
-      return toast({
+    // if (!user)
+    //   return toast({
+    if (!user) {
+      toast({
         title: "Error",
         description: "Please login to send message",
       });
+      return;
+    }
     dispatch(getAssistantFeedbackThunk());
   };
 
