@@ -1,5 +1,4 @@
-// CollapsiblePanel.tsx
-
+"use client";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import React, { useState } from "react";
 

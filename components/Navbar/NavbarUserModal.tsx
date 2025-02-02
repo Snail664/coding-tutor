@@ -1,3 +1,4 @@
+"use client";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +10,6 @@ import {
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { CircleUser } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAppSelector } from "@/store";
 
 // get provider from sub
 const getProviderFromSub = (sub: string) => {
@@ -25,11 +25,17 @@ const getProviderFromSub = (sub: string) => {
   }
 };
 
-export default function NavbarUserModal() {
-  const user = useAppSelector((state) => state.auth.user);
+interface NavbarUserModalProps {
+  name: string;
+  email: string;
+  sub: string;
+}
 
-  if (!user) return null;
-
+export default function NavbarUserModal({
+  name,
+  email,
+  sub,
+}: NavbarUserModalProps) {
   return (
     <Dialog>
       <DialogTrigger>
@@ -45,18 +51,18 @@ export default function NavbarUserModal() {
               <td>
                 <strong>Name</strong>
               </td>
-              <td>{user.name}</td>
+              <td>{name}</td>
               <tr>
                 <td>
                   <strong>Email</strong>
                 </td>
-                <td>{user.email}</td>
+                <td>{email}</td>
               </tr>
               <tr>
                 <td>
                   <strong>Login Method</strong>
                 </td>
-                <td>{getProviderFromSub(user.sub)}</td>
+                <td>{getProviderFromSub(sub)}</td>
               </tr>
             </tbody>
           </table>

@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { BotMessageSquare } from "lucide-react";
 import CollapsiblePanel from "../../layout/CollapsiblePanel";

@@ -4,32 +4,17 @@ import ExecutionWindow from "@/components/features/CodeExecution";
 import QuestionWindow from "@/components/features/Question";
 import EditorWindow from "@/components/features/CodeEditor";
 import SplitPane from "@/components/layout/SplitPane";
-import { useAppDispatch, useAppSelector } from "@/store";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { useEffect, useState } from "react";
-import Walkthrough from "@/components/features/Walkthrough";
-import { fetchUserDataThunk } from "@/slices/AuthSlice";
-import LoadingScreen from "@/components/layout/LoadingScreen";
-import Navbar from "@/components/Navbar";
 
-export default function Main() {
-  const { user: auth0User, isLoading: auth0Loading } = useUser();
-  const { isLoading: dbLoading } = useAppSelector((state) => state.auth);
-  const dispatch = useAppDispatch();
-  const [dimensions, setDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
+export default function QuestionLayout() {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    if (!auth0Loading) {
-      if (auth0User) {
-        dispatch(fetchUserDataThunk());
-      }
-    }
-  }, [auth0User, auth0Loading, dispatch]);
+    setDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
 
-  useEffect(() => {
     const handleResize = () => {
       setDimensions({
         width: window.innerWidth,
@@ -41,29 +26,19 @@ export default function Main() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Show loading state while either Auth0 or DB data is loading
-  if (auth0Loading || dbLoading) {
-    return <LoadingScreen />;
+  if (!dimensions.width || !dimensions.height) {
+    return null;
   }
 
   return (
-    <div
-      style={{
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-        width: "100vw",
-      }}
-    >
-      <Walkthrough />
-      <Navbar auth0User={auth0User} />
+    <>
       <div
         style={{
           flex: 1,
           display: "flex",
           flexDirection: "row",
           overflow: "hidden",
+          minHeight: 0,
         }}
       >
         <SplitPane
@@ -77,7 +52,7 @@ export default function Main() {
             split="horizontal"
             minSize={53}
             defaultSize={dimensions.height / 2}
-            maxSize={Math.max(dimensions.height - 308, 53)}
+            maxSize={Math.max(dimensions.height - 348, 53)}
           >
             <EditorWindow />
             <ExecutionWindow />
@@ -87,6 +62,6 @@ export default function Main() {
       <div style={{ marginTop: "10px", height: "200px", flexShrink: 0 }}>
         <AssistantWindow />
       </div>
-    </div>
+    </>
   );
 }

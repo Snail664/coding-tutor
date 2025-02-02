@@ -1,5 +1,4 @@
-// QuestionWindow.tsx
-
+"use client";
 import { FileQuestion } from "lucide-react";
 import CollapsiblePanel from "../../layout/CollapsiblePanel";
 import QuestionSelector from "./QuestionSelector";

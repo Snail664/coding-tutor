@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import Joyride, { Step, CallBackProps } from "react-joyride";
 import { useAppDispatch, useAppSelector } from "@/store";

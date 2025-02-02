@@ -1,5 +1,4 @@
-// ExecutionWindow.tsx
-
+"use client";
 import { SquarePlay } from "lucide-react";
 import CollapsiblePanel from "@/components/layout/CollapsiblePanel";
 import { useState } from "react";

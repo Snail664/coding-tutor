@@ -1,3 +1,4 @@
+"use client";
 import { Code2 } from "lucide-react";
 import CollapsiblePanel from "@/components/layout/CollapsiblePanel";
 import CodeEditor from "./CodeEditor";

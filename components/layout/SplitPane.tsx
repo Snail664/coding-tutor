@@ -76,7 +76,7 @@ export default function SplitPane({
         width: "100%",
       }}
     >
-      <div style={{ flex: 1, overflow: "auto" }}>{children[0]}</div>
+      <div style={{ flex: 1, overflow: "hidden" }}>{children[0]}</div>
       <div
         className="hover:bg-blue-400"
         style={{
