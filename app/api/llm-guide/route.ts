@@ -13,41 +13,46 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const { error, response } = await rateLimitMiddleware(request, "chat");
-  if (error) return response;
-  const data = await request.json();
+  try {
+    const { error, response } = await rateLimitMiddleware(request, "chat");
+    if (error) return response;
+    const data = await request.json();
 
-  const messages = [
-    { role: "user", content: system_prompt },
-    ...(data.chatHistory || []),
-    {
-      role: "user",
-      content: get_gpt_prompt(
-        data["question"].content,
+    const messages = [
+      { role: "user", content: system_prompt },
+      ...(data.chatHistory || []),
+      {
+        role: "user",
+        content: get_gpt_prompt(
+          data["question"].content,
+          data["sourceCode"],
+          data["userAudioTranscript"]
+        ),
+      },
+    ];
+
+    const completion = await openai.chat.completions.create({
+      model: "o1-mini",
+      messages: messages,
+    });
+
+    console.log(
+      "prompt: ",
+      get_gpt_prompt(
+        data["question"]["content"],
         data["sourceCode"],
         data["userAudioTranscript"]
-      ),
-    },
-  ];
+      )
+    );
 
-  const completion = await openai.chat.completions.create({
-    model: "o1-mini",
-    messages: messages,
-  });
+    const responseContent = parseLLMResponse(completion, "answer");
+    console.log("responseContent: ", responseContent);
 
-  console.log(
-    "prompt: ",
-    get_gpt_prompt(
-      data["question"]["content"],
-      data["sourceCode"],
-      data["userAudioTranscript"]
-    )
-  );
-
-  const responseContent = parseLLMResponse(completion, "answer");
-  console.log("responseContent: ", responseContent);
-
-  return NextResponse.json({ response: responseContent });
+    return NextResponse.json({ response: responseContent });
+  } catch (e: any) {
+    console.log("error: ", e);
+    return NextResponse.json({ error: e.message });
+  }
 }
 
 const system_prompt = `    
