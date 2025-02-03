@@ -45,6 +45,7 @@ export default function AssistantWindow() {
   const [isAssistantSpeakingHidden, setIsAssistantSpeakingHidden] =
     useState(true);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     if (hintError) {
@@ -136,32 +137,38 @@ export default function AssistantWindow() {
 
   // console.log("assistantPopupText: ", assistantPopupText);
   return (
-    <CollapsiblePanel icon={<BotMessageSquare />} title="LLM Assistant">
-      {assistantAudioUrl && (
-        <audio className="hidden" src={assistantAudioUrl} autoPlay />
-      )}
-      <AssistantSpeaking
-        isHidden={isAssistantSpeakingHidden}
-        setIsHidden={setIsAssistantSpeakingHidden}
-      />
+    <div style={{ height: isCollapsed ? "25px" : "300px" }}>
+      <CollapsiblePanel
+        icon={<BotMessageSquare />}
+        title="LLM Assistant"
+        onCollapsedChange={setIsCollapsed}
+      >
+        {assistantAudioUrl && (
+          <audio className="hidden" src={assistantAudioUrl} autoPlay />
+        )}
+        <AssistantSpeaking
+          isHidden={isAssistantSpeakingHidden}
+          setIsHidden={setIsAssistantSpeakingHidden}
+        />
 
-      <div className="flex flex-row w-full mt-5 px-3">
-        <UserInputSection
-          userAudioTranscriptInput={userAudioTranscriptInput}
-          isRecording={isRecording}
-          setUserAudioTranscriptInput={handleSetUserAudioTranscriptInput}
-          onRecordStart={startRecording}
-          onRecordStop={stopRecording}
-          onSend={onSend}
-          onHint={onHint}
-          hintLoading={hintLoading}
-          LLMFeedbackLoading={LLMFeedbackLoading}
-        />
-        <LLMFeedback
-          userQuestion={userAudioTranscript}
-          LLMResponse={LLMResponse}
-        />
-      </div>
-    </CollapsiblePanel>
+        <div className="flex flex-row w-full mt-5 px-3">
+          <UserInputSection
+            userAudioTranscriptInput={userAudioTranscriptInput}
+            isRecording={isRecording}
+            setUserAudioTranscriptInput={handleSetUserAudioTranscriptInput}
+            onRecordStart={startRecording}
+            onRecordStop={stopRecording}
+            onSend={onSend}
+            onHint={onHint}
+            hintLoading={hintLoading}
+            LLMFeedbackLoading={LLMFeedbackLoading}
+          />
+          <LLMFeedback
+            userQuestion={userAudioTranscript}
+            LLMResponse={LLMResponse}
+          />
+        </div>
+      </CollapsiblePanel>
+    </div>
   );
 }

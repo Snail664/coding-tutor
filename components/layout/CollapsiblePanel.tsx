@@ -7,6 +7,7 @@ interface CollapsiblePanelProps {
   icon: React.ReactNode;
   headerActions?: React.ReactNode;
   children: React.ReactNode;
+  onCollapsedChange?: (isCollapsed: boolean) => void;
 }
 
 export default function CollapsiblePanel({
@@ -14,8 +15,16 @@ export default function CollapsiblePanel({
   icon,
   headerActions,
   children,
+  onCollapsedChange,
 }: CollapsiblePanelProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const handleCollapse = () => {
+    const newState = !isCollapsed;
+    setIsCollapsed(newState);
+    onCollapsedChange?.(newState);
+  };
+
   return (
     <div className="flex flex-col h-full rounded-lg">
       {/* Header */}
@@ -26,7 +35,7 @@ export default function CollapsiblePanel({
         </div>
         <div className="flex items-center gap-2">
           {headerActions}
-          <button onClick={() => setIsCollapsed(!isCollapsed)}>
+          <button onClick={handleCollapse}>
             {isCollapsed ? <ChevronDown /> : <ChevronUp />}
           </button>
         </div>
