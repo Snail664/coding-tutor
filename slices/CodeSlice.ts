@@ -63,7 +63,17 @@ export const runCodeThunk = createAsyncThunk<
     const runner = RunnerFactory.getRunner(programmingLanguage.name);
     const completeCode = runner.prepareCode(sourceCode, question.testCases);
     const result = await runner.runCode(completeCode, sourceCode);
-    return result;
+
+    // Add testCase information back to each result
+    const updatedResult = {
+      ...result,
+      testCases: result.testCases.map((testResult, index) => ({
+        ...testResult,
+        testCase: question.testCases[index],
+      })),
+    };
+
+    return updatedResult;
   } catch (error: any) {
     return rejectWithValue(error.message || "Failed to run code");
   }

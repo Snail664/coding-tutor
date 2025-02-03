@@ -68,7 +68,6 @@ export class PythonRunner implements LanguageRunner {
               userPrints = user_stdout.getvalue()
               passed = result == expected_output
               result_dict = {
-                  'testCase': test_case,
                   'actualOutput': result,
                   'passed': passed,
                   'userPrints': userPrints
@@ -76,7 +75,6 @@ export class PythonRunner implements LanguageRunner {
               results.append(result_dict)
           except Exception as e:
               results.append({
-                  'testCase': test_case,
                   'actualOutput': '',
                   'passed': False,
                   'error': str(e)
