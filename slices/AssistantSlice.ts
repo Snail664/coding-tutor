@@ -210,6 +210,14 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
       // Set the transcript for display
       dispatch(setUserAudioTranscript(userAudioTranscriptInput));
 
+      console.log("posted data: ", {
+        question,
+        sourceCode,
+        userAudioTranscript: userAudioTranscriptInput,
+        codeExecuteResponse,
+        chatHistory: updatedChatHistory,
+      });
+
       const response = await apiClient.post("/llm-guide", {
         question,
         sourceCode,
@@ -217,6 +225,8 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
         codeExecuteResponse,
         chatHistory: updatedChatHistory,
       });
+
+      console.log("response: ", response.data);
 
       const assistantMsg = response.data["response"];
 
