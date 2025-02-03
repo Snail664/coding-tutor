@@ -49,9 +49,10 @@ export async function POST(request: Request) {
     console.log("responseContent: ", responseContent);
 
     return NextResponse.json({ response: responseContent });
-  } catch (e: any) {
-    console.log("error: ", e);
-    return NextResponse.json({ error: e.message });
+  } catch (e: unknown) {
+    const error = e as Error;
+    console.log("error: ", error);
+    return NextResponse.json({ error: error.message });
   }
 }
 
