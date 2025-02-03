@@ -7,6 +7,7 @@ import LLMFeedback from "./LLMFeedback";
 import {
   setUserAudioTranscript,
   getAssistantFeedbackThunk,
+  setUserAudioTranscriptInput,
 } from "@/slices/AssistantSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { getHintThunk } from "@/slices/AssistantSlice";
@@ -21,6 +22,7 @@ export default function AssistantWindow() {
     LLMResponse,
     LLMResponseError,
     userAudioTranscript,
+    userAudioTranscriptInput,
     hintLoading,
     hintError,
     LLMFeedbackLoading,
@@ -88,6 +90,10 @@ export default function AssistantWindow() {
     dispatch(setUserAudioTranscript(transcript));
   };
 
+  const handleSetUserAudioTranscriptInput = (transcript: string) => {
+    dispatch(setUserAudioTranscriptInput(transcript));
+  };
+
   const onHint = () => {
     // if (!user)
     //   return toast({
@@ -141,9 +147,9 @@ export default function AssistantWindow() {
 
       <div className="flex flex-row w-full mt-5 px-3">
         <UserInputSection
-          userAudioTranscript={userAudioTranscript}
+          userAudioTranscriptInput={userAudioTranscriptInput}
           isRecording={isRecording}
-          setUserAudioTranscript={handleSetUserAudioTranscript}
+          setUserAudioTranscriptInput={handleSetUserAudioTranscriptInput}
           onRecordStart={startRecording}
           onRecordStop={stopRecording}
           onSend={onSend}
@@ -151,7 +157,10 @@ export default function AssistantWindow() {
           hintLoading={hintLoading}
           LLMFeedbackLoading={LLMFeedbackLoading}
         />
-        <LLMFeedback LLMResponse={LLMResponse} />
+        <LLMFeedback
+          userQuestion={userAudioTranscript}
+          LLMResponse={LLMResponse}
+        />
       </div>
     </CollapsiblePanel>
   );

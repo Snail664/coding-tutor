@@ -7,9 +7,9 @@ import HintButton from "./HintButton";
 import Loading from "@/components/ui/loading";
 
 interface UserInputSectionProps {
-  userAudioTranscript: string;
+  userAudioTranscriptInput: string;
   isRecording: boolean;
-  setUserAudioTranscript: (value: string) => void;
+  setUserAudioTranscriptInput: (transcript: string) => void;
   onRecordStart: () => void;
   onRecordStop: () => void;
   onSend: () => void;
@@ -19,9 +19,9 @@ interface UserInputSectionProps {
 }
 
 export default function UserInputSection({
-  userAudioTranscript,
+  userAudioTranscriptInput,
   isRecording,
-  setUserAudioTranscript,
+  setUserAudioTranscriptInput,
   onRecordStart,
   onRecordStop,
   onSend,
@@ -37,10 +37,10 @@ export default function UserInputSection({
         <div className="flex items-center assistant-input">
           <Input
             placeholder="Ask a question..."
-            value={userAudioTranscript}
+            value={userAudioTranscriptInput}
             disabled={isRecording || isAnyLoading}
             onChange={(e) => {
-              setUserAudioTranscript(e.target.value);
+              setUserAudioTranscriptInput(e.target.value);
             }}
           />
           <RecordButton

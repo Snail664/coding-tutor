@@ -8,7 +8,8 @@ import { areCodesEquivalentNaive, base64ToAudioUrl } from "@/lib/utils";
 interface AssistantState {
   LLMResponse: string; // for llm chat feature response
   LLMResponseError: string;
-  userAudioTranscript: string;
+  userAudioTranscript: string; // For displaying current question
+  userAudioTranscriptInput: string; // For input field only
   assistantAudioUrl: string; // Consolidated audio URL
   hintLoading: boolean;
   hintError: string;
@@ -198,18 +199,21 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
       const {
         question: { question },
         code: { sourceCode, codeExecuteResponse },
-        assistant: { userAudioTranscript, chatHistory },
+        assistant: { userAudioTranscriptInput, chatHistory },
       } = state;
 
       const updatedChatHistory = [
         ...chatHistory,
-        { role: "user", content: userAudioTranscript },
+        { role: "user", content: userAudioTranscriptInput },
       ];
+
+      // Set the transcript for display
+      dispatch(setUserAudioTranscript(userAudioTranscriptInput));
 
       const response = await apiClient.post("/llm-guide", {
         question,
         sourceCode,
-        userAudioTranscript,
+        userAudioTranscript: userAudioTranscriptInput,
         codeExecuteResponse,
         chatHistory: updatedChatHistory,
       });
@@ -219,19 +223,18 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
       await apiClient.post("/chat/add-message", {
         chatId: validChatId,
         messages: [
-          { role: "user", content: userAudioTranscript },
+          { role: "user", content: userAudioTranscriptInput },
           { role: "assistant", content: assistantMsg },
         ],
       });
 
       return {
         assistantMsg,
-        userMsg: userAudioTranscript,
+        userMsg: userAudioTranscriptInput,
       };
     } catch (error: any) {
       // Handle axios error responses
       if (error.response) {
-        // Return the error message from our API
         return rejectWithValue(
           error.response.data.error || "An error occurred"
         );
@@ -246,6 +249,7 @@ const initialState: AssistantState = {
   LLMResponse: "",
   LLMResponseError: "",
   userAudioTranscript: "",
+  userAudioTranscriptInput: "",
   assistantAudioUrl: "",
   hintLoading: false,
   hintError: "",
@@ -291,6 +295,9 @@ const AssistantSlice = createSlice({
     setUserAudioTranscript: (state, action: PayloadAction<string>) => {
       state.userAudioTranscript = action.payload;
     },
+    setUserAudioTranscriptInput: (state, action: PayloadAction<string>) => {
+      state.userAudioTranscriptInput = action.payload;
+    },
     setChatId: (state, action: PayloadAction<string>) => {
       state.chatId = action.payload;
     },
@@ -322,6 +329,7 @@ const AssistantSlice = createSlice({
           role: "assistant",
           content: action.payload.assistantMsg,
         });
+        state.userAudioTranscriptInput = "";
         state.LLMFeedbackLoading = false;
       })
       .addCase(getAssistantFeedbackThunk.rejected, (state, action) => {
@@ -371,6 +379,7 @@ const AssistantSlice = createSlice({
 export const {
   setLLMResponse,
   setUserAudioTranscript,
+  setUserAudioTranscriptInput,
   setChatId,
   setAssistantPopupText,
   setIsPolling,
