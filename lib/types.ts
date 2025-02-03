@@ -11,7 +11,7 @@ export enum QuestionDifficulty {
 
 export interface TestCase {
   input: string[] | number[];
-  expectedOutput: string | number | boolean;
+  expectedOutput: string | number | boolean | number[];
   description: string;
 }
 
