@@ -226,6 +226,10 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
         chatHistory: updatedChatHistory,
       });
 
+      if (response.status != 200) {
+        return rejectWithValue("An Unexpected error occured.");
+      }
+
       console.log("response: ", response.data);
 
       const assistantMsg = response.data["response"];
