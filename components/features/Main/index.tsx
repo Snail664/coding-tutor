@@ -84,7 +84,7 @@ export default function Main() {
           </SplitPane>
         </SplitPane>
       </div>
-      <div style={{ marginTop: "10px", height: "300px", flexShrink: 0 }}>
+      <div style={{ marginTop: "10px", flexShrink: 0 }}>
         <AssistantWindow />
       </div>
     </div>
