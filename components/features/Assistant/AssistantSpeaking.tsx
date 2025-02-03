@@ -18,7 +18,7 @@ export default function AssistantSpeaking({
     >
       <div className="flex flex-col bg-menuBackground p-4 rounded shadow-lg">
         <div className="flex justify-between">
-          <div className="text-sm font-bold">Asssistant</div>
+          <div className="text-sm font-bold">Assistant</div>
           <XIcon onClick={() => setIsHidden(true)} className="cursor-pointer" />
         </div>
         <div className="flex items-center gap-2 justify-around">

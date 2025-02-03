@@ -30,7 +30,7 @@ export const QUESTIONS: QuestionT[] = [
           "AAA: Discount 3103",
           "DDD: Rebate 967",
         ],
-        expectedOutput: 2454,
+        expectedOutput: 2533,
         description: "",
       },
       {
@@ -42,7 +42,7 @@ export const QUESTIONS: QuestionT[] = [
           "BBB: Fee 9378",
           "AAA: Discount 3103",
         ],
-        expectedOutput: 200,
+        expectedOutput: 3500,
         description: "",
       },
     ],
@@ -67,7 +67,7 @@ export const QUESTIONS: QuestionT[] = [
           '4500012c0000000083069f3fc0a800030A000003', 
           '450001900000000083069f3f0A000004c0a80004'  
         ],
-        expectedOutput: "700/900",  
+        expectedOutput: "800/900",  
         description: "",
       },
       {
@@ -93,7 +93,7 @@ export const QUESTIONS: QuestionT[] = [
           '45ffffff000000008306f39fc0a80001c0a80002', 
           '45ffff00000000008306f39f0A0000010A000002'  
         ],
-        expectedOutput: "16777224/56", 
+        expectedOutput: "65542/65336", 
         description: "",
       }
     ],
