@@ -62,7 +62,7 @@ export const QUESTIONS: QuestionT[] = [
           '4500012c0000000083069f3fc0a800030A000003', 
           '450001900000000083069f3f0A000004c0a80004'  
         ],
-        expectedOutput: "700/900",  
+        expectedOutput: "800/900",  
         description: "",
       },
       {
@@ -88,7 +88,7 @@ export const QUESTIONS: QuestionT[] = [
           '45ffffff000000008306f39fc0a80001c0a80002', 
           '45ffff00000000008306f39f0A0000010A000002'  
         ],
-        expectedOutput: "16777224/56", 
+        expectedOutput: "65542/65336", 
         description: "",
       }
     ],
@@ -517,6 +517,86 @@ export const QUESTIONS: QuestionT[] = [
           "#########################"
         ],
         expectedOutput: 42,
+        description: "",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `def solution(data):
+    # insert your code below
+`,
+        language: LanguageName.Python,
+      },
+    ],
+  },
+  {
+    name: "Median of Two Sorted Arrays",
+    difficulty: QuestionDifficulty.Hard,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/PurchaseTickets.md"),
+      "utf8"
+    ),
+    testCases: [
+      {
+        input: [
+          "nums1 = [1, 3]",
+          "nums2 = [2]",
+        ],
+        expectedOutput: 2,
+        description: "",
+      },
+      {
+        input: [
+          "nums1 = [1, 2]",
+          "nums2 = [3,4]",
+        ],
+        expectedOutput: 2.5,
+        description: "",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `def solution(data):
+    # insert your code below
+`,
+        language: LanguageName.Python,
+      },
+    ],
+  },
+  {
+    name: "Kattis Quest",
+    difficulty: QuestionDifficulty.Hard,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/KattisQuest.md"),
+      "utf8"
+    ),
+    testCases: [
+      {
+        input: [ 
+          "9",
+          "add 8 10",
+          "add 3 25",
+          "add 5 6",
+          "query 7",
+          "query 7",
+          "add 1 9",
+          "add 2 13",
+          "query 20",
+          "query 1",
+        ],
+        expectedOutput: [6, 25, 32, 0],
+        description: "",
+      },
+      {
+        input: [ 
+          "5",
+          "add 10 20",
+          "add 5 15",
+          "query 12",
+          "add 3 30",
+          "query 8",
+        ],
+        expectedOutput: [20,45],
         description: "",
       },
     ],

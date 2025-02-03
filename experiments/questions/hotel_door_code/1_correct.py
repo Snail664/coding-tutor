@@ -1,6 +1,11 @@
 def solution(data):
     # Simple linear approach
-    numbers = [int(x) for x in data.split()]
+    if isinstance(data, list):
+        input_str = data[0]
+    else:
+        input_str = data
+    numbers = [int(x) for x in input_str.split()]
+    
     pixels = []
     is_white = True
     

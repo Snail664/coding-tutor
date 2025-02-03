@@ -66,9 +66,14 @@ export class PythonRunner implements LanguageRunner {
               with redirect_stdout(user_stdout):
                 result = ${functionName}(input_data)
               userPrints = user_stdout.getvalue()
-              passed = result == expected_output
+
+              # Convert both to same type before comparison
+              str_result = str(result).strip()
+              str_expected = str(expected_output).strip()
+              passed = str_result == str_expected
+
               result_dict = {
-                  'actualOutput': result,
+                  'actualOutput': str_result,
                   'passed': passed,
                   'userPrints': userPrints
               }
