@@ -1,24 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   ProgrammingLanguageT,
-  LanguageName,
   CodeExecuteResponseT,
   CodeExecuteResponseCategory,
 } from "@/lib/types";
+import { LanguageName } from "@prisma/client";
 import { getTemplateCode } from "@/lib/utils";
-import { QUESTIONS } from "@/lib/constants";
 import { RunnerFactory } from "@/lib/runners";
 import { RootState } from "@/store";
 
 export const LANGUAGES: ProgrammingLanguageT[] = [
   {
-    name: LanguageName.Python,
+    name: LanguageName.python,
     icon: "py",
     version: "3.10.0",
     defaultCode: "# insert code below",
   },
   {
-    name: LanguageName.Javascript,
+    name: LanguageName.javascript,
     icon: "js",
     version: "1.32.3",
     defaultCode: "// insert code below",
@@ -37,10 +36,6 @@ const initialCodeExecuteResponse: CodeExecuteResponseT = {
   sourceCode: "",
   category: CodeExecuteResponseCategory.Error,
 };
-const initialSourceCode: string = getTemplateCode(
-  LANGUAGES[0].name,
-  QUESTIONS[0]
-);
 
 export const runCodeThunk = createAsyncThunk<
   CodeExecuteResponseT,
@@ -84,7 +79,7 @@ export const CodeSlice = createSlice({
   initialState: {
     programmingLanguage: initialState,
     programmingLanguageList: LANGUAGES,
-    sourceCode: initialSourceCode,
+    sourceCode: "",
     codeExecuteResponse: initialCodeExecuteResponse,
     runCodeLoading: false,
   },

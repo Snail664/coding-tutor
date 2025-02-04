@@ -1,12 +1,8 @@
+import { LanguageName, QuestionDifficulty } from "@prisma/client";
+
 export interface MessageT {
   role: "user" | "assistant";
   content: string;
-}
-
-export enum QuestionDifficulty {
-  Easy = "easy",
-  Medium = "medium",
-  Hard = "hard",
 }
 
 export interface TestCase {
@@ -40,14 +36,6 @@ export interface LanguageRunner {
     preparedCode: string,
     originalCode: string
   ): Promise<CodeExecuteResponseT>;
-}
-
-export enum LanguageName {
-  Javascript = "javascript",
-  Python = "python",
-  Typescript = "typescript",
-  Java = "java",
-  Cpp = "c++",
 }
 
 export type TemplateCodeT = {

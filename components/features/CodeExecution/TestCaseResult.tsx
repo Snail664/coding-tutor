@@ -41,15 +41,23 @@ export default function TestCaseResult({
         <div className="text-sm">
           <div className="mb-1">
             <span className="font-semibold">Input:</span>{" "}
-            {JSON.stringify(testCase.testCase.input)}
+            <span className="whitespace-normal break-words">
+              {testCase.testCase.input}
+            </span>
           </div>
           <div className="mb-1">
             <span className="font-semibold">Expected Output:</span>{" "}
-            {JSON.stringify(testCase.testCase.expectedOutput)}
+            <span className="whitespace-normal break-words">
+              {Array.isArray(testCase.testCase.expectedOutput)
+                ? JSON.stringify(testCase.testCase.expectedOutput)
+                : testCase.testCase.expectedOutput}
+            </span>
           </div>
           <div className="mb-1">
             <span className="font-semibold">Actual Output:</span>{" "}
-            {testCase.actualOutput || testCase.error}
+            <span className="whitespace-normal break-words">
+              {testCase.actualOutput || testCase.error}
+            </span>
           </div>
         </div>
       )}

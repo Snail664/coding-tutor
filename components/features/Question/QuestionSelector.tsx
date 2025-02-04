@@ -8,21 +8,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { getTemplateCode, truncateText } from "@/lib/utils";
+import { truncateText } from "@/lib/utils";
 import QuestionDifficultyTag from "./QuestionDifficultyTag";
-import { useAppSelector, useAppDispatch } from "@/store";
-import { updateQuestion } from "@/slices/QuestionSlice";
-import { setSourceCode } from "@/slices/CodeSlice";
+import { useAppSelector } from "@/store";
 
 export default function QuestionSelector() {
-  const {
-    question: { question, questionList },
-    code: { programmingLanguage },
-  } = useAppSelector((state) => state);
+  const { question, questionList } = useAppSelector((state) => state.question);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useAppDispatch();
   const filteredQuestions = questionList.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -66,14 +60,11 @@ export default function QuestionSelector() {
         {filteredQuestions.map((item) => (
           <DropdownMenuItem
             key={item.name}
-            onClick={() => {
-              dispatch(updateQuestion(item));
-              dispatch(
-                setSourceCode(getTemplateCode(programmingLanguage.name, item))
-              );
-              setSearchTerm("");
-              setIsOpen(false);
-            }}
+            onClick={() =>
+              (window.location.href = `/questions/${encodeURIComponent(
+                item.name
+              )}`)
+            }
             className={`cursor-pointer rounded-none focus:bg-menuBackground ${
               item.name === question.name ? "bg-menuBackground" : ""
             }`}

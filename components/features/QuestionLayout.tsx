@@ -38,7 +38,6 @@ export default function QuestionLayout() {
           display: "flex",
           flexDirection: "row",
           overflow: "hidden",
-          minHeight: 0,
         }}
       >
         <SplitPane
@@ -52,14 +51,14 @@ export default function QuestionLayout() {
             split="horizontal"
             minSize={53}
             defaultSize={dimensions.height / 2}
-            maxSize={Math.max(dimensions.height - 348, 53)}
+            maxSize={Math.max(dimensions.height - 308, 53)}
           >
             <EditorWindow />
             <ExecutionWindow />
           </SplitPane>
         </SplitPane>
       </div>
-      <div style={{ marginTop: "10px", height: "200px", flexShrink: 0 }}>
+      <div style={{ marginTop: "10px", flexShrink: 0 }}>
         <AssistantWindow />
       </div>
     </>

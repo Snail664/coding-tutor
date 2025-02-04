@@ -102,6 +102,7 @@ You are a coding teacher. Based on the question given and the student's solution
 
 
 Return your answer in the JSON format with the following keys. ONLY RETURN JSON OBJECT. No other text outside it. ENSURE YOU RETURN VALID JSON:
+thought: "your thought process on the rules and what hint to give"
 is_complete: <answer boolean>
 is_correct: <answer boolean>
 errors_or_next_steps: <answer string>

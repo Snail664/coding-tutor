@@ -14,7 +14,7 @@ interface AssistantState {
   hintLoading: boolean;
   hintError: string;
   chatHistory: MessageT[];
-  chatId: string;
+  chatId: number;
   LLMFeedbackLoading: boolean;
   assistantPopupText: string;
   proactiveFeedback: string;
@@ -23,33 +23,6 @@ interface AssistantState {
 }
 
 const initialChatHistory: MessageT[] = [];
-
-// Utility function to ensure a chat exists
-async function ensureChatExists(
-  dispatch: any,
-  getState: () => RootState
-): Promise<string> {
-  const state = getState();
-  const {
-    question: { question, previousQuestion },
-    assistant: { chatId },
-  } = state;
-
-  if (!chatId || previousQuestion?.name !== question?.name) {
-    const response = await apiClient.post("/chat/create", {
-      messages: [
-        {
-          role: "system",
-          content: `Starting chat for question: ${question?.name}`,
-        },
-      ],
-    });
-    const newChatId = response.data.id;
-    dispatch(setChatId(newChatId));
-    return newChatId;
-  }
-  return chatId;
-}
 
 export const getProactiveFeedbackThunk = createAsyncThunk<
   { audioUrl: string; textFeedback: string },
@@ -79,9 +52,6 @@ export const getProactiveFeedbackThunk = createAsyncThunk<
         return { audioUrl: "", textFeedback: "" };
       }
 
-      // ensure chat exists
-      const validChatId = await ensureChatExists(dispatch, getState);
-
       // get proactive feedback
       const response = await apiClient.post("/llm-guide/proactive", {
         question,
@@ -102,7 +72,7 @@ export const getProactiveFeedbackThunk = createAsyncThunk<
       (async () => {
         try {
           await apiClient.post("/chat/add-message", {
-            chatId: validChatId,
+            chatId: state.assistant.chatId,
             messages: [{ role: "assistant", content: proactiveFeedback }],
           });
         } catch (error) {
@@ -129,9 +99,6 @@ export const getHintThunk = createAsyncThunk<
     // Ensure the code is executed and up-to-date
     await dispatch(runCodeThunk()).unwrap();
 
-    // Ensure chat exists
-    const validChatId = await ensureChatExists(dispatch, getState);
-
     const state = getState();
     const {
       question: { question },
@@ -155,7 +122,7 @@ export const getHintThunk = createAsyncThunk<
     (async () => {
       try {
         await apiClient.post("/chat/add-message", {
-          chatId: validChatId,
+          chatId: state.assistant.chatId,
           messages: [
             { role: "user", content: "hint button pressed" },
             { role: "assistant", content: textHint },
@@ -192,9 +159,6 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
       // run code first
       await dispatch(runCodeThunk()).unwrap();
 
-      // Ensure chat exists
-      const validChatId = await ensureChatExists(dispatch, getState);
-
       const state = getState();
       const {
         question: { question },
@@ -210,14 +174,6 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
       // Set the transcript for display
       dispatch(setUserAudioTranscript(userAudioTranscriptInput));
 
-      console.log("posted data: ", {
-        question,
-        sourceCode,
-        userAudioTranscript: userAudioTranscriptInput,
-        codeExecuteResponse,
-        chatHistory: updatedChatHistory,
-      });
-
       const response = await apiClient.post("/llm-guide", {
         question,
         sourceCode,
@@ -230,12 +186,10 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
         return rejectWithValue("An Unexpected error occured.");
       }
 
-      console.log("response: ", response.data);
-
       const assistantMsg = response.data["response"];
 
       await apiClient.post("/chat/add-message", {
-        chatId: validChatId,
+        chatId: state.assistant.chatId,
         messages: [
           { role: "user", content: userAudioTranscriptInput },
           { role: "assistant", content: assistantMsg },
@@ -268,7 +222,7 @@ const initialState: AssistantState = {
   hintLoading: false,
   hintError: "",
   chatHistory: initialChatHistory,
-  chatId: "",
+  chatId: 0,
   assistantPopupText: "",
   LLMFeedbackLoading: false,
   proactiveFeedback: "",
@@ -312,7 +266,7 @@ const AssistantSlice = createSlice({
     setUserAudioTranscriptInput: (state, action: PayloadAction<string>) => {
       state.userAudioTranscriptInput = action.payload;
     },
-    setChatId: (state, action: PayloadAction<string>) => {
+    setChatId: (state, action: PayloadAction<number>) => {
       state.chatId = action.payload;
     },
     setAssistantPopupText: (state, action: PayloadAction<string>) => {
@@ -326,6 +280,9 @@ const AssistantSlice = createSlice({
       action: PayloadAction<string>
     ) => {
       state.lastSourceCodeForProactiveFeedback = action.payload;
+    },
+    setChatHistory: (state, action: PayloadAction<MessageT[]>) => {
+      state.chatHistory = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -398,5 +355,6 @@ export const {
   setAssistantPopupText,
   setIsPolling,
   setLastSourceCodeForProactiveFeedback,
+  setChatHistory,
 } = AssistantSlice.actions;
 export default AssistantSlice.reducer;
