@@ -8,7 +8,7 @@ import QuestionStateInitializer from "@/components/QuestionStateInitializer";
 import AssistantStateInitializer from "@/components/AssistantStateInitializer";
 import { MessageT } from "@/lib/types";
 import CodeStateInitializer from "@/components/CodeStateInitializer";
-
+import { notFound } from "next/navigation";
 export default async function QuestionPage({
   params,
 }: {
@@ -69,7 +69,9 @@ export default async function QuestionPage({
       },
     });
 
-    console.log("userData", userData);
+    if (!question) {
+      notFound();
+    }
 
     // create a chat
     chat = await prisma.chat.create({
@@ -108,7 +110,16 @@ export default async function QuestionPage({
             }}
             questionList={allQuestionsMeta}
           />
-          <CodeStateInitializer question={question} />
+          <CodeStateInitializer
+            question={{
+              ...question,
+              testCases: question.testCases.map((tc) => ({
+                input: JSON.parse(tc.input),
+                expectedOutput: JSON.parse(tc.expectedOutput),
+                description: tc.description,
+              })),
+            }}
+          />
         </>
       )}
       {chat && (
