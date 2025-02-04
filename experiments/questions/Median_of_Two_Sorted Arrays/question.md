@@ -6,13 +6,13 @@ The overall run time complexity should be O(log (m+n)).
 
 ## Example
 
-1. **Input:** ["nums1 = [1,3]", "nums2 = [2]"]
+1. **Input:** [[1,3], [2]], where nums1 = [1,3] and nums2 = [2]
 
    **Output:** 2.00000  
 
    **Explanation:** merged array = [1,2,3] and median is 2
 
-2. **Input:** ["nums1 = [1,2]", "nums2 = [3,4]"]
+2. **Input:** [[1,2], [3,4]], where nums1 = [1,2] and nums2 = [3,4]
 
    **Output:** 2.50000 
 
@@ -28,4 +28,4 @@ The overall run time complexity should be O(log (m+n)).
 
 ## Your Task
 
-Find the median of the two sorted arrays. Your solution function takes a single parameter data, which is a list of strings containing the input arrays.
+Find the median of the two sorted arrays. Your solution function takes a single parameter data, which is an nested array consisting of two sorted arrays.

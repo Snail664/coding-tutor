@@ -12,6 +12,7 @@ import ConnectingCitiesContent from "../assets/questions/ConnectingCities.md";
 import MiningTunnelsContent from "../assets/questions/MiningTunnels.md";
 import MedianofTwoSortedArraysContent from "../assets/questions/MedianofTwoSortedArrays.md";
 import KattisQuestContent from "../assets/questions/KattisQuest.md";
+import BurstBalloonsContent from "../assets/questions/BurstBalloons.md";
 
 export const QUESTIONS: QuestionT[] = [
   {
@@ -520,16 +521,16 @@ export const QUESTIONS: QuestionT[] = [
     testCases: [
       {
         input: [ 
-          "nums1 = [1, 3]",
-          "nums2 = [2]",
+          [1, 3],
+          [2],
         ],
         expectedOutput: 2,
         description: "",
       },
       {
         input: [ 
-          "nums1 = [1, 2]",
-          "nums2 = [3,4]",
+          [1, 2],
+          [3,4],
         ],
         expectedOutput: 2.5,
         description: "",
@@ -575,6 +576,39 @@ export const QUESTIONS: QuestionT[] = [
           "query 8",
         ],
         expectedOutput: [20,45],
+        description: "",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `def solution(data):
+    # insert your code below
+`,
+        language: LanguageName.Python,
+      },
+    ],
+  },
+  {
+    name: "Burst Balloons",
+    difficulty: QuestionDifficulty.Hard,
+    content: BurstBalloonsContent,
+    testCases: [
+      {
+        input: [ 
+          3,
+          1,
+          5,
+          8,
+        ],
+        expectedOutput: 167,
+        description: "",
+      },
+      {
+        input: [ 
+        1,
+        5,
+        ],
+        expectedOutput: 10,
         description: "",
       },
     ],
