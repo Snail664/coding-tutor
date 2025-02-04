@@ -41,11 +41,11 @@ export default function TestCaseResult({
         <div className="text-sm">
           <div className="mb-1">
             <span className="font-semibold">Input:</span>{" "}
-            {testCase.testCase.input.toString()}
+            {JSON.stringify(testCase.testCase.input)}
           </div>
           <div className="mb-1">
             <span className="font-semibold">Expected Output:</span>{" "}
-            {testCase.testCase.expectedOutput}
+            {JSON.stringify(testCase.testCase.expectedOutput)}
           </div>
           <div className="mb-1">
             <span className="font-semibold">Actual Output:</span>{" "}

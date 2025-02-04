@@ -10,21 +10,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { getTemplateCode, truncateText } from "@/lib/utils";
 import QuestionDifficultyTag from "./QuestionDifficultyTag";
-import { QUESTIONS } from "@/lib/constants";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { updateQuestion } from "@/slices/QuestionSlice";
 import { setSourceCode } from "@/slices/CodeSlice";
 
 export default function QuestionSelector() {
   const {
-    question: { question },
+    question: { question, questionList },
     code: { programmingLanguage },
   } = useAppSelector((state) => state);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
-  const filteredQuestions = QUESTIONS.filter((item) =>
+  const filteredQuestions = questionList.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
