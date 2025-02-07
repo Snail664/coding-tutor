@@ -50,7 +50,7 @@ export const QUESTIONS: QuestionT[] = [
   },
   {
     name: "Broken Firewall",
-    difficulty: QuestionDifficulty.medium,
+    difficulty: QuestionDifficulty.easy,
     content: readFileSync(
       join(__dirname, "../assets/questions/BrokenFirewall.md"),
       "utf-8"
@@ -106,7 +106,7 @@ export const QUESTIONS: QuestionT[] = [
   },
   {
     name: "Hotel Door Code",
-    difficulty: QuestionDifficulty.hard,
+    difficulty: QuestionDifficulty.easy,
     content: readFileSync(
       join(__dirname, "../assets/questions/HotelDoorCode.md"),
       "utf-8"
@@ -155,7 +155,7 @@ export const QUESTIONS: QuestionT[] = [
   },
   {
     name: "Closest Star Systems",
-    difficulty: QuestionDifficulty.hard,
+    difficulty: QuestionDifficulty.easy,
     content: readFileSync(
       join(__dirname, "../assets/questions/ClosestStarSystems.md"),
       "utf-8"
@@ -202,7 +202,7 @@ export const QUESTIONS: QuestionT[] = [
   },
   {
     name: "Busy Moon Rovers",
-    difficulty: QuestionDifficulty.hard,
+    difficulty: QuestionDifficulty.easy,
     content: readFileSync(
       join(__dirname, "../assets/questions/BusyMoonRovers.md"),
       "utf-8"
@@ -256,7 +256,7 @@ export const QUESTIONS: QuestionT[] = [
   },
   {
     name: "Time To Play Fair",
-    difficulty: QuestionDifficulty.hard,
+    difficulty: QuestionDifficulty.easy,
     content: readFileSync(
       join(__dirname, "../assets/questions/TimeToPlayFair.md"),
       "utf-8"
@@ -295,7 +295,7 @@ export const QUESTIONS: QuestionT[] = [
   },
   {
     name: "The Purge",
-    difficulty: QuestionDifficulty.hard,
+    difficulty: QuestionDifficulty.easy,
     content: readFileSync(
       join(__dirname, "../assets/questions/ThePurge.md"),
       "utf-8"
@@ -390,7 +390,7 @@ export const QUESTIONS: QuestionT[] = [
   },
   {
     name: "Connecting Cities",
-    difficulty: QuestionDifficulty.hard,
+    difficulty: QuestionDifficulty.easy,
     content: readFileSync(
       join(__dirname, "../assets/questions/ConnectingCities.md"),
       "utf-8"
@@ -423,7 +423,7 @@ export const QUESTIONS: QuestionT[] = [
   },
   {
     name: "Mining Tunnels",
-    difficulty: QuestionDifficulty.hard,
+    difficulty: QuestionDifficulty.easy,
     content: readFileSync(
       join(__dirname, "../assets/questions/MiningTunnels.md"),
       "utf-8"
@@ -527,9 +527,9 @@ export const QUESTIONS: QuestionT[] = [
   },
   {
     name: "Median of Two Sorted Arrays",
-    difficulty: QuestionDifficulty.hard,
+    difficulty: QuestionDifficulty.medium,
     content: readFileSync(
-      join(__dirname, "../assets/questions/PurchaseTickets.md"),
+      join(__dirname, "../assets/questions/MedianofTwoSortedArrays.md"),
       "utf8"
     ),
     testCases: [
@@ -555,7 +555,7 @@ export const QUESTIONS: QuestionT[] = [
   },
   {
     name: "Kattis Quest",
-    difficulty: QuestionDifficulty.hard,
+    difficulty: QuestionDifficulty.medium,
     content: readFileSync(
       join(__dirname, "../assets/questions/KattisQuest.md"),
       "utf8"
