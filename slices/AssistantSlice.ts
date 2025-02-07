@@ -63,8 +63,12 @@ export const getProactiveFeedbackThunk = createAsyncThunk<
       // Update the last source code regardless of feedback result
       dispatch(setLastSourceCodeForProactiveFeedback(sourceCode));
 
-      // if there is no feedback, return empty strings without saving to chat
-      if (!proactiveFeedback || !audioProactiveFeedbackBase64) {
+      // if there is no feedback or the hint has already changed then return empty strings without saving to chat
+      if (
+        !proactiveFeedback ||
+        !audioProactiveFeedbackBase64 ||
+        assistantPopupText != getState().assistant.assistantPopupText
+      ) {
         return { audioUrl: "", textFeedback: "" };
       }
 
@@ -106,7 +110,10 @@ export const getHintThunk = createAsyncThunk<
     } = state;
 
     // return hint early if all test cases passed
-    if (codeExecuteResponse.numFailed == 0) {
+    if (
+      codeExecuteResponse.numFailed == 0 &&
+      codeExecuteResponse.numPassed > 0
+    ) {
       return {
         audioUrl: "/assets/audio/test-cases-passed.mp3",
         textHint: "Well done! You have passed all the test cases.",
