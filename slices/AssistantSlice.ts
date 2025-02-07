@@ -100,6 +100,10 @@ export const getHintThunk = createAsyncThunk<
   { state: RootState }
 >("assistant/getHint", async (_, { getState, dispatch, rejectWithValue }) => {
   try {
+    // clear old hint and feedback states and stop polling
+    dispatch(setIsPolling(true));
+    dispatch(setAssistantPopupText(""));
+
     // Ensure the code is executed and up-to-date
     await dispatch(runCodeThunk()).unwrap();
 

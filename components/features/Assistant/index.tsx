@@ -38,6 +38,8 @@ export default function AssistantWindow() {
   useEffect(() => {
     if (assistantPopupText) {
       setIsAssistantSpeakingHidden(false);
+    } else if (assistantPopupText == "") {
+      setIsAssistantSpeakingHidden(true);
     }
   }, [assistantPopupText]);
 
