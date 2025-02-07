@@ -105,6 +105,14 @@ export const getHintThunk = createAsyncThunk<
       code: { sourceCode, codeExecuteResponse },
     } = state;
 
+    // return hint early if all test cases passed
+    if (codeExecuteResponse.numFailed == 0) {
+      return {
+        audioUrl: "/assets/audio/test-cases-passed.mp3",
+        textHint: "Well done! You have passed all the test cases.",
+      };
+    }
+
     const response = await apiClient.post("/llm-guide/hint", {
       question,
       sourceCode,
