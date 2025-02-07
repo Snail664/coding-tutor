@@ -22,12 +22,14 @@ export default async function QuestionPage({
         templateCodes: true,
         testCases: true,
       },
+      cacheStrategy: { ttl: 3600, swr: 30 },
     }),
     prisma.question.findMany({
       select: {
         name: true,
         difficulty: true,
       },
+      cacheStrategy: { ttl: 3600, swr: 30 },
     }),
   ]);
 

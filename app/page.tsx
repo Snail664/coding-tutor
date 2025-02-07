@@ -9,6 +9,7 @@ export default async function Page() {
       name: true,
       difficulty: true,
     },
+    cacheStrategy: { ttl: 3600, swr: 30 },
   });
 
   return (
