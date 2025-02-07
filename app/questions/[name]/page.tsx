@@ -33,49 +33,32 @@ export default async function QuestionPage({
     }),
   ]);
 
-  console.log("over here!!");
+  // question not found
+  if (!question) {
+    notFound();
+  }
 
-  let userData = null;
+  // user data
+  const userData = {
+    auth0_sid: session?.user?.sid,
+    auth0_sub: session?.user?.sub,
+    auth0_given_name: session?.user?.given_name,
+    auth0_family_name: session?.user?.family_name,
+    auth0_name: session?.user?.name,
+    auth0_picture: session?.user?.picture,
+    auth0_email: session?.user?.email,
+    auth0_email_verified: session?.user?.email_verified,
+    isWalkthroughEnabled: session?.user?.isWalkthroughEnabled,
+  };
+
+  // create a chat for the user if logged in.
   let chat = null;
-  const messages: MessageT[] = [
-    {
+  const messages: MessageT[] = [];
+  if (session?.user?.sub) {
+    messages.push({
       role: "assistant",
       content: `Chat started for question ${question?.name}`,
-    },
-  ];
-  if (session?.user?.sub) {
-    console.log("session?.user?.sub", session?.user?.sub);
-
-    const userFields = {
-      auth0_sid: session?.user?.sid,
-      auth0_sub: session?.user?.sub,
-      auth0_given_name: session?.user?.given_name,
-      auth0_family_name: session?.user?.family_name,
-      auth0_name: session?.user?.name,
-      auth0_picture: session?.user?.picture,
-      auth0_email: session?.user?.email,
-      auth0_email_verified: session?.user?.email_verified,
-    };
-
-    userData = await prisma.user.upsert({
-      where: { auth0_sub: session.user.sub },
-      update: userFields,
-      create: { ...userFields, isWalkthroughEnabled: true },
-      select: {
-        auth0_sid: true,
-        auth0_sub: true,
-        auth0_name: true,
-        auth0_picture: true,
-        auth0_email: true,
-        isWalkthroughEnabled: true,
-      },
     });
-
-    if (!question) {
-      notFound();
-    }
-
-    // create a chat
     chat = await prisma.chat.create({
       data: {
         userId: session.user.sub,
@@ -85,8 +68,6 @@ export default async function QuestionPage({
       },
     });
   }
-
-  console.log("server done", chat);
 
   return (
     <div
