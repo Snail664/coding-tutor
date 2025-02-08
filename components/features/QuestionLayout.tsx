@@ -1,5 +1,4 @@
 "use client";
-import AssistantWindow from "@/components/features/Assistant";
 import ExecutionWindow from "@/components/features/CodeExecution";
 import QuestionWindow from "@/components/features/Question";
 import EditorWindow from "@/components/features/CodeEditor";
@@ -57,9 +56,6 @@ export default function QuestionLayout() {
             <ExecutionWindow />
           </SplitPane>
         </SplitPane>
-      </div>
-      <div style={{ marginTop: "10px", flexShrink: 0 }}>
-        <AssistantWindow />
       </div>
     </>
   );
