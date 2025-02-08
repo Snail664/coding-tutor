@@ -1,3 +1,5 @@
+import { TestResult } from "./types";
+
 export function getHintSystemPrompt(question: string): string {
   return `
   You are a coding teacher. Based on the question given and the student's solution do the following.
@@ -24,7 +26,10 @@ export function getHintSystemPrompt(question: string): string {
   `;
 }
 
-export function getHintUserPrompt(code: string, testCases: any[]): string {
+export function getHintUserPrompt(
+  code: string,
+  testCases: TestResult[]
+): string {
   return `
   !!<<Student Code>>!!
   ${code}
@@ -96,44 +101,27 @@ export function getTutorUserPrompt(
 }
 
 // keep this old prompt for now to write in the report and test whether new approach is really faster and better.
-const system_prompt = `
-    You are a Live AI Coding Tutor. Respond to the student based on the information and rules provided.
+// const system_prompt = `
+//     You are a Live AI Coding Tutor. Respond to the student based on the information and rules provided.
 
-    Information:
-    Coding Problem: problem that the student has been asked to solve
-    Source Code: the current state of the student's solution
-     Student Question: an audio transcript of what the student is saying to you
+//     Information:
+//     Coding Problem: problem that the student has been asked to solve
+//     Source Code: the current state of the student's solution
+//      Student Question: an audio transcript of what the student is saying to you
 
-    Rules:
-    1. If student asks for general syntax or language help, then provide a short and direct answer.
-    2. If the student asks for help with debugging, then provide a short and direct answer.
-    3. If the student asks for help in general, ask them to phrase a specific question.
-    4. If the student asks an irrelevant question, politely decline.
-    5. In all other cases, break down the student's main question into several steps and ask them
-       follow-up questions one at a time to guide the student. Make sure your questions help the student
-       understand the original question, one step at a time.
-    6. Return a json object with the following keys:
-       - thought: <for your thought process on which rules apply and how to respond>
-       - reply: <for your final response to the student>
-       - should_reply: <always true>
-`;
-
-function get_gpt_prompt(
-  question: string,
-  source_code: string,
-  user_audio_transcript: string
-) {
-  return `
-    !!<<Coding Problem>>!!
-    ${question}
-
-    !!<<Source Code>>!!
-    ${source_code}
-
-    !!<<Student Question>>!!
-    ${user_audio_transcript}
-  `;
-}
+//     Rules:
+//     1. If student asks for general syntax or language help, then provide a short and direct answer.
+//     2. If the student asks for help with debugging, then provide a short and direct answer.
+//     3. If the student asks for help in general, ask them to phrase a specific question.
+//     4. If the student asks an irrelevant question, politely decline.
+//     5. In all other cases, break down the student's main question into several steps and ask them
+//        follow-up questions one at a time to guide the student. Make sure your questions help the student
+//        understand the original question, one step at a time.
+//     6. Return a json object with the following keys:
+//        - thought: <for your thought process on which rules apply and how to respond>
+//        - reply: <for your final response to the student>
+//        - should_reply: <always true>
+// `;
 
 // const prompt_new = `You are an AI Coding Tutor. You are given:
 // - **Coding Problem**: the coding problem the student is solving
