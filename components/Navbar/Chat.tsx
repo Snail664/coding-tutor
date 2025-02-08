@@ -3,6 +3,7 @@ import { MessageCircleQuestion, SendHorizontal } from "lucide-react";
 import Loading from "@/components/ui/loading";
 import { Button } from "../ui/button";
 import { useEffect, useRef, useState } from "react";
+import FeedbackDialog from "../ui/FeedbackDialog";
 import {
   Dialog,
   DialogContent,
@@ -118,6 +119,9 @@ export default function Chat() {
               stopRecording={stopRecording}
               disabled={LLMFeedbackLoading}
             />
+            {!LLMFeedbackLoading && LLMResponse ? (
+              <FeedbackDialog feedbackType="chat" />
+            ) : null}
             <Button
               variant="ghost"
               onClick={onSend}

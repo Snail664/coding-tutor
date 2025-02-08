@@ -177,6 +177,9 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
   "assistant/getAssistantFeedback",
   async (_, { getState, dispatch, rejectWithValue }) => {
     try {
+      // clear old feedback
+      dispatch(setLLMResponse(""));
+
       // run code first
       await dispatch(runCodeThunk()).unwrap();
 

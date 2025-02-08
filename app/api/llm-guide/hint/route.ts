@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { rateLimitMiddleware } from "@/app/middleware/rateLimitMiddleware";
 import { parseLLMResponse } from "@/lib/utils";
-
+import { getHintSystemPrompt, getHintUserPrompt } from "@/lib/prompts";
 const OPEN_AI_API_KEY = process.env.OPEN_AI_API_KEY;
 const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
 
@@ -32,11 +32,11 @@ export async function POST(request: Request) {
     messages: [
       {
         role: "system",
-        content: get_hint_system_prompt(data["question"]["content"]),
+        content: getHintSystemPrompt(data["question"]["content"]),
       },
       {
         role: "user",
-        content: get_hint_user_prompt(data["sourceCode"], data["testCases"]),
+        content: getHintUserPrompt(data["sourceCode"], data["testCases"]),
       },
     ],
   });
@@ -64,52 +64,4 @@ export async function POST(request: Request) {
     textHint: hintText,
     audioHintBase64: base64Audio,
   });
-}
-
-function get_hint_user_prompt(code: string, testCases: TestResult[]) {
-  return `
-!!<<Student Code>>!!
-${code}
-
-!!<<Test Cases>>!!
-${testCases
-  .map(
-    (testCase) => `
-description: ${testCase.testCase.description}
-input: ${testCase.testCase.input}
-actual: ${testCase.actualOutput}
-passed: ${testCase.passed ? "Passed" : "Failed"}
-error: ${testCase.error}
-expected: ${testCase.testCase.expectedOutput}
-`
-  )
-  .join("\n")}
-`;
-}
-
-function get_hint_system_prompt(question: string) {
-  return `
-You are a coding teacher. Based on the question given and the student's solution do the following.
-1. Determine if the solution is complete or incomplete
-2. If solution is complete: Identify the logical errors in the solution
-3. If there are multiple errors, only point out one error, and syntax errors take precedence over logical errors
-4. If solution is incomplete: determine the likely next step
-5. Return a hint which is less than 50 words based on one error the student should rectify or the immediate next step the student should take
-6. Your hint should be in a conversational format as though you are a teacher talking to a student
-7. When giving your hint, provide a brief text to direct the student to the part of the code you are refering to
-8. DO NOT give the correct solution, only give a hint
-9. If the answer is correct, encourage the student and let them know it seems more or less correct
-10. You are also provided with the test cases the student has run. Use this to determine if the student's solution is correct or not.
-
-
-Return your answer in the JSON format with the following keys. ONLY RETURN JSON OBJECT. No other text outside it. ENSURE YOU RETURN VALID JSON:
-thought: "your thought process on the rules and what hint to give"
-is_complete: <answer boolean>
-is_correct: <answer boolean>
-errors_or_next_steps: <answer string>
-hint: <answer string>
-
-!!<<Question>>!!
-${question}
-    `;
 }
