@@ -1,7 +1,6 @@
 def solution(data):
-    # Extract nums1 and nums2 from the input data
-    nums1 = eval(data[0].split('=')[1].strip())
-    nums2 = eval(data[1].split('=')[1].strip())
+    # Extract nums1 and nums2 from the input data (each is a list)
+    nums1, nums2 = data
 
     # Implementation of findMedianSortedArrays
     n = len(nums1)
@@ -11,7 +10,7 @@ def solution(data):
     m1 = 0
     m2 = 0
 
-    # Find median
+    # Merge up to the median position
     for count in range(0, (n + m) // 2 + 1):
         m2 = m1
         if i < n and j < m:
@@ -28,16 +27,12 @@ def solution(data):
             m1 = nums2[j]
             j += 1
 
-    # Check if the sum of n and m is odd
+    # Return result based on odd/even total length
     if (n + m) % 2 == 1:
         return float(m1)
     else:
-        ans = float(m1) + float(m2)
-        return ans / 2.0
+        return (float(m1) + float(m2)) / 2.0
 
 if __name__ == '__main__':
-    data = [
-        "nums1 = [1, 3]",
-        "nums2 = [2]",
-    ]
+    data = [[1, 3], [2]]
     print(solution(data))

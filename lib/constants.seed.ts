@@ -599,4 +599,60 @@ export const QUESTIONS: QuestionT[] = [
       },
     ],
   },
+  {
+    name: "Burst Balloons",
+    difficulty: QuestionDifficulty.hard,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/BurstBalloons.md"),
+      "utf8"
+    ),
+    testCases: [
+      {
+        input: [3, 1, 5, 8],
+        expectedOutput: 167,
+        description: "",
+      },
+      {
+        input: [1, 5],
+        expectedOutput: 10,
+        description: "",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `def solution(data):
+    # insert your code below
+`,
+        language: LanguageName.python,
+      },
+    ],
+  },
+  {
+    name: "Burst Balloons",
+    difficulty: QuestionDifficulty.hard,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/BurstBalloons.md"),
+      "utf8"
+    ),
+    testCases: [
+      {
+        input: [3, 1, 5, 8],
+        expectedOutput: 167,
+        description: "",
+      },
+      {
+        input: [1, 5],
+        expectedOutput: 10,
+        description: "",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `def solution(data):
+    # insert your code below
+`,
+        language: LanguageName.python,
+      },
+    ],
+  },
 ];

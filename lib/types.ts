@@ -6,7 +6,7 @@ export interface MessageT {
 }
 
 export interface TestCase {
-  input: string[] | number[];
+  input: string[] | number[] | number[][];
   expectedOutput: string | number | boolean | number[];
   description: string;
 }
