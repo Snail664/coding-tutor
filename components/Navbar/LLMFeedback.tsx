@@ -11,23 +11,27 @@ export default function LLMFeedback({
 }) {
   return (
     <>
-      <div className="flex flex-row gap-2 items-center mb-5">
-        <div className="bg-menuBackground p-3 rounded-md flex-1">
-          {userQuestion}
-        </div>
-        <div className="bg-blue-300 h-10 w-10 justify-center items-center flex rounded-full">
-          <User />
-        </div>
-      </div>
+      {userQuestion && (
+        <>
+          <div className="flex flex-row gap-2 items-center mb-5">
+            <div className="bg-menuBackground p-3 rounded-md flex-1">
+              {userQuestion}
+            </div>
+            <div className="bg-blue-300 h-10 w-10 justify-center items-center flex rounded-full">
+              <User />
+            </div>
+          </div>
 
-      <div className="flex flex-row gap-2 items-center">
-        <div className="bg-menuBackground p-3 rounded-md flex-1">
-          <Markdown>{LLMResponse}</Markdown>
-        </div>
-        <div className="bg-yellow-500 h-10 w-10 justify-center items-center flex rounded-full">
-          <BotMessageSquare />
-        </div>
-      </div>
+          <div className="flex flex-row gap-2 items-center">
+            <div className="bg-menuBackground p-3 rounded-md flex-1">
+              <Markdown>{LLMResponse}</Markdown>
+            </div>
+            <div className="bg-yellow-500 h-10 w-10 justify-center items-center flex rounded-full">
+              <BotMessageSquare />
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }

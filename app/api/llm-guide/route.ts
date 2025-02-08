@@ -49,10 +49,30 @@ export async function POST(request: Request) {
       data["userAudioTranscript"]
     );
 
-    const promise_a = callOpenAI(prompt_a, prompt, [], "gpt-4o-mini");
-    const promise_b = callOpenAI(prompt_b, prompt, [], "gpt-4o-mini");
-    const promise_c = callOpenAI(prompt_c, prompt, [], "gpt-4o");
-    const promise_d = callOpenAI(prompt_d, prompt, [], "gpt-4o");
+    const promise_a = callOpenAI(
+      prompt_a,
+      prompt,
+      data["chatHistory"],
+      "gpt-4o-mini"
+    );
+    const promise_b = callOpenAI(
+      prompt_b,
+      prompt,
+      data["chatHistory"],
+      "gpt-4o-mini"
+    );
+    const promise_c = callOpenAI(
+      prompt_c,
+      prompt,
+      data["chatHistory"],
+      "gpt-4o"
+    );
+    const promise_d = callOpenAI(
+      prompt_d,
+      prompt,
+      data["chatHistory"],
+      "gpt-4o"
+    );
 
     const response_a = await promise_a;
     if (response_a.should_reply) {

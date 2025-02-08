@@ -91,7 +91,7 @@ export default function Chat() {
           <p className="ml-2 text-background">Chat</p>
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-xl w-full p-4">
         <DialogHeader>
           <DialogTitle>Chat with Codey</DialogTitle>
         </DialogHeader>
