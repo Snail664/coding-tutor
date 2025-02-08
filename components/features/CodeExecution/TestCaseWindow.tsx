@@ -16,7 +16,7 @@ export default function TestCaseWindow({
 }: TestCaseWindowProps) {
   return (
     <div className="p-4">
-      <div className="text-lg font-semibold mb-4">
+      <div className="text-md font-semibold mb-4">
         {numPassed} / {numPassed + numFailed} test cases passed
       </div>
       <div className="space-y-4">

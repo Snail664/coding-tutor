@@ -31,7 +31,7 @@ export default function TestCaseResult({
         ) : (
           <XCircle className="text-red-500 mr-2" />
         )}
-        <span className="font-medium text-lg">
+        <span className="font-medium text-md">
           {passed
             ? `Passed Test Case ${index + 1}`
             : `Failed Test Case ${index + 1}`}

@@ -16,7 +16,8 @@ export default function ExecuteCodeButton() {
   const runCode = async () => {
     if (!user) {
       // return toast({
-      toast({                           //to prevent infinite render loops
+      toast({
+        //to prevent infinite render loops
         title: "Error",
         description: "Please login to run code",
       });

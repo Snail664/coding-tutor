@@ -31,7 +31,7 @@ export default function CollapsiblePanel({
       <div className="flex items-center p-2 bg-menuBackground">
         <div className="flex items-center gap-2 w-full">
           {icon}
-          <div>{title}</div>
+          <div className="text-sm">{title}</div>
         </div>
         <div className="flex items-center gap-2">
           {headerActions}

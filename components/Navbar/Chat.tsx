@@ -86,7 +86,7 @@ export default function Chat() {
   return (
     <Dialog open={isChatOpen} onOpenChange={setIsChatOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="rounded-full">
+        <Button variant="outline" className="rounded-full chat">
           <MessageCircleQuestion className="text-yellow-500" />
           <p className="ml-2 text-background">Chat</p>
         </Button>

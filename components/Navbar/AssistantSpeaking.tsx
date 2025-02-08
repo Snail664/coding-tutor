@@ -28,7 +28,7 @@ export default function AssistantSpeaking({
             unoptimized
             height={100}
           />
-          <div className="text-lg">{assistantPopupText}</div>
+          <div className="text-md">{assistantPopupText}</div>
         </div>
       </div>
     </div>

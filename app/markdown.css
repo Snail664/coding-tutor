@@ -1,17 +1,17 @@
 .markdown-container h1 {
-  font-size: 1.875rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
 .markdown-container h2 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   margin-top: 1.25rem;
   margin-bottom: 0.75rem;
 }
 .markdown-container p {
-  font-size: 1rem;
+  font-size: 0.875rem;
   line-height: 1.5rem;
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
@@ -36,7 +36,7 @@
 }
 .markdown-container code {
   font-family: "Courier New", monospace;
-  font-size: 1rem;
+  font-size: 0.875rem;
   background-color: var(--background);
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
