@@ -527,19 +527,22 @@ export const QUESTIONS: QuestionT[] = [
   },
   {
     name: "Median of Two Sorted Arrays",
-    difficulty: QuestionDifficulty.medium,
+    difficulty: QuestionDifficulty.hard,
     content: readFileSync(
       join(__dirname, "../assets/questions/MedianofTwoSortedArrays.md"),
       "utf8"
     ),
     testCases: [
       {
-        input: ["nums1 = [1, 3]", "nums2 = [2]"],
-        expectedOutput: 2,
+        input: [[1, 3], [2]],
+        expectedOutput: 2.0,
         description: "",
       },
       {
-        input: ["nums1 = [1, 2]", "nums2 = [3,4]"],
+        input: [
+          [1, 2],
+          [3, 4],
+        ],
         expectedOutput: 2.5,
         description: "",
       },
@@ -587,34 +590,6 @@ export const QUESTIONS: QuestionT[] = [
           "query 8",
         ],
         expectedOutput: [20, 45],
-        description: "",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code below
-`,
-        language: LanguageName.python,
-      },
-    ],
-  },
-  {
-    name: "Burst Balloons",
-    difficulty: QuestionDifficulty.hard,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/BurstBalloons.md"),
-      "utf8"
-    ),
-    testCases: [
-      {
-        input: [3, 1, 5, 8],
-        expectedOutput: 167,
-        description: "",
-      },
-      {
-        input: [1, 5],
-        expectedOutput: 10,
         description: "",
       },
     ],
