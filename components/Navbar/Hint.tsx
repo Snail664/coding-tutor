@@ -75,8 +75,8 @@ export default function HintButton() {
         setIsHidden={setIsAssistantSpeakingHidden}
       />
       <Button
-        className="hint-button rounded-full"
-        variant="outline"
+        className="hint-button text-background hover:text-primary"
+        variant="square"
         onClick={onHint}
         disabled={hintLoading}
       >
@@ -85,7 +85,7 @@ export default function HintButton() {
         ) : (
           <Lightbulb className="text-yellow-500" />
         )}
-        <p className="ml-2 text-background">Hint</p>
+        <p className="ml-2">Hint</p>
       </Button>
     </>
   );
