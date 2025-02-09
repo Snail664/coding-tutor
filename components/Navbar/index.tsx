@@ -11,7 +11,6 @@ interface NavbarProps {
 }
 
 export default function Navbar({ auth0User, hideMiddle }: NavbarProps) {
-  console.log("coming prop: ", auth0User);
   return (
     <div className="flex flex-row gap-2 items-center justify-between mb-2 text-sm font-bold">
       {/* header left */}

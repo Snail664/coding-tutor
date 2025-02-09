@@ -63,8 +63,6 @@ export const getProactiveFeedbackThunk = createAsyncThunk<
       // Update the last source code regardless of feedback result
       dispatch(setLastSourceCodeForProactiveFeedback(sourceCode));
 
-      console.log("proactiveFeedback: ", proactiveFeedback);
-
       // if there is no feedback or the hint has already changed then return empty strings without saving to chat
       if (
         !proactiveFeedback ||
@@ -258,7 +256,6 @@ export const startPolling = createAsyncThunk<void, void, { state: RootState }>(
   "assistant/startPolling",
   async (_, { dispatch, getState }) => {
     const poll = async () => {
-      console.log("polling proactive feedback...");
       const state = getState();
       if (!state.assistant.isPolling) return;
 
@@ -288,7 +285,6 @@ const AssistantSlice = createSlice({
       state.userAudioTranscript = action.payload;
     },
     setUserAudioTranscriptInput: (state, action: PayloadAction<string>) => {
-      console.log("payload: ", action.payload);
       state.userAudioTranscriptInput = action.payload;
     },
     setChatId: (state, action: PayloadAction<number>) => {
@@ -351,7 +347,6 @@ const AssistantSlice = createSlice({
         });
       })
       .addCase(getHintThunk.rejected, (state, action) => {
-        console.log("getHintThunk.rejected", action);
         state.hintLoading = false;
         state.hintError =
           (action.payload as string) || "Error in generating hint";

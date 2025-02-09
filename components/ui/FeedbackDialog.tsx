@@ -25,13 +25,11 @@ export default function FeedbackDialog({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Feedback:", feedback);
 
     try {
       await dispatch(
         submitFeedbackThunk({ feedbackText: feedback, feedbackType })
       ).unwrap();
-      console.log("Feedback submitted successfully");
       // Optionally, you can display a success notification here.
     } catch (error) {
       console.error("Error submitting feedback:", error);

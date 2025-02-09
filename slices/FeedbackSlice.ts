@@ -26,7 +26,6 @@ export const submitFeedbackThunk = createAsyncThunk<
 >(
   "feedback/submitFeedback",
   async ({ feedbackText, feedbackType }, { getState, rejectWithValue }) => {
-    console.log("Submitting feedback:", feedbackText);
     try {
       const state = getState();
       const question = state.question.question;
