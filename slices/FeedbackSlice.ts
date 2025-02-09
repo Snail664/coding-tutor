@@ -39,6 +39,7 @@ export const submitFeedbackThunk = createAsyncThunk<
 
       let systemPromptUsed;
       let userPromptUsed;
+      let LLMOutput;
       if (feedbackType === "hint") {
         // Generate the two prompts using shared functions
         systemPromptUsed = getHintSystemPrompt(question.content);
@@ -46,6 +47,7 @@ export const submitFeedbackThunk = createAsyncThunk<
           sourceCode,
           state.code.codeExecuteResponse.testCases
         );
+        LLMOutput = state.assistant.assistantPopupText;
       } else if (feedbackType === "chat") {
         // Generate the two prompts using shared functions
         systemPromptUsed = getTutorSystemPrompt();
@@ -54,6 +56,7 @@ export const submitFeedbackThunk = createAsyncThunk<
           sourceCode,
           state.assistant.assistantPopupText
         );
+        LLMOutput = state.assistant.LLMResponse;
       }
 
       // Prepare the payload by combining the feedback text with additional information from the state.
@@ -62,9 +65,9 @@ export const submitFeedbackThunk = createAsyncThunk<
         feedbackText,
         systemPromptUsed,
         userPromptUsed,
-        LLMOutput: state.assistant.assistantPopupText,
+        LLMOutput: LLMOutput,
         questionName: question.name,
-        feedbackType: "hint", // or "chat" / "general" as needed
+        feedbackType: feedbackType, // or "chat" / "hint" as needed
       };
 
       const response = await apiClient.post("/feedback", payload);

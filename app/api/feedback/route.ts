@@ -22,6 +22,7 @@ export async function POST(req: Request) {
   try {
     data = await req.json();
   } catch (error) {
+    console.error("Error parsing feedback data:", error);
     return new Response("Invalid JSON data", { status: 400 });
   }
 
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
     typeof data.questionName !== "string" ||
     data.questionName.trim() === ""
   ) {
+    console.error("Invalid feedback data:", data);
     return new Response("Invalid feedback data", { status: 400 });
   }
 
