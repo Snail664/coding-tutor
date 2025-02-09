@@ -104,6 +104,7 @@ export default function Chat() {
         </div>
         <div className="border-gray-300 border rounded-md p-2">
           <Textarea
+            onEnter={onSend}
             value={userAudioTranscriptInput}
             disabled={LLMFeedbackLoading}
             onChange={(e) => {
