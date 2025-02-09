@@ -9,16 +9,16 @@ export default function QuestionDifficultyTag({
 
   switch (difficulty.toLowerCase()) {
     case QuestionDifficulty.easy:
-      colorClass = "bg-emerald-500 text-emerald-800";
+      colorClass = "bg-emerald-300 text-emerald-800";
       break;
     case QuestionDifficulty.medium:
-      colorClass = "bg-amber-500 text-amber-800";
+      colorClass = "bg-amber-300 text-amber-800";
       break;
     case QuestionDifficulty.hard:
-      colorClass = "bg-rose-500 text-rose-800";
+      colorClass = "bg-rose-300 text-rose-800";
       break;
     default:
-      colorClass = "bg-gray-500 text-white";
+      colorClass = "bg-gray-300 text-white";
   }
 
   return (
