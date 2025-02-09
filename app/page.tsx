@@ -22,8 +22,8 @@ export default async function Page() {
             Coding Tutor
           </h1>
           <p className="text-lg text-primary mt-2">
-            Powered by Codey, the AI. Codey will help you when you're stuck with
-            a bug or don't know how to continue.
+            Powered by Codey, the AI. Codey will help you when you&apos;re stuck
+            with a bug or don&apos;t know how to continue.
           </p>
         </div>
         {session ? null : (
