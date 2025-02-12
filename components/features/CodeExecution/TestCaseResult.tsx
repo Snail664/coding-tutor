@@ -31,7 +31,7 @@ export default function TestCaseResult({
         ) : (
           <XCircle className="text-red-500 mr-2" />
         )}
-        <span className="font-medium text-lg">
+        <span className="font-medium text-md">
           {passed
             ? `Passed Test Case ${index + 1}`
             : `Failed Test Case ${index + 1}`}
@@ -41,15 +41,23 @@ export default function TestCaseResult({
         <div className="text-sm">
           <div className="mb-1">
             <span className="font-semibold">Input:</span>{" "}
-            {testCase.testCase.input.toString()}
+            <span className="whitespace-normal break-words">
+              {testCase.testCase.input}
+            </span>
           </div>
           <div className="mb-1">
             <span className="font-semibold">Expected Output:</span>{" "}
-            {testCase.testCase.expectedOutput}
+            <span className="whitespace-normal break-words">
+              {Array.isArray(testCase.testCase.expectedOutput)
+                ? JSON.stringify(testCase.testCase.expectedOutput)
+                : testCase.testCase.expectedOutput}
+            </span>
           </div>
           <div className="mb-1">
             <span className="font-semibold">Actual Output:</span>{" "}
-            {testCase.actualOutput || testCase.error}
+            <span className="whitespace-normal break-words">
+              {testCase.actualOutput || testCase.error}
+            </span>
           </div>
         </div>
       )}

@@ -26,6 +26,8 @@ export async function POST(request: Request) {
 
   try {
     const { chatId, messages } = await request.json();
+    console.log("chatId", chatId);
+    console.log("messages", messages);
 
     // Validate the presence of required fields
     if (!chatId || !Array.isArray(messages) || messages.length === 0) {

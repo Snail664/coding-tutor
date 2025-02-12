@@ -25,7 +25,7 @@ export default function LanguageSelector() {
           className="w-[200px] justify-between bg-menuBackground text-primary hover:bg-primary hover:text-background"
         >
           <span className="flex items-center">
-            <span className={`text-xl mr-2`}>{programmingLanguage.icon}</span>
+            <span className={`text-md mr-2`}>{programmingLanguage.icon}</span>
             {programmingLanguage.name}
           </span>
           <ChevronDown className="h-4 w-4 opacity-50" />
@@ -50,7 +50,7 @@ export default function LanguageSelector() {
               lang.name == programmingLanguage.name ? "bg-menuBackground" : ""
             }`}
           >
-            <span className={`text-xl mr-2`}>{lang.icon}</span>
+            <span className={`text-md mr-2`}>{lang.icon}</span>
             {lang.name}
             <span className="text-xxs text-zinc-400 ml-1">
               {"(" + lang.version + ")"}

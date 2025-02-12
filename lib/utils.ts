@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { LanguageName, QuestionT } from "./types";
+import { QuestionT } from "./types";
+import { LanguageName } from "@prisma/client";
 import { LANGUAGES } from "@/slices/CodeSlice";
 import { OpenAI } from "openai";
 
@@ -66,23 +67,23 @@ export function areCodesEquivalentNaive(
 
   // Language-specific comment patterns
   const commentPatterns = {
-    [LanguageName.Python]: {
+    [LanguageName.python]: {
       singleLine: /#.*$/gm,
       multiLine: /"""[\s\S]*?"""|'''[\s\S]*?'''/g,
     },
-    [LanguageName.Javascript]: {
+    [LanguageName.javascript]: {
       singleLine: /\/\/.*$/gm,
       multiLine: /\/\*[\s\S]*?\*\//g,
     },
-    [LanguageName.Typescript]: {
+    [LanguageName.typescript]: {
       singleLine: /\/\/.*$/gm,
       multiLine: /\/\*[\s\S]*?\*\//g,
     },
-    [LanguageName.Java]: {
+    [LanguageName.java]: {
       singleLine: /\/\/.*$/gm,
       multiLine: /\/\*[\s\S]*?\*\//g,
     },
-    [LanguageName.Cpp]: {
+    [LanguageName.cpp]: {
       singleLine: /\/\/.*$/gm,
       multiLine: /\/\*[\s\S]*?\*\//g,
     },
@@ -90,13 +91,13 @@ export function areCodesEquivalentNaive(
 
   // Language-specific print patterns
   const printPatterns = {
-    [LanguageName.Python]: /print\s*\([^)]*\)/g,
-    [LanguageName.Javascript]:
+    [LanguageName.python]: /print\s*\([^)]*\)/g,
+    [LanguageName.javascript]:
       /console\.(log|info|debug|warn|error)\s*\([^)]*\)/g,
-    [LanguageName.Typescript]:
+    [LanguageName.typescript]:
       /console\.(log|info|debug|warn|error)\s*\([^)]*\)/g,
-    [LanguageName.Java]: /System\.(out|err)\.(println|print)\s*\([^)]*\)/g,
-    [LanguageName.Cpp]: /(std::)?cout\s*<<[^;]*;|printf\s*\([^)]*\)/g,
+    [LanguageName.java]: /System\.(out|err)\.(println|print)\s*\([^)]*\)/g,
+    [LanguageName.cpp]: /(std::)?cout\s*<<[^;]*;|printf\s*\([^)]*\)/g,
   };
 
   // Remove comments based on language

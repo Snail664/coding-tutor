@@ -19,6 +19,12 @@ export default function Walkthrough() {
 
   const steps: Step[] = [
     {
+      target: "body",
+      content:
+        "If the UI appears too big or too small, try adjusting your browser zoom settings (e.g., Ctrl/Cmd + '+' or '-') to optimize the display.",
+      disableBeacon: true,
+    },
+    {
       target: ".question-button",
       content: "Select different coding problems and read about the task.",
       disableBeacon: true,
@@ -37,9 +43,9 @@ export default function Walkthrough() {
       content: "Stuck? Click here or press Cmd+H to get a helpful hint!",
     },
     {
-      target: ".assistant-input",
+      target: ".chat",
       content:
-        "Need more than a hint?Ask questions or get help from our AI assistant. You can type or use voice input.",
+        "Need more than a hint? Ask questions or get help from our AI assistant. You can type or use voice input.",
     },
   ];
 

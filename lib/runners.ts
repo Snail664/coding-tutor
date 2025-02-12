@@ -1,6 +1,5 @@
 import apiClient from "./APIClient";
 import {
-  LanguageName,
   LanguageRunner,
   TestCase,
   CodeExecuteResponseT,
@@ -8,6 +7,7 @@ import {
   CodeExecuteResponseCategory,
 } from "./types";
 import { LANGUAGES } from "@/slices/CodeSlice";
+import { LanguageName } from "@prisma/client";
 
 export class RunnerFactory {
   static getRunner(language: LanguageName): LanguageRunner {

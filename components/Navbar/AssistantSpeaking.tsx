@@ -2,6 +2,8 @@ import robotSpeakingGif from "@/assets/images/robot-speaking.gif";
 import { useAppSelector } from "@/store";
 import { XIcon } from "lucide-react";
 import Image from "next/image";
+import FeedbackDialog from "../ui/FeedbackDialog";
+
 export default function AssistantSpeaking({
   isHidden,
   setIsHidden,
@@ -28,8 +30,9 @@ export default function AssistantSpeaking({
             unoptimized
             height={100}
           />
-          <div className="text-lg">{assistantPopupText}</div>
+          <div className="text-md">{assistantPopupText}</div>
         </div>
+        <FeedbackDialog feedbackType="hint" />
       </div>
     </div>
   );
