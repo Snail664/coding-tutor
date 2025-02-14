@@ -1,14 +1,11 @@
 # Broken Firewall
 
-Tickets in hand, you board your rocket flight ready for your vacation. Just as you are settling into your seat, the pilot can be heard on the speaker system. It seems they are having some issues with the onboard network and are looking for a Computer Scientist to help them out. Keen to see if you can get a free upgrade as a reward, you volunteer your services!
-
+Tickets in hand, you board your rocket flight ready for your vacation. Just as you are settling into your seat, the pilot can be heard on the speaker system.
 It seems the network router has been accidentally reset and is blocking legitimate traffic between the rocket systems and mission control, while simultaneously also allowing the onboard passengers to overwhelm the wifi.
 
-On inspection, you determine the router is using Internet Protocol version 4. You set up a data logger and record the IP headers of 1000 packets for analysis, your input data.
+On inspection, you determine the router is using **Internet Protocol version 4 (IPv4)** and recorded the IP headers of **1000 packets** for analysis, your input data.
 
 Speaking to the captain, you are advised that internal ship systems are in the `192.168.0.0` through to `192.168.254.254` IP address range, while passenger wifi is on the `10.0.0.0` to `10.0.254.254` IP address range. Any other addresses are external to the ship (for instance the ship control center, space traffic control, or just other internet locations for passenger web browsing).
-
-To start with, you decide to determine the ratio of network traffic that originates or is destined for the ship's internal systems, compared to that which originates or is destined for the passenger wifi.
 
 ## Example
 
@@ -55,6 +52,12 @@ For the first 5 packets, the length, source IP address, and destination IP addre
 
 With that information, you determine the total bytes of network traffic for the ship's internal systems as being 868 bytes, and the passenger wifi as being 1625 bytes. Therefore, the ratio would be `868/1625`, which would be your answer (submit in that style, don't perform the division).
 
-## Your Task
 
-Analyse all 1000 packet headers, and calculate the total number of bytes for ship's internal systems, and the total number of bytes for passenger wifi. Submit the ratio as your answer.
+## Constraints
+- 1 ≤ len(packet_headers) ≤ 1000
+- Each packet_headers[i] is a valid 40-character hexadecimal string.
+- All IP addresses are well-formed.
+
+
+## Your Task
+Determine the total bytes of network traffic that either originates from or is destined for the ship’s internal systems, as well as the total bytes of network traffic for the passenger wifi. You must return the result as a **ratio of the two traffic amounts**.

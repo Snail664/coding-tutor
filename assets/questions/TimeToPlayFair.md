@@ -1,11 +1,14 @@
 # Time to Play Fair
 
-You receive a message from your sister back on Earth. Just as a couple of years ago, you still communicate with each other using a private cipher - for a little bit of nerdy fun between siblings. Recently, you both agreed to switch to using a **Playfair cipher**, so that's what you are going to have to figure out in order to read the message.
+### Difficulty : Easy 
 
-Since there are a few ways of implementing Playfair, you remember the two of you agreed to the following stipulations:
+Your sister is a puzzle enthusiast, and for years, the two of you have shared a private cipher system to communicate hidden messages. Recently, she challenged you to decode her latest message using a **Playfair cipher**.
 
-- Replace any and all occurrences of `j` with the letter `i`.
-- For words of odd length, append an `x` (unless the last letter is already `x`, in which case use a `q`).
+Since there are multiple implementations of the Playfair, the two of you agreed to the following rules:
+
+- Replace any and all occurrences of `j` with the letter `i` before encoding.
+- For words of odd length, append an `x` at the end (unless the last letter is already `x`, in which case use a `q`).
+
 
 ### Example
 
@@ -32,6 +35,15 @@ A similar process applies if a pair of letters appear in the same column: you de
 
 The above phrase decodes to `et phonex home`. The `x` in `phonex` appears because the `x` was added to ensure all words have an even number of letters. It is one of the quirks of the Playfair algorithm.
 
-### Your Task
+## Constraints
+* 1 ≤ `length of key` ≤ 100
+* 1 ≤ `length of cipher_text` ≤ 500
+* `key` and `cipher_text` consist of lowercase English letters and spaces only.
+* `cipher_text` does not contain j (as it has already been replaced by i).
+* The decoded message contains only lowercase English letters and spaces.
+
+
+
+## Your Task
 
 Obtain your decryption key and message to decode from your input data. The decoded message is your answer.

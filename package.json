@@ -2,6 +2,9 @@
   "name": "coding-tutor",
   "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "seed": "ts-node --files --project tsconfig.seed.json prisma/seed.ts"
+  },
   "scripts": {
     "dev": "next dev",
     "postinstall": "prisma generate",

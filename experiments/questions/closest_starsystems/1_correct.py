@@ -1,30 +1,40 @@
 def solution(data):
-    # Parse input data into list of coordinates
     stars = []
+    print("\nParsing star coordinates:")
     for star_data in data:
+        name = star_data.split(':')[0]
         parts = star_data.split(': ')[1].strip().split(',')
-        stars.append([float(parts[0]), float(parts[1]), float(parts[2])])
+        coords = []
+        for i in range(1, 4):  # Using indices 1, 2, and 3
+            part = parts[i].strip()
+            coords.append(float(part))
+        print(f"{name}: {coords}")
+        stars.append(coords)
     
-    # Initialize minimum distance as infinity
+    print("\nCalculating distances between all pairs:")
     min_distance = float('inf')
-    
-    # Compare each pair of stars
+    min_pair = None
     for i in range(len(stars)):
         for j in range(i + 1, len(stars)):
-            # Calculate Euclidean distance
-            distance = ((stars[i][0] - stars[j][0])**2 + 
-                       (stars[i][1] - stars[j][1])**2 + 
-                       (stars[i][2] - stars[j][2])**2)**0.5
-            min_distance = min(min_distance, distance)
+            # Calculate each component separately for debugging
+            dx = stars[i][0] - stars[j][0]
+            dy = stars[i][1] - stars[j][1]
+            dz = stars[i][2] - stars[j][2]
+            distance = (dx*dx + dy*dy + dz*dz)**0.5
+            print(f"Distance between {stars[i]} and {stars[j]}: {distance}")
+            if distance < min_distance:
+                min_distance = distance
+                min_pair = (i, j)
+    
+    print(f"\nMinimum distance found: {round(min_distance, 3)}")
+    if min_pair:
+        print(f"Between stars: {stars[min_pair[0]]} and {stars[min_pair[1]]}")
     
     return round(min_distance, 3)
 
-if __name__ == '__main__':
-    data = [
-        "Proxima Centauri: 4.247, 2.945, -3.056, -0.143",
-        "Barnard's star: 5.963, 4.958, 2.980, 1.449",
-        "Luhman 16 A: 6.503, 1.697, -6.249, 0.600",
-        "WISE J085510.83-071442.5: 7.532, -3.967, -5.664, 2.985",
-        "Wolf 359: 7.856, -1.916, -3.938, 6.522"
-    ]
-    print(solution(data))
+
+
+
+
+
+
