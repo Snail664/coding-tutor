@@ -105,55 +105,6 @@ export const QUESTIONS: QuestionT[] = [
     ],
   },
   {
-    name: "Hotel Door Code",
-    difficulty: QuestionDifficulty.easy,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/HotelDoorCode.md"),
-      "utf-8"
-    ),
-    testCases: [
-      {
-        input: [/**simple original test */ "12 6 4 1 9 5 5 1 9 1 7"],
-        expectedOutput: "",
-        description: "",
-      },
-      {
-        input: [
-          /** medium test */
-          "10 5 15 5 10 5 15 5 10 5 " + // top of 3
-            "15 5 10 5 15 5 10 5 15 5 " + // middle of 3
-            "10 5 15 5 10 5 15 5 10 5 " + // bottom of 3
-            "20 5 15 5 20 5 15 5 20 5 " + // top of 5
-            "15 5 20 5 15 5 20 5 15 5", // bottom of 5
-        ],
-        expectedOutput: "35",
-        description: "",
-      },
-      {
-        input: [
-          /** Hard test: edge cases */
-          "99 1 " + // Tests exact width boundary
-            "50 50 " + // Tests mid-row transition
-            "100 " + // Tests full row fill
-            "1 99 " + // Tests row start
-            "98 1 1 " + // Tests row end
-            "200 " + // Tests multi-row span
-            "8000", // Tests maximum pixel count
-        ],
-        expectedOutput: "7",
-        description: "",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code below
-`,
-        language: LanguageName.python,
-      },
-    ],
-  },
-  {
     name: "Closest Star Systems",
     difficulty: QuestionDifficulty.easy,
     content: readFileSync(
@@ -389,27 +340,27 @@ export const QUESTIONS: QuestionT[] = [
     ],
   },
   {
-    name: "Connecting Cities",
+    name: "Connecting Train Stations",
     difficulty: QuestionDifficulty.easy,
     content: readFileSync(
-      join(__dirname, "../assets/questions/ConnectingCities.md"),
+      join(__dirname, "../assets/questions/ConnectingTrainStations.md"),
       "utf-8"
     ),
     testCases: [
       {
-        input: [/**simple test */ "856,40,12,1"],
+        input: "856,40,12,1",
         expectedOutput: 12,
         description: "",
       },
       {
-        input: [/** middddd*/ "100,20,5,1"],
+        input: /** middddd*/ "100,20,5,1",
         expectedOutput: 3127,
         description: "",
       },
       {
-        input: [/** to test stac overflow limit  */ "999999,40000,2000,1"],
+        input: /** to test stac overflow limit  */ "999999,40000,2000,1",
         expectedOutput: 7852401,
-        description: "skys the limit",
+        description: "",
       },
     ],
     templateCodes: [
@@ -526,79 +477,39 @@ export const QUESTIONS: QuestionT[] = [
     ],
   },
   {
-    name: "Median of Two Sorted Arrays",
-    difficulty: QuestionDifficulty.hard,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/MedianofTwoSortedArrays.md"),
-      "utf8"
-    ),
-    testCases: [
-      {
-        input: [[1, 3], [2]],
-        expectedOutput: 2.0,
-        description: "",
-      },
-      {
-        input: [
-          [1, 2],
-          [3, 4],
-        ],
-        expectedOutput: 2.5,
-        description: "",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code below
-`,
-        language: LanguageName.python,
-      },
-    ],
-  },
-  {
     name: "Codey's Performance Analysis",
     difficulty: QuestionDifficulty.medium,
     content: readFileSync(
-      join(__dirname, "../assets/questions/CodeyPerformanceAnalysis.md"),
+      join(__dirname, "../assets/questions/CodeyTutorChallenge.md"),
       "utf8"
     ),
     testCases: [
       {
-        input: [
-          "15",
-          "add 5 20",
-          "add 3 15",
-          "add 7 30",
-          "process 10",
-          "add 2 12",
-          "add 4 18",
-          "process 8",
-          "add 6 25",
-          "add 1 10",
-          "process 15",
-          "add 3 22",
-          "add 5 28",
-          "process 5",
-          "add 2 14",
-          "process 20"
-        ]
-          ,
-        expectedOutput: [50, 33, 85, 22, 99]        ,
+        input: ["9",
+          "add 8 10",
+          "add 3 25",
+          "add 5 6",
+          "tutor 7",
+          "tutor 7",
+          "add 1 9",
+          "add 2 13",
+          "tutor 20",
+          "tutor 1"],
+        expectedOutput: [6, 25, 32, 0],
         description: "",
       },
       {
         input: [
           "6",
           "add 100000 100000",
-          "process 99999",
+          "tutor 99999",
           "add 1 100000",
-          "process 100000",
+          "tutor 100000",
           "add 50000 1",
-          "process 100000"
+          "tutor 100000"
         ]
           ,
-        expectedOutput: [0, 200000, 200001]
+        expectedOutput: [0, 100000, 100001]
         ,
         description: "",
       },
@@ -613,10 +524,10 @@ export const QUESTIONS: QuestionT[] = [
     ],
   },
   {
-    name: "Burst Balloons",
+    name: "Cosmic Candy Crush",
     difficulty: QuestionDifficulty.hard,
     content: readFileSync(
-      join(__dirname, "../assets/questions/BurstBalloons.md"),
+      join(__dirname, "../assets/questions/CosmicCandyCrush.md"),
       "utf8"
     ),
     testCases: [
@@ -640,4 +551,35 @@ export const QUESTIONS: QuestionT[] = [
       },
     ],
   },
+  {
+    name: "Magical Median Challenge",
+    difficulty: QuestionDifficulty.hard,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/MagicalMedianChallenge.md"),
+      "utf8"
+    ),
+    testCases: [
+      {
+        input: [[1, 3], [2]],
+        expectedOutput: 2,
+        description: "",
+      },
+      {
+        input: [
+          [1, 2],
+          [3, 4],
+        ],
+        expectedOutput: 2,
+        description: "",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `def solution(data):
+    # insert your code below
+`,
+        language: LanguageName.python,
+      },
+    ],
+  }
 ];

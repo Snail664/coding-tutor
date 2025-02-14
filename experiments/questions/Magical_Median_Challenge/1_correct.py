@@ -29,9 +29,9 @@ def solution(data):
 
     # Return result based on odd/even total length
     if (n + m) % 2 == 1:
-        return float(m1)
+        return int(float(m1))
     else:
-        return (float(m1) + float(m2)) / 2.0
+        return int((float(m1) + float(m2)) / 2.0)
 
 if __name__ == '__main__':
     data = [[1, 3], [2]]

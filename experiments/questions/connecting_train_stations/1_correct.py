@@ -13,13 +13,13 @@ def count_ways_dp(target, segments):
     return dp[target]
 
 def solution(data):
-    numbers = list(map(int, data[0].split(',')))
+    numbers = list(map(int, data.split(',')))
     target = numbers[0]  # First number is the target
     segments = numbers[1:]  # Remaining numbers 
     return count_ways_dp(target, segments)
 
 if __name__ == '__main__':
-    data = ["856,40,12,1"]
+    data = "856,40,12,1"
     result = solution(data)
     print(f"Number of different ways: {result}")
 
