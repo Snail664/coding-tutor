@@ -557,39 +557,49 @@ export const QUESTIONS: QuestionT[] = [
     ],
   },
   {
-    name: "Kattis Quest",
+    name: "Codey's Performance Analysis",
     difficulty: QuestionDifficulty.medium,
     content: readFileSync(
-      join(__dirname, "../assets/questions/KattisQuest.md"),
+      join(__dirname, "../assets/questions/CodeyPerformanceAnalysis.md"),
       "utf8"
     ),
     testCases: [
       {
         input: [
-          "9",
-          "add 8 10",
-          "add 3 25",
-          "add 5 6",
-          "query 7",
-          "query 7",
-          "add 1 9",
-          "add 2 13",
-          "query 20",
-          "query 1",
-        ],
-        expectedOutput: [6, 25, 32, 0],
+          "15",
+          "add 5 20",
+          "add 3 15",
+          "add 7 30",
+          "process 10",
+          "add 2 12",
+          "add 4 18",
+          "process 8",
+          "add 6 25",
+          "add 1 10",
+          "process 15",
+          "add 3 22",
+          "add 5 28",
+          "process 5",
+          "add 2 14",
+          "process 20"
+        ]
+          ,
+        expectedOutput: [50, 33, 85, 22, 99]        ,
         description: "",
       },
       {
         input: [
-          "5",
-          "add 10 20",
-          "add 5 15",
-          "query 12",
-          "add 3 30",
-          "query 8",
-        ],
-        expectedOutput: [20, 45],
+          "6",
+          "add 100000 100000",
+          "process 99999",
+          "add 1 100000",
+          "process 100000",
+          "add 50000 1",
+          "process 100000"
+        ]
+          ,
+        expectedOutput: [0, 200000, 200001]
+        ,
         description: "",
       },
     ],
