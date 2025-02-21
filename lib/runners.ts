@@ -14,6 +14,8 @@ export class RunnerFactory {
     switch (language) {
       case "python":
         return new PythonRunner();
+      case "cpp":
+        return new CPPRunner();
       // Add cases for other languages
       default:
         throw new Error("Unsupported language");
@@ -114,6 +116,130 @@ if __name__ == "__main__":
     let resultArr: TestResult[] = [];
     if (response.data.run["stdout"]) {
       resultArr = JSON.parse(response.data.run["stdout"])["testCases"];
+      resultArr.map((x: TestResult) => {
+        x.passed ? numPassed++ : numFailed++;
+      });
+    }
+    return {
+      testCases: resultArr,
+      numPassed: numPassed,
+      numFailed: numFailed,
+      stdout: response.data.run["stdout"],
+      stderr: response.data.run["stderr"],
+      sourceCode: originalCode,
+      category: response.data.run["stderr"]
+        ? CodeExecuteResponseCategory.Error
+        : CodeExecuteResponseCategory.Success,
+      message: "",
+    };
+  }
+}
+
+export class CPPRunner implements LanguageRunner {
+  private language = LANGUAGES.find(lang => lang.name === "cpp");
+
+  constructor() {
+    if (!this.language) {
+      throw new Error(
+        "Cannot construct C++ Runner, C++ language is not defined in language constants array"
+      );
+    }
+  }
+
+  // Extract function signature from C++ code
+  private extractFunctionName(code: string): string | null {
+    const match = code.match(/\b(\w+)\s*\(/);
+    return match ? match[1] : null;
+  }
+
+  prepareCode(userCode: string, testCases: TestCase[]): string {
+    const functionName = this.extractFunctionName(userCode);
+    if (!functionName) {
+      throw new Error("No function definition found in the user code.");
+    }
+
+    // Convert test cases to a JSON string
+    const testCasesJSON = JSON.stringify(testCases);
+
+    // Generate C++ test runner code
+    const testRunnerCode = `
+    #include <iostream>
+    #include <vector>
+    #include <string>
+    #include <sstream>
+
+    using namespace std;
+
+    struct TestCase {
+        vector<string> input;
+        string expectedOutput;
+    };
+
+    int main() {
+        string testCasesStr = R"(${testCasesJSON})";
+        vector<TestCase> testCases;
+        vector<string> results;
+
+        // Manually parse testCasesStr into testCases (assuming simple format)
+        stringstream ss(testCasesStr);
+        string line;
+        while (getline(ss, line, ',')) {
+            TestCase tc;
+            tc.input.push_back(line);
+            testCases.push_back(tc);
+        }
+
+        for (auto& test_case : testCases) {
+            vector<string> input_data = test_case.input;
+            string expected_output = test_case.expectedOutput;
+            try {
+                stringstream userOutput;
+                cout << "Executing: ${functionName} with input ";
+                for (const auto& input : input_data) {
+                    cout << input << " ";
+                }
+                cout << endl;
+                
+                auto result = ${functionName}(input_data);
+                userOutput << result;
+                string actualOutput = userOutput.str();
+
+                bool passed = (actualOutput == expected_output);
+                results.push_back(actualOutput + ", Passed: " + (passed ? "true" : "false"));
+            } catch (exception &e) {
+                results.push_back("Error: " + string(e.what()));
+            }
+        }
+
+        for (const auto& res : results) {
+            cout << res << endl;
+        }
+        cout.flush();
+
+        return 0;
+}`;
+
+    // Combine user's code with the test runner
+    return `${userCode}
+
+${testRunnerCode}`;
+  }
+
+  async runCode(
+    preparedCode: string,
+    originalCode: string
+  ): Promise<CodeExecuteResponseT> {
+    const response = await apiClient.post("/execute-code", {
+      language: this.language?.name,
+      version: this.language?.version,
+      code: preparedCode,
+    });
+
+    let numPassed = 0;
+    let numFailed = 0;
+    let resultArr: TestResult[] = [];
+    if (response.data.run["stdout"]) {
+      resultArr = JSON.parse(response.data.run["stdout"]);
       resultArr.map((x: TestResult) => {
         x.passed ? numPassed++ : numFailed++;
       });

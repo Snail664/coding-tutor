@@ -5,50 +5,6 @@ import { join } from "path";
 
 export const QUESTIONS: QuestionT[] = [
   {
-    name: "Purchase Tickets",
-    difficulty: QuestionDifficulty.easy,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/PurchaseTickets.md"),
-      "utf8"
-    ),
-    testCases: [
-      {
-        input: [
-          "AAA: Seat 9997",
-          "BBB: Discount 2886",
-          "DDD: Luggage 3500",
-          "AAA: Tax 156",
-          "CCC: Fee 9468",
-          "BBB: Fee 9378",
-          "AAA: Discount 3103",
-          "DDD: Rebate 967",
-        ],
-        expectedOutput: 2533,
-        description: "",
-      },
-      {
-        input: [
-          "AAA: Seat 9997",
-          "BBB: Discount 2886",
-          "DDD: Luggage 3500",
-          "CCC: Fee 9468",
-          "BBB: Fee 9378",
-          "AAA: Discount 3103",
-        ],
-        expectedOutput: 3500,
-        description: "",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code below
-`,
-        language: LanguageName.python,
-      },
-    ],
-  },
-  {
     name: "Broken Firewall",
     difficulty: QuestionDifficulty.easy,
     content: readFileSync(
@@ -118,7 +74,7 @@ export const QUESTIONS: QuestionT[] = [
           "Star B: 1.0, 0.0, 2.0, 0.0",
           "Star C: 1.0, 2.0, 1.0, 0.0",
         ],
-        expectedOutput: 2.0,
+        expectedOutput: "2.0",
         description: "",
       },
       {
@@ -152,47 +108,36 @@ export const QUESTIONS: QuestionT[] = [
     ],
   },
   {
-    name: "Busy Moon Rovers",
+    name: "Galactic Bounty Contract",
     difficulty: QuestionDifficulty.easy,
     content: readFileSync(
-      join(__dirname, "../assets/questions/BusyMoonRovers.md"),
-      "utf-8"
+      join(__dirname, "../assets/questions/GalacticBountyContract.md"),
+      "utf8"
     ),
     testCases: [
       {
         input: [
-          /** Simple test: small matrix, clear path */ "alpha bravo charlie",
-          "alpha 0 10 20",
-          "bravo 10 0 15",
-          "charlie 20 15 0",
+          "AAA: Pilot 9997",
+          "BBB: Discount 2886",
+          "DDD: Maintenance  3500",
+          "AAA: Tax 156",
+          "CCC: Docking  9468",
+          "BBB: Docking  9378",
+          "AAA: Discount 3103",
+          "DDD: Rebate 967",
         ],
-        expectedOutput: 45,
+        expectedOutput: 2533,
         description: "",
       },
       {
         input: [
-          /** Medium test: larger matrix, negative impact of wrong implementation */
-          "base camp ridge peak valley",
-          "base 0 100 500 300",
-          "camp 100 0 200 400",
-          "ridge 500 200 0 250",
-          "peak 300 400 250 0",
+          "Starfire: Pilot 5000",
+          "Voidwalkers: Docking 2000", 
+          "Starfire: Tax 300",
+          "Voidwalkers: Discount 1500",
+          "Starfire: Discount 600",
         ],
-        expectedOutput: 1150,
-        description: "",
-      },
-      {
-        input: [
-          /** Hard test: edge cases with large numbers and precision */
-          "s1 s2 s3 s4 s5 s6",
-          "s1 0 999999 1000 500000 2000 3000",
-          "s2 999999 0 888888 777777 666666 555555",
-          "s3 1000 888888 0 444444 333333 222222",
-          "s4 500000 777777 444444 0 111111 100000",
-          "s5 2000 666666 333333 111111 0 50000",
-          "s6 3000 555555 222222 100000 50000 0",
-        ],
-        expectedOutput: 2164444,
+        expectedOutput: 4700,
         description: "",
       },
     ],
@@ -477,7 +422,7 @@ export const QUESTIONS: QuestionT[] = [
     ],
   },
   {
-    name: "Codey's Performance Analysis",
+    name: "CodeyTutorChallenge",
     difficulty: QuestionDifficulty.medium,
     content: readFileSync(
       join(__dirname, "../assets/questions/CodeyTutorChallenge.md"),
@@ -511,6 +456,228 @@ export const QUESTIONS: QuestionT[] = [
           ,
         expectedOutput: [0, 100000, 100001]
         ,
+        description: "",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `def solution(data):
+    # insert your code below
+`,
+        language: LanguageName.python,
+      },
+    ],
+  },
+  {
+    name: "Rotting Oranges",
+    difficulty: QuestionDifficulty.medium,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/RottingOranges.md"),
+      "utf-8"
+    ),
+    testCases: [
+      {
+        input: [
+          /** Simple test: small matrix, clear path */ 
+          "[[2,1,1]",
+          "[1,1,0]",
+          "[0,1,1]]"
+        ],
+        expectedOutput: 4,
+        description: "",
+      },
+      {
+        input: [
+          /** Medium test: larger matrix, negative impact of wrong implementation */
+          "[[2,1,1,1,1]",
+          "[1,1,0,1,1]",
+          "[0,0,0,2,1]",
+          "[1,1,1,1,1]",
+          "[1,1,1,1,1]]"
+        ],
+        expectedOutput: 1150,
+        description: "",
+      },
+      {
+        input: [
+          /** Hard test: edge cases with large numbers and precision */
+          "[[2,1,1,1,1]",
+          "[1,1,0,1,1]",
+          "[0,0,0,0,1]",
+          "[1,0,0,0,1]",
+          "[1,1,1,1,1]]"
+        ],
+        expectedOutput: -1,
+        description: "",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `class Solution(object):
+    def orangesRotting(self, grid):
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+    # insert your code below
+`,
+        language: LanguageName.python,
+      },
+    ],
+  },
+  {
+    name: "Supply Squad",
+    difficulty: QuestionDifficulty.medium,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/SupplySquad.md"),
+      "utf-8"
+    ),
+    testCases: [
+      {
+        input: [
+          /** Simple test: small matrix, clear path */ "alpha bravo charlie",
+          "alpha 0 10 20",
+          "bravo 10 0 15",
+          "charlie 20 15 0",
+        ],
+        expectedOutput: 45,
+        description: "",
+      },
+      {
+        input: [
+          /** Medium test: larger matrix, negative impact of wrong implementation */
+          "base camp ridge peak valley",
+          "base 0 100 500 300",
+          "camp 100 0 200 400",
+          "ridge 500 200 0 250",
+          "peak 300 400 250 0",
+        ],
+        expectedOutput: 1150,
+        description: "",
+      },
+      {
+        input: [
+          /** Hard test: edge cases with large numbers and precision */
+          "s1 s2 s3 s4 s5 s6",
+          "s1 0 999999 1000 500000 2000 3000",
+          "s2 999999 0 888888 777777 666666 555555",
+          "s3 1000 888888 0 444444 333333 222222",
+          "s4 500000 777777 444444 0 111111 100000",
+          "s5 2000 666666 333333 111111 0 50000",
+          "s6 3000 555555 222222 100000 50000 0",
+        ],
+        expectedOutput: 2164444,
+        description: "",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `def solution(data):
+    # insert your code below
+`,
+        language: LanguageName.python,
+      },
+    ],
+  },
+  {
+    name: "Rotting Oranges",
+    difficulty: QuestionDifficulty.medium,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/RottingOranges.md"),
+      "utf-8"
+    ),
+    testCases: [
+      {
+        input: [
+          /** Simple test: small matrix, clear path */ 
+          "[[2,1,1]",
+          "[1,1,0]",
+          "[0,1,1]]"
+        ],
+        expectedOutput: 4,
+        description: "",
+      },
+      {
+        input: [
+          /** Medium test: larger matrix, negative impact of wrong implementation */
+          "[[2,1,1,1,1]",
+          "[1,1,0,1,1]",
+          "[0,0,0,2,1]",
+          "[1,1,1,1,1]",
+          "[1,1,1,1,1]]"
+        ],
+        expectedOutput: 1150,
+        description: "",
+      },
+      {
+        input: [
+          /** Hard test: edge cases with large numbers and precision */
+          "[[2,1,1,1,1]",
+          "[1,1,0,1,1]",
+          "[0,0,0,0,1]",
+          "[1,0,0,0,1]",
+          "[1,1,1,1,1]]"
+        ],
+        expectedOutput: -1,
+        description: "",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `class Solution(object):
+    def orangesRotting(self, grid):
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+    # insert your code below
+`,
+        language: LanguageName.python,
+      },
+    ],
+  },
+  {
+    name: "Supply Squad",
+    difficulty: QuestionDifficulty.medium,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/SupplySquad.md"),
+      "utf-8"
+    ),
+    testCases: [
+      {
+        input: [
+          /** Simple test: small matrix, clear path */ "alpha bravo charlie",
+          "alpha 0 10 20",
+          "bravo 10 0 15",
+          "charlie 20 15 0",
+        ],
+        expectedOutput: 45,
+        description: "",
+      },
+      {
+        input: [
+          /** Medium test: larger matrix, negative impact of wrong implementation */
+          "base camp ridge peak valley",
+          "base 0 100 500 300",
+          "camp 100 0 200 400",
+          "ridge 500 200 0 250",
+          "peak 300 400 250 0",
+        ],
+        expectedOutput: 1150,
+        description: "",
+      },
+      {
+        input: [
+          /** Hard test: edge cases with large numbers and precision */
+          "s1 s2 s3 s4 s5 s6",
+          "s1 0 999999 1000 500000 2000 3000",
+          "s2 999999 0 888888 777777 666666 555555",
+          "s3 1000 888888 0 444444 333333 222222",
+          "s4 500000 777777 444444 0 111111 100000",
+          "s5 2000 666666 333333 111111 0 50000",
+          "s6 3000 555555 222222 100000 50000 0",
+        ],
+        expectedOutput: 2164444,
         description: "",
       },
     ],

@@ -1,4 +1,4 @@
-# Purchase Tickets
+# Galactic Bounty Conract 
 
 The year is 2224. You have spent most of the past year on Earth, catching up with friends and family after your travels of recent years. It didn't take too long, however, for you to long for spending some more time in space. You have decided that what you need is to spend the next two weeks on holiday to an Earth-orbiting Space Station and the Moon base, Luna City. Let’s go on an adventure!
 

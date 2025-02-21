@@ -1,29 +1,31 @@
 def solution(data):
-    # insert your code below
     total_costs = {}
+
     for line in data:
-        company_and_rest = line.split(': ')
-        if len(company_and_rest) != 2:
+        parts = line.split(": ")
+        if len(parts) != 2:
             continue
-        company_code, rest = company_and_rest
-        type_and_amount = rest.split(' ')
-        if len(type_and_amount) != 2:
+        
+        crew, cost_details = parts
+        cost_info = cost_details.split()
+        if len(cost_info) != 2:
             continue
-        charge_type, amount_str = type_and_amount
+        
+        cost_type, amount_str = cost_info
         try:
             amount = int(amount_str)
         except ValueError:
             continue
-        if company_code not in total_costs:
-            total_costs[company_code] = 0
-        if charge_type in ['Pilot', 'Fuel', 'Maintenance', 'Docking', 'Tax']:
-            total_costs[company_code] += amount
-        elif charge_type in ['Discount', 'Rebate']:
-            total_costs[company_code] -= amount
-        else:
-            continue
-    if not total_costs:
-        return 0
-    else:
-        min_cost = min(total_costs.values())
-        return min_cost
+
+        # Initialize crew cost if not already present
+        if crew not in total_costs:
+            total_costs[crew] = 0
+
+        # Apply charges and discounts
+        if cost_type in {"Pilot", "Fuel", "Maintenance", "Docking", "Tax"}:
+            total_costs[crew] += amount
+        elif cost_type in {"Discount", "Rebate"}:
+            total_costs[crew] -= amount
+
+    # Return the minimum cost among all crews
+    return min(total_costs.values(), default=0)
