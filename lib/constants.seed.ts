@@ -148,6 +148,68 @@ export const QUESTIONS: QuestionT[] = [
 `,
         language: LanguageName.python,
       },
+      {
+        code:`struct Transaction {
+    string crew;
+    string cost_type;
+    int amount;
+};
+
+Transaction parseLine(const string& line) {
+    Transaction t;
+    stringstream ss(line);
+    char discard;
+    
+    // Try CSV-like format: "AAA,Pilot,9997"
+    if (getline(ss, t.crew, ',') && 
+        getline(ss, t.cost_type, ',') && 
+        (ss >> t.amount)) {
+        return t;
+    }
+    
+    // Clear errors and try original format: "AAA: Pilot 9997"
+    ss.clear();
+    ss.str(line);
+    if (ss >> t.crew >> discard && discard == ':' &&
+        ss >> t.cost_type >> t.amount) {
+        return t;
+    }
+    
+    // Try JSON-like format: {"crew":"AAA","type":"Pilot","amount":9997}
+    size_t crew_pos = line.find("crew");
+    size_t type_pos = line.find("type");
+    size_t amount_pos = line.find("amount");
+    if (crew_pos != string::npos && 
+        type_pos != string::npos && 
+        amount_pos != string::npos) {
+        
+        auto extract = [&](size_t pos) {
+            size_t start = line.find('"', pos + 5) + 1;
+            size_t end = line.find('"', start);
+            return line.substr(start, end - start);
+        };
+        
+        t.crew = extract(crew_pos);
+        t.cost_type = extract(type_pos);
+        string amount_str = extract(amount_pos);
+        t.amount = stoi(amount_str);
+        return t;
+    }
+    
+    // Numeric fallback (if input is just a number)
+    try {
+        t.crew = "default";
+        t.cost_type = "unknown";
+        t.amount = stoi(line);
+        return t;
+    } catch (...) {}
+    
+    // Final fallback
+    throw runtime_error("Invalid input format: " + line);
+}
+        `,
+        language: LanguageName.cpp,
+      }
     ],
   },
   {

@@ -148,7 +148,7 @@ export class CPPRunner implements LanguageRunner {
 
   // Extract function signature from C++ code
   private extractFunctionName(code: string): string | null {
-    const match = code.match(/\b(\w+)\s*\(/);
+    const match = code.match(/(\w+)\s*\([^)]*const\s+vector\s*<\s*string\s*>\s*&[^)]*\)\s*\{/);
     return match ? match[1] : null;
   }
 
@@ -157,9 +157,10 @@ export class CPPRunner implements LanguageRunner {
     if (!functionName) {
       throw new Error("No function definition found in the user code.");
     }
+    
 
-    // Convert test cases to a JSON string
-    const testCasesJSON = JSON.stringify(testCases);
+    // // Convert test cases to a JSON string
+    // const testCasesJSON = JSON.stringify(testCases);
 
     // Generate C++ test runner code
     const testRunnerCode = `
@@ -167,62 +168,108 @@ export class CPPRunner implements LanguageRunner {
     #include <vector>
     #include <string>
     #include <sstream>
+    #include <algorithm>
+    #include <regex>
 
     using namespace std;
 
     struct TestCase {
-        vector<string> input;
-        string expectedOutput;
+      vector<string> input;
+      string expectedOutput;
     };
 
+    struct TestResult {
+      string actualOutput;
+      bool passed;
+      string userPrints;
+      string error;
+    };
+
+    ${userCode}
+
+    string escapeJson(const string& s) {
+      string escaped;
+      for (char c : s) {
+          switch (c) {
+              case '"':  escaped += "\\\\\\""; break;
+              case '\\\\': escaped += "\\\\\\\\"; break;
+              case '\\n': escaped += "\\\\n";  break;
+              case '\\r': escaped += "\\\\r";  break;
+              case '\\t': escaped += "\\\\t";  break;
+              default:   escaped += c;
+          }
+      }
+      return escaped;
+    }
+
     int main() {
-        string testCasesStr = R"(${testCasesJSON})";
-        vector<TestCase> testCases;
-        vector<string> results;
 
-        // Manually parse testCasesStr into testCases (assuming simple format)
-        stringstream ss(testCasesStr);
-        string line;
-        while (getline(ss, line, ',')) {
-            TestCase tc;
-            tc.input.push_back(line);
-            testCases.push_back(tc);
-        }
+      vector<TestCase> testCases = {
+        ${testCases.map(tc => `{
+          {
+              ${Array.isArray(tc.input) 
+                  ? (tc.input as (string | number | number[] | number[][])[])
+                      .map((line: string | number | number[] | number[][]) => {
+                          const strLine = typeof line === 'string' ? line : JSON.stringify(line);
+                          return `"${strLine.replace(/"/g, '\\"')}"`;
+                      }).join(",\n                ")
+                  : `"${String(tc.input).replace(/"/g, '\\"')}"`
+              }
+          },
+          "${typeof tc.expectedOutput === 'string' 
+              ? tc.expectedOutput.replace(/"/g, '\\"') 
+              : JSON.stringify(tc.expectedOutput)}"
+        }`).join(",\n        ")}
+        };
 
-        for (auto& test_case : testCases) {
-            vector<string> input_data = test_case.input;
-            string expected_output = test_case.expectedOutput;
-            try {
-                stringstream userOutput;
-                cout << "Executing: ${functionName} with input ";
-                for (const auto& input : input_data) {
-                    cout << input << " ";
-                }
-                cout << endl;
-                
-                auto result = ${functionName}(input_data);
-                userOutput << result;
-                string actualOutput = userOutput.str();
+      vector<TestResult> results;
+      streambuf* origCout = cout.rdbuf();
+      stringstream outputCapture;
 
-                bool passed = (actualOutput == expected_output);
-                results.push_back(actualOutput + ", Passed: " + (passed ? "true" : "false"));
-            } catch (exception &e) {
-                results.push_back("Error: " + string(e.what()));
-            }
-        }
+      for (auto& tc : testCases) {
+          TestResult res;
+          outputCapture.str("");
+          cout.rdbuf(outputCapture.rdbuf());
+          
+          try {
+              auto actual = ${functionName}(tc.input);
+              cout.rdbuf(origCout);
+              
+              res.userPrints = outputCapture.str();
+              stringstream ss;
+              ss << actual;
+              res.actualOutput = escapeJson(ss.str());
+              res.passed = (ss.str() == tc.expectedOutput);
+          } catch (const exception& e) {
+              cout.rdbuf(origCout);
+              res.error = escapeJson(e.what());
+              res.passed = false;
+          } catch (...) {
+              cout.rdbuf(origCout);
+              res.error = "Unknown error";
+              res.passed = false;
+          }
+          results.push_back(res);
+      }
 
-        for (const auto& res : results) {
-            cout << res << endl;
-        }
-        cout.flush();
-
-        return 0;
-}`;
+      // Generate JSON output manually
+      std::string output = "{\\testCases\\":[";
+      for (size_t i = 0; i < results.size(); ++i) {
+          auto& r = results[i];
+          output += "{"
+              "\\\"actualOutput\\\":\\\"" + r.actualOutput + "\\\","
+              "\\\"passed\\\": " + (r.passed ? "true" : "false") + ","
+              "\\\"userPrints\\\":\\\"" + escapeJson(r.userPrints) + "\\\","
+              "\\\"error\\\":\\\"" + r.error + "\\\"";
+          if (i != results.size()-1) output += ",";
+      }
+      output += "}";
+      fprintf(stdout, "%s", output.c_str());
+      return 0;
+}`;            
 
     // Combine user's code with the test runner
-    return `${userCode}
-
-${testRunnerCode}`;
+    return testRunnerCode;;
   }
 
   async runCode(
@@ -254,7 +301,7 @@ ${testRunnerCode}`;
       category: response.data.run["stderr"]
         ? CodeExecuteResponseCategory.Error
         : CodeExecuteResponseCategory.Success,
-      message: "",
+      message: response.data.run?.stderr ? "Execution failed" : "Execution successful",
     };
   }
 }
