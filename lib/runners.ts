@@ -159,7 +159,6 @@ export class CPPRunner implements LanguageRunner {
     if (!functionName) {
       throw new Error("No function definition found in the user code.");
     }
-    
 
     // // Convert test cases to a JSON string
     const testCasesJSON = JSON.stringify(testCases);
@@ -207,6 +206,7 @@ export class CPPRunner implements LanguageRunner {
     int main() {
 
       vector<TestCase> testCases = {
+<<<<<<< HEAD
         ${testCases.map((tc)  => `{
           {
             /**
@@ -216,14 +216,27 @@ export class CPPRunner implements LanguageRunner {
              * - If the element is a number or an array of numbers/number arrays, convert it to a JSON string.
              */
               ${Array.isArray(tc.input) 
+=======
+        ${testCases
+          .map(
+            (tc) => `{
+          {
+              ${
+                Array.isArray(tc.input)
+>>>>>>> b74b4f8d2ae4bbf99cd34ec55cff79b97ad99588
                   ? (tc.input as (string | number | number[] | number[][])[])
                       .map((line: string | number | number[] | number[][]) => {
-                          const strLine = typeof line === 'string' ? line : JSON.stringify(line);
-                          return `"${strLine.replace(/"/g, '\\"')}"`;
-                      }).join(",\n                ")
+                        const strLine =
+                          typeof line === "string"
+                            ? line
+                            : JSON.stringify(line);
+                        return `"${strLine.replace(/"/g, '\\"')}"`;
+                      })
+                      .join(",\n                ")
                   : `"${String(tc.input).replace(/"/g, '\\"')}"`
               }
           },
+<<<<<<< HEAD
           /**
            * Convert the expected output of the test case into a string format:
            * - If the expected output is a string, escape double quotes.
@@ -233,6 +246,16 @@ export class CPPRunner implements LanguageRunner {
               ? tc.expectedOutput.replace(/"/g, '\\"') 
               : JSON.stringify(tc.expectedOutput)}"
         }`).join(",\n        ")}
+=======
+          "${
+            typeof tc.expectedOutput === "string"
+              ? tc.expectedOutput.replace(/"/g, '\\"')
+              : JSON.stringify(tc.expectedOutput)
+          }"
+        }`
+          )
+          .join(",\n        ")}
+>>>>>>> b74b4f8d2ae4bbf99cd34ec55cff79b97ad99588
         };
 
       vector<TestResult> results;
@@ -269,17 +292,21 @@ export class CPPRunner implements LanguageRunner {
       std::string output = "{\\\"testCases\\\":[";
       for (size_t i = 0; i < results.size(); ++i) {
           auto& r = results[i];
-          output += "{"
-              "\\\"actualOutput\\\":\\\"" + r.actualOutput + "\\\","
-              "\\\"passed\\\": " + (r.passed ? "true" : "false") + ","
+          output += "{\\\"actualOutput\\\":\\\"" + r.actualOutput + "\\\","
+              "\\\"passed\\\":" + (r.passed ? "true" : "false") + ","
               "\\\"userPrints\\\":\\\"" + escapeJson(r.userPrints) + "\\\","
+<<<<<<< HEAD
               "\\\"error\\\":\\\"" + r.error + "\\\"" + "}";
+=======
+              "\\\"error\\\":\\\"" + r.error + "\\\"" + 
+          "}";
+>>>>>>> b74b4f8d2ae4bbf99cd34ec55cff79b97ad99588
           output += (i < results.size()-1) ? "," : "";
       }
       output += "]}";
       fprintf(stdout, "%s", output.c_str());
       return 0;
-}`;            
+}`;
 
     // Combine user's code with the test runner
     return testRunnerCode;
@@ -299,8 +326,13 @@ export class CPPRunner implements LanguageRunner {
     let numFailed = 0;
     let resultArr: TestResult[] = [];
     if (response.data.run["stdout"]) {
+<<<<<<< HEAD
       try{
         resultArr = JSON.parse(response.data.run["stdout"]);
+=======
+      try {
+        resultArr = JSON.parse(response.data.run["stdout"])["testCases"];
+>>>>>>> b74b4f8d2ae4bbf99cd34ec55cff79b97ad99588
         resultArr.map((x: TestResult) => {
           x.passed ? numPassed++ : numFailed++;
         });
@@ -319,7 +351,11 @@ export class CPPRunner implements LanguageRunner {
       category: response.data.run["stderr"]
         ? CodeExecuteResponseCategory.Error
         : CodeExecuteResponseCategory.Success,
+<<<<<<< HEAD
         message: response.data.run?.stderr
+=======
+      message: response.data.run?.stderr
+>>>>>>> b74b4f8d2ae4bbf99cd34ec55cff79b97ad99588
         ? "Execution failed"
         : "Execution successful",
     };
