@@ -136,7 +136,7 @@ if __name__ == "__main__":
 }
 
 export class CPPRunner implements LanguageRunner {
-  private language = LANGUAGES.find(lang => lang.name === "cpp");
+  private language = LANGUAGES.find((lang) => lang.name === "cpp");
 
   constructor() {
     if (!this.language) {
@@ -148,7 +148,9 @@ export class CPPRunner implements LanguageRunner {
 
   // Extract function signature from C++ code
   private extractFunctionName(code: string): string | null {
-    const match = code.match(/(\w+)\s*\([^)]*const\s+vector\s*<\s*string\s*>\s*&[^)]*\)\s*\{/);
+    const match = code.match(
+      /(\w+)\s*\([^)]*const\s+vector\s*<\s*string\s*>\s*&[^)]*\)\s*\{/
+    );
     return match ? match[1] : null;
   }
 
@@ -157,7 +159,6 @@ export class CPPRunner implements LanguageRunner {
     if (!functionName) {
       throw new Error("No function definition found in the user code.");
     }
-    
 
     // // Convert test cases to a JSON string
     // const testCasesJSON = JSON.stringify(testCases);
@@ -205,21 +206,32 @@ export class CPPRunner implements LanguageRunner {
     int main() {
 
       vector<TestCase> testCases = {
-        ${testCases.map(tc => `{
+        ${testCases
+          .map(
+            (tc) => `{
           {
-              ${Array.isArray(tc.input) 
+              ${
+                Array.isArray(tc.input)
                   ? (tc.input as (string | number | number[] | number[][])[])
                       .map((line: string | number | number[] | number[][]) => {
-                          const strLine = typeof line === 'string' ? line : JSON.stringify(line);
-                          return `"${strLine.replace(/"/g, '\\"')}"`;
-                      }).join(",\n                ")
+                        const strLine =
+                          typeof line === "string"
+                            ? line
+                            : JSON.stringify(line);
+                        return `"${strLine.replace(/"/g, '\\"')}"`;
+                      })
+                      .join(",\n                ")
                   : `"${String(tc.input).replace(/"/g, '\\"')}"`
               }
           },
-          "${typeof tc.expectedOutput === 'string' 
-              ? tc.expectedOutput.replace(/"/g, '\\"') 
-              : JSON.stringify(tc.expectedOutput)}"
-        }`).join(",\n        ")}
+          "${
+            typeof tc.expectedOutput === "string"
+              ? tc.expectedOutput.replace(/"/g, '\\"')
+              : JSON.stringify(tc.expectedOutput)
+          }"
+        }`
+          )
+          .join(",\n        ")}
         };
 
       vector<TestResult> results;
@@ -253,23 +265,23 @@ export class CPPRunner implements LanguageRunner {
       }
 
       // Generate JSON output manually
-      std::string output = "{\\testCases\\":[";
+      std::string output = "{\\\"testCases\\\":[";
       for (size_t i = 0; i < results.size(); ++i) {
           auto& r = results[i];
-          output += "{"
-              "\\\"actualOutput\\\":\\\"" + r.actualOutput + "\\\","
-              "\\\"passed\\\": " + (r.passed ? "true" : "false") + ","
+          output += "{\\\"actualOutput\\\":\\\"" + r.actualOutput + "\\\","
+              "\\\"passed\\\":" + (r.passed ? "true" : "false") + ","
               "\\\"userPrints\\\":\\\"" + escapeJson(r.userPrints) + "\\\","
-              "\\\"error\\\":\\\"" + r.error + "\\\"";
-          if (i != results.size()-1) output += ",";
+              "\\\"error\\\":\\\"" + r.error + "\\\"" + 
+          "}";
+          output += (i < results.size()-1) ? "," : "";
       }
-      output += "}";
+      output += "]}";
       fprintf(stdout, "%s", output.c_str());
       return 0;
-}`;            
+}`;
 
     // Combine user's code with the test runner
-    return testRunnerCode;;
+    return testRunnerCode;
   }
 
   async runCode(
@@ -286,10 +298,15 @@ export class CPPRunner implements LanguageRunner {
     let numFailed = 0;
     let resultArr: TestResult[] = [];
     if (response.data.run["stdout"]) {
-      resultArr = JSON.parse(response.data.run["stdout"]);
-      resultArr.map((x: TestResult) => {
-        x.passed ? numPassed++ : numFailed++;
-      });
+      try {
+        resultArr = JSON.parse(response.data.run["stdout"])["testCases"];
+        resultArr.map((x: TestResult) => {
+          x.passed ? numPassed++ : numFailed++;
+        });
+      } catch (error) {
+        console.error("Failed to parse runner output:", error);
+        console.log("Raw stdout:", response.data.run["stdout"]);
+      }
     }
     return {
       testCases: resultArr,
@@ -301,7 +318,9 @@ export class CPPRunner implements LanguageRunner {
       category: response.data.run["stderr"]
         ? CodeExecuteResponseCategory.Error
         : CodeExecuteResponseCategory.Success,
-      message: response.data.run?.stderr ? "Execution failed" : "Execution successful",
+      message: response.data.run?.stderr
+        ? "Execution failed"
+        : "Execution successful",
     };
   }
 }
