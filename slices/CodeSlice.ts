@@ -17,12 +17,6 @@ export const LANGUAGES: ProgrammingLanguageT[] = [
     defaultCode: "# insert code below",
   },
   {
-    name: LanguageName.javascript,
-    icon: "js",
-    version: "1.32.3",
-    defaultCode: "// insert code below",
-  },
-  {
     name: LanguageName.cpp,
     icon: "cpp",
     version: "10.2.0",
