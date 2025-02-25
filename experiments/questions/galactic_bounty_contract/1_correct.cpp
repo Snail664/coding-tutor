@@ -1,43 +1,69 @@
 #include <iostream>
-#include <vector>
 #include <string>
-#include <sstream>
 #include <unordered_map>
 #include <limits>
-#include <cctype>
+#include <vector>
+#include <sstream>
 
 using namespace std;
 
-int solution(const vector<string>& data) {
-    unordered_map<string, int> total_costs;
-    vector<string> add_types = {"Pilot", "Fuel", "Maintenance", "Docking", "Tax"};
-    vector<string> subtract_types = {"Discount", "Rebate"};
+int calculateMinimumCost(const vector<string>& input) {
+    unordered_map<string, int> crewCosts;
 
-    for (const string& line : data) {
-        try {
-            Transaction t = parseLine(line);
-            
-            if (total_costs.find(t.crew) == total_costs.end()) {
-                total_costs[t.crew] = 0;
-            }
+    for (const string& line : input) {
+        istringstream iss(line);
+        string crewName, costType;
+        int costValue;
 
-            if (find(add_types.begin(), add_types.end(), t.cost_type) != add_types.end()) {
-                total_costs[t.crew] += t.amount;
-            } else if (find(subtract_types.begin(), subtract_types.end(), t.cost_type) != subtract_types.end()) {
-                total_costs[t.crew] -= t.amount;
-            }
-        } catch (const exception& e) {
-            // Log error or continue based on requirements
-            cerr << "Skipping invalid line: " << e.what() << endl;
+        // Read the crewName
+        if (!getline(iss, crewName, ':')) {
+            cerr << "Failed to parse crew name in line: " << line << endl;
+            continue;
+        }
+
+        // Skip spaces after ':'
+        iss >> ws;
+
+        // Read the costType
+        if (!(iss >> costType)) {
+            cerr << "Failed to parse cost type in line: " << line << endl;
+            continue;
+        }
+
+        // Read the costValue
+        if (!(iss >> costValue)) {
+            cerr << "Failed to parse cost value in line: " << line << endl;
+            continue;
+        }
+
+        // Update the cost for the crew based on the costType
+        if (costType == "Pilot" || costType == "Fuel" || costType == "Maintenance" || costType == "Docking" || costType == "Tax") {
+            crewCosts[crewName] += costValue;
+        } else if (costType == "Discount" || costType == "Rebate") {
+            crewCosts[crewName] -= costValue;
+        } else {
+            cerr << "Unknown cost type: " << costType << " in line: " << line << endl;
         }
     }
 
-    if (total_costs.empty()) return 0;
-
-    int min_cost = numeric_limits<int>::max();
-    for (const auto& entry : total_costs) {
-        min_cost = min(min_cost, entry.second);
+    // Debugging: Print the crew costs
+    for (const auto& [name, cost] : crewCosts) {
+        cout << name << ": " << cost << endl;
     }
 
-    return min_cost;
+    // Find the minimum cost among all crews
+    int minCost = numeric_limits<int>::max();
+    for (const auto& [_, cost] : crewCosts) {
+        if (cost < minCost) {
+            minCost = cost;
+        }
+    }
+
+    // If no valid costs were found, return 0 or handle it appropriately
+    if (minCost == numeric_limits<int>::max()) {
+        cout << "No valid costs found." << endl;
+        return 0;
+    }
+
+    return minCost;
 }

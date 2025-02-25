@@ -160,9 +160,6 @@ export class CPPRunner implements LanguageRunner {
       throw new Error("No function definition found in the user code.");
     }
 
-    // // Convert test cases to a JSON string
-    const testCasesJSON = JSON.stringify(testCases);
-
     // Generate C++ test runner code
     const testRunnerCode = `
     #include <iostream>
@@ -204,10 +201,13 @@ export class CPPRunner implements LanguageRunner {
     }
 
     int main() {
+      string functionName = "${functionName}";
+      cerr << "Function Name: " << functionName << endl;
 
       vector<TestCase> testCases = {
-<<<<<<< HEAD
-        ${testCases.map((tc)  => `{
+        ${testCases
+          .map(
+            (tc) => `{
           {
             /**
              * Convert the input of the test case into a string format:
@@ -215,15 +215,8 @@ export class CPPRunner implements LanguageRunner {
              * - If the element is a string, escape double quotes.
              * - If the element is a number or an array of numbers/number arrays, convert it to a JSON string.
              */
-              ${Array.isArray(tc.input) 
-=======
-        ${testCases
-          .map(
-            (tc) => `{
-          {
               ${
                 Array.isArray(tc.input)
->>>>>>> b74b4f8d2ae4bbf99cd34ec55cff79b97ad99588
                   ? (tc.input as (string | number | number[] | number[][])[])
                       .map((line: string | number | number[] | number[][]) => {
                         const strLine =
@@ -236,17 +229,11 @@ export class CPPRunner implements LanguageRunner {
                   : `"${String(tc.input).replace(/"/g, '\\"')}"`
               }
           },
-<<<<<<< HEAD
           /**
            * Convert the expected output of the test case into a string format:
            * - If the expected output is a string, escape double quotes.
            * - If the expected output is not a string, convert it to a JSON string.
            */
-          "${typeof tc.expectedOutput === 'string' 
-              ? tc.expectedOutput.replace(/"/g, '\\"') 
-              : JSON.stringify(tc.expectedOutput)}"
-        }`).join(",\n        ")}
-=======
           "${
             typeof tc.expectedOutput === "string"
               ? tc.expectedOutput.replace(/"/g, '\\"')
@@ -255,9 +242,8 @@ export class CPPRunner implements LanguageRunner {
         }`
           )
           .join(",\n        ")}
->>>>>>> b74b4f8d2ae4bbf99cd34ec55cff79b97ad99588
         };
-
+      
       vector<TestResult> results;
       streambuf* origCout = cout.rdbuf();
       stringstream outputCapture;
@@ -295,12 +281,8 @@ export class CPPRunner implements LanguageRunner {
           output += "{\\\"actualOutput\\\":\\\"" + r.actualOutput + "\\\","
               "\\\"passed\\\":" + (r.passed ? "true" : "false") + ","
               "\\\"userPrints\\\":\\\"" + escapeJson(r.userPrints) + "\\\","
-<<<<<<< HEAD
-              "\\\"error\\\":\\\"" + r.error + "\\\"" + "}";
-=======
               "\\\"error\\\":\\\"" + r.error + "\\\"" + 
           "}";
->>>>>>> b74b4f8d2ae4bbf99cd34ec55cff79b97ad99588
           output += (i < results.size()-1) ? "," : "";
       }
       output += "]}";
@@ -321,18 +303,13 @@ export class CPPRunner implements LanguageRunner {
       version: this.language?.version,
       code: preparedCode,
     });
-
+    
     let numPassed = 0;
     let numFailed = 0;
     let resultArr: TestResult[] = [];
     if (response.data.run["stdout"]) {
-<<<<<<< HEAD
-      try{
-        resultArr = JSON.parse(response.data.run["stdout"]);
-=======
       try {
-        resultArr = JSON.parse(response.data.run["stdout"])["testCases"];
->>>>>>> b74b4f8d2ae4bbf99cd34ec55cff79b97ad99588
+        resultArr = JSON.parse(response.data.run["stdout"])["testCases"]; //key line to process test cases
         resultArr.map((x: TestResult) => {
           x.passed ? numPassed++ : numFailed++;
         });
@@ -351,11 +328,7 @@ export class CPPRunner implements LanguageRunner {
       category: response.data.run["stderr"]
         ? CodeExecuteResponseCategory.Error
         : CodeExecuteResponseCategory.Success,
-<<<<<<< HEAD
-        message: response.data.run?.stderr
-=======
       message: response.data.run?.stderr
->>>>>>> b74b4f8d2ae4bbf99cd34ec55cff79b97ad99588
         ? "Execution failed"
         : "Execution successful",
     };

@@ -2,6 +2,9 @@ import { getSession } from "@auth0/nextjs-auth0";
 import DifficultyTag from "@/components/features/Question/QuestionDifficultyTag";
 import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/Navbar";
+import FilterableQuestions from "@/components/features/Question/FilterableQuestions";
+import { Search as SearchIcon, Filter as FilterIcon } from "lucide-react";
+
 
 export default async function Page() {
   const session = await getSession();
@@ -34,7 +37,12 @@ export default async function Page() {
             Get Started
           </a>
         )}
-        <div className="bg-menuBackground w-full max-w-md rounded-xl shadow-lg overflow-hidden mt-5">
+
+        {/* Render the FilterableQuestions client component */}
+        <FilterableQuestions questions={questions} />
+
+
+        {/* <div className="bg-menuBackground w-full max-w-md rounded-xl shadow-lg overflow-hidden mt-5">
           <div className="max-h-96 overflow-y-auto">
             <ul className="divide-y divide-gray-300">
               {questions.map((question) => (
@@ -55,7 +63,8 @@ export default async function Page() {
               ))}
             </ul>
           </div>
-        </div>
+        </div> */}
+
       </div>
     </div>
   );
