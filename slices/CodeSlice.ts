@@ -104,6 +104,7 @@ export const CodeSlice = createSlice({
         state.runCodeLoading = true;
       })
       .addCase(runCodeThunk.fulfilled, (state, action) => {
+        console.log("runCodeThunk.fulfilled", action.payload);
         state.codeExecuteResponse = action.payload;
         state.runCodeLoading = false;
       })

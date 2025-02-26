@@ -8,9 +8,10 @@ import { QUESTIONS } from "../lib/constants.seed";
 const prisma = new PrismaClient();
 
 async function main() {
-  // delete all existing data
+  // delete all existing data in the correct order
   await prisma.templateCode.deleteMany({});
   await prisma.testCase.deleteMany({});
+  await prisma.feedback.deleteMany({}); // delete feedback before questions
   await prisma.question.deleteMany({});
 
   // seed the database
@@ -43,12 +44,10 @@ async function main() {
 }
 
 main()
-  .then(async () => {
-    console.log("Seeding completed successfully!");
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
+  .catch((e) => {
     console.error(e);
-    await prisma.$disconnect();
     process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });

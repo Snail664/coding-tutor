@@ -63,6 +63,11 @@ enum QuestionDifficulty {
     hard
 }
 
+model Tag {
+    name      String     @id
+    questions Question[] @relation("QuestionsOnTags")
+}
+
 model Question {
     id            Int                @id @default(autoincrement())
     name          String             @unique
@@ -70,6 +75,7 @@ model Question {
     content       String             @db.VarChar(10000)
     templateCodes TemplateCode[]
     testCases     TestCase[]
+    tags          Tag[]              @relation("QuestionsOnTags")
     Feedback      Feedback[]
 }
 

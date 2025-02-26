@@ -1,0 +1,66 @@
+{
+  "testCases": [
+    {
+      "actualOutput": "",
+      "passed": false,
+      "error": "name 'line' is not defined",
+      "testCase": {
+        "input": [
+          "AAA: Seat 9997",
+          "BBB: Discount 2886",
+          "DDD: Luggage 3500",
+          "CCC: Fee 9468",
+          "BBB: Fee 9378",
+          "AAA: Discount 3103"
+        ],
+        "expectedOutput": 3500,
+        "description": "Basic test"
+      }
+    },
+    {
+      "actualOutput": "",
+      "passed": false,
+      "error": "name 'line' is not defined",
+      "testCase": {
+        "input": [
+          "SuperSpace: Seat 9997",
+          "OrionTravles: Discount 2886",
+          "Galactica: Luggage 3500",
+          "SuperSpace: Tax 156",
+          "EarthExpress: Fee 9468",
+          "OrionTravles: Fee 9378",
+          "SuperSpace: Discount 3103",
+          "Galactica: Rebate 967"
+        ],
+        "expectedOutput": 2533,
+        "description": "check if different length company names are handled"
+      }
+    },
+    {
+      "actualOutput": "",
+      "passed": false,
+      "error": "name 'line' is not defined",
+      "testCase": {
+        "input": [
+          "AAA: Seat 3000",
+          "AAA: Meals 1000",
+          "AAA: Luggage 2000",
+          "AAA: Fee 1000",
+          "AAA: Tax 1000",
+          "AAA: Rebate 500",
+          "AAA: Discount 200",
+          "BBB: Seat 5000",
+          "BBB: Meals 1000",
+          "BBB: Discount 200",
+          "CCC: Discount 300",
+          "CCC: Fee 1000"
+        ],
+        "expectedOutput": 700,
+        "description": "check if all cost types are accounted for"
+      }
+    }
+  ],
+  "numPassed": 0,
+  "numFailed": 3,
+  "stderr": ""
+}

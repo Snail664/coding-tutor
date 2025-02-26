@@ -32,6 +32,26 @@ This particular rover traveled as follows:
 
 Sum these distances to calculate the total distance traveled by this rover as **353480**.
 
+The input data is given in the following format:
+
+```
+data = {
+    locations: ["base", "ta00", "cx22", "xj84"],
+    distances: [
+        [0, 55457, 63529, 61302],
+        [55457, 0, 111890, 35768],
+        [63529, 111890, 0, 98977],
+        [61302, 35768, 98977, 0]
+    ],
+    routes: [
+        "Rover 1 route: base -> cx22 -> ta00 -> base -> xj84 -> base",
+        "Rover 2 route: base -> ta00 -> cx22 -> base -> xj84 -> base",
+    ]
+}
+```
+
+
+
 ### Your Task
 
 Process the journey distances of all 10 rovers to calculate the total distance traveled. That is your answer value.
