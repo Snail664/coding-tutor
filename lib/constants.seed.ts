@@ -58,6 +58,21 @@ export const QUESTIONS: QuestionT[] = [
 `,
         language: LanguageName.python,
       },
+      {
+        code: `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+char* solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+`,
+        language: LanguageName.python,
+      }
     ],
   },
   {
@@ -145,23 +160,25 @@ export const QUESTIONS: QuestionT[] = [
     templateCodes: [
       {
         code: `def solution(data):
-    # insert your code below
+    # insert your code below as soon as possible
 `,
         language: LanguageName.python,
       },
       {
         code:
-        `
-        #include <iostream>
-        #include <sstream>
-        #include <unordered_map>
-        
-        using namespace std;
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
-        int calculateMinimumCost(const vector<string>& input) {
-        unordered_map<string, int> crewCosts;
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
         `,
-        language: LanguageName.cpp,
+          language: LanguageName.cpp,
       }
     ],
   },

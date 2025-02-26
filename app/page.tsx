@@ -1,9 +1,9 @@
 import { getSession } from "@auth0/nextjs-auth0";
-import DifficultyTag from "@/components/features/Question/QuestionDifficultyTag";
+// import DifficultyTag from "@/components/features/Question/QuestionDifficultyTag";
 import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/Navbar";
 import FilterableQuestions from "@/components/features/Question/FilterableQuestions";
-import { Search as SearchIcon, Filter as FilterIcon } from "lucide-react";
+// import { Search as SearchIcon, Filter as FilterIcon } from "lucide-react";
 
 
 export default async function Page() {
@@ -29,7 +29,7 @@ export default async function Page() {
             with a bug or don&apos;t know how to continue.
           </p>
         </div>
-        {session ? null : (
+        {!session ? null : (
           <a
             href="/api/auth/login"
             className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105"

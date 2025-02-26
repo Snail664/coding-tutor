@@ -15,6 +15,16 @@ async function main() {
 
   // seed the database
   for (const questionData of QUESTIONS) {
+    const existingQuestion = await prisma.question.findUnique({
+      where: { name: questionData.name },
+    });
+  
+    if (existingQuestion) {
+      console.log(`Updating existing record for ${questionData.name}`);
+    } else {
+      console.log(`Creating new record for ${questionData.name}`);
+    }
+    
     const questionDetails = {
       name: questionData.name,
       difficulty: questionData.difficulty,

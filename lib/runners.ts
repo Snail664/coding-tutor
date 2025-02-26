@@ -171,6 +171,21 @@ export class CPPRunner implements LanguageRunner {
 
     using namespace std;
 
+    // Overload operator<< for unordered_map for debugging purposes.
+    template<typename K, typename V>
+    ostream& operator<<(ostream& os, const unordered_map<K, V>& m) {
+        os << "{";
+        bool first = true;
+        for (const auto& pair : m) {
+            if (!first) {
+                os << ", ";
+            }
+            first = false;
+            os << pair.first << ": " << pair.second;
+        }
+        return os << "}";
+    }
+
     struct TestCase {
       vector<string> input;
       string expectedOutput;
@@ -202,12 +217,10 @@ export class CPPRunner implements LanguageRunner {
 
     int main() {
       string functionName = "${functionName}";
-      cerr << "Function Name: " << functionName << endl;
+      cerr << "Function Name: " << functionName << endl;    //Debugging line to print function name injected 
 
       vector<TestCase> testCases = {
-        ${testCases
-          .map(
-            (tc) => `{
+        ${testCases.map((tc) => `{
           {
             /**
              * Convert the input of the test case into a string format:
@@ -219,13 +232,9 @@ export class CPPRunner implements LanguageRunner {
                 Array.isArray(tc.input)
                   ? (tc.input as (string | number | number[] | number[][])[])
                       .map((line: string | number | number[] | number[][]) => {
-                        const strLine =
-                          typeof line === "string"
-                            ? line
-                            : JSON.stringify(line);
+                        const strLine = typeof line === "string" ? line : JSON.stringify(line);
                         return `"${strLine.replace(/"/g, '\\"')}"`;
-                      })
-                      .join(",\n                ")
+                      }).join(",\n                ")
                   : `"${String(tc.input).replace(/"/g, '\\"')}"`
               }
           },
@@ -239,10 +248,8 @@ export class CPPRunner implements LanguageRunner {
               ? tc.expectedOutput.replace(/"/g, '\\"')
               : JSON.stringify(tc.expectedOutput)
           }"
-        }`
-          )
-          .join(",\n        ")}
-        };
+        }`).join(",\n        ")}
+      };
       
       vector<TestResult> results;
       streambuf* origCout = cout.rdbuf();
@@ -252,11 +259,9 @@ export class CPPRunner implements LanguageRunner {
           TestResult res;
           outputCapture.str("");
           cout.rdbuf(outputCapture.rdbuf());
-          
           try {
               auto actual = ${functionName}(tc.input);
               cout.rdbuf(origCout);
-              
               res.userPrints = outputCapture.str();
               stringstream ss;
               ss << actual;
@@ -277,18 +282,17 @@ export class CPPRunner implements LanguageRunner {
       // Generate JSON output manually
       std::string output = "{\\\"testCases\\\":[";
       for (size_t i = 0; i < results.size(); ++i) {
-          auto& r = results[i];
-          output += "{\\\"actualOutput\\\":\\\"" + r.actualOutput + "\\\","
-              "\\\"passed\\\":" + (r.passed ? "true" : "false") + ","
-              "\\\"userPrints\\\":\\\"" + escapeJson(r.userPrints) + "\\\","
-              "\\\"error\\\":\\\"" + r.error + "\\\"" + 
-          "}";
-          output += (i < results.size()-1) ? "," : "";
+        auto& r = results[i];
+        output += "{\\\"actualOutput\\\":\\\"" + r.actualOutput + "\\\","
+            "\\\"passed\\\":" + (r.passed ? "true" : "false") + ","
+            "\\\"userPrints\\\":\\\"" + escapeJson(r.userPrints) + "\\\","
+            "\\\"error\\\":\\\"" + r.error + "\\\"" + "}";
+        output += (i < results.size()-1) ? "," : "";
       }
       output += "]}";
       fprintf(stdout, "%s", output.c_str());
       return 0;
-}`;
+      }`;
 
     // Combine user's code with the test runner
     return testRunnerCode;
