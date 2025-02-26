@@ -32,7 +32,7 @@ export default async function Page() {
         {!session ? null : (
           <a
             href="/api/auth/login"
-            className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105"
+            className="inline-block relative -top-5 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105"
           >
             Get Started
           </a>

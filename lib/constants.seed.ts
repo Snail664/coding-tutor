@@ -5,71 +5,65 @@ import { join } from "path";
 
 export const QUESTIONS: QuestionT[] = [
   {
-<<<<<<< HEAD
-=======
-    name: "Purchase Tickets",
+    name: "Busy Moon Rovers",
     difficulty: QuestionDifficulty.easy,
     content: readFileSync(
-      join(__dirname, "../assets/questions/PurchaseTickets.md"),
+      join(__dirname, "../assets/questions/BusyMoonRovers.md"),
       "utf8"
     ),
     testCases: [
       {
-        input: [
-          "AAA: Seat 9997",
-          "BBB: Discount 2886",
-          "DDD: Luggage 3500",
-          "CCC: Fee 9468",
-          "BBB: Fee 9378",
-          "AAA: Discount 3103",
-        ],
-        expectedOutput: 3500,
-        description: "Basic test",
-      },
-      {
-        input: [
-          "SuperSpace: Seat 9997",
-          "OrionTravles: Discount 2886",
-          "Galactica: Luggage 3500",
-          "SuperSpace: Tax 156",
-          "EarthExpress: Fee 9468",
-          "OrionTravles: Fee 9378",
-          "SuperSpace: Discount 3103",
-          "Galactica: Rebate 967",
-        ],
-        expectedOutput: 2533,
-        description: "check if different length company names are handled",
-      },
-      {
-        input: [
-          "AAA: Seat 3000",
-          "AAA: Meals 1000",
-          "AAA: Luggage 2000",
-          "AAA: Fee 1000",
-          "AAA: Tax 1000",
-          "AAA: Rebate 500",
-          "AAA: Discount 200",
-          "BBB: Seat 5000",
-          "BBB: Meals 1000",
-          "BBB: Discount 200",
-          "CCC: Discount 300",
-          "CCC: Fee 1000",
-        ],
-        expectedOutput: 700,
-        description: "check if all cost types are accounted for",
+        input: {
+          locations: ["base", "ta00", "cx22", "xj84"],
+          distances: [
+            [0, 55457, 63529, 61302],
+            [55457, 0, 111890, 35768],
+            [63529, 111890, 0, 98977],
+            [61302, 35768, 98977, 0],
+          ],
+          routes: [
+            "Rover 1 route: base -> cx22 -> ta00 -> base -> xj84 -> base",
+            "Rover 2 route: base -> ta00 -> cx22 -> base -> xj84 -> base",
+            "Rover 3 route: base -> xj84 -> base",
+            "Rover 4 route: base -> ta00 -> base",
+            "Rover 5 route: base -> cx22 -> base",
+            "Rover 6 route: base -> xj84 -> cx22 -> base",
+            "Rover 7 route: base -> ta00 -> xj84 -> base",
+            "Rover 8 route: base -> cx22 -> ta00 -> xj84 -> base",
+            "Rover 9 route: base -> ta00 -> cx22 -> xj84 -> base",
+            "Rover 10 route: base -> cx22 -> base",
+          ],
+        },
+        expectedOutput: 2171044,
+        description: "simple test",
       },
     ],
     templateCodes: [
       {
         code: `def solution(data):
-    # insert your code below
+    # insert your code below as soon as possible
 `,
         language: LanguageName.python,
+      },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
       },
     ],
   },
   {
->>>>>>> dac1e9344cd05ee7bcb301bf2994b7e4c5f80ac7
     name: "Broken Firewall",
     difficulty: QuestionDifficulty.easy,
     content: readFileSync(
@@ -137,8 +131,8 @@ char* solution(const vector<string>& input) {
     
     } 
 `,
-        language: LanguageName.python,
-      }
+        language: LanguageName.cpp,
+      },
     ],
   },
   {
@@ -179,6 +173,22 @@ char* solution(const vector<string>& input) {
 `,
         language: LanguageName.python,
       },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+double solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
+      },
     ],
   },
   {
@@ -190,56 +200,48 @@ char* solution(const vector<string>& input) {
     ),
     testCases: [
       {
-<<<<<<< HEAD
         input: [
-          "AAA: Pilot 9997",
+          "AAA: Seat 9997",
           "BBB: Discount 2886",
-          "DDD: Maintenance  3500",
-          "AAA: Tax 156",
-          "CCC: Docking  9468",
-          "BBB: Docking  9378",
+          "DDD: Luggage 3500",
+          "CCC: Fee 9468",
+          "BBB: Fee 9378",
           "AAA: Discount 3103",
-          "DDD: Rebate 967",
         ],
-        expectedOutput: 2533,
-        description: "",
+        expectedOutput: 3500,
+        description: "Basic test",
       },
       {
         input: [
-          "Starfire: Pilot 5000",
-          "Voidwalkers: Docking 2000", 
-          "Voidwalkers: Maintenance 4200",
-          "Starfire: Tax 300",
-          "Voidwalkers: Discount 1500",
-          "Starfire: Discount 600",
+          "SuperSpace: Seat 9997",
+          "OrionTravles: Discount 2886",
+          "Galactica: Luggage 3500",
+          "SuperSpace: Tax 156",
+          "EarthExpress: Fee 9468",
+          "OrionTravles: Fee 9378",
+          "SuperSpace: Discount 3103",
+          "Galactica: Rebate 967",
         ],
-        expectedOutput: 4700,
-        description: "",
-=======
-        input: {
-          locations: ["base", "ta00", "cx22", "xj84"],
-          distances: [
-            [0, 55457, 63529, 61302],
-            [55457, 0, 111890, 35768],
-            [63529, 111890, 0, 98977],
-            [61302, 35768, 98977, 0],
-          ],
-          routes: [
-            "Rover 1 route: base -> cx22 -> ta00 -> base -> xj84 -> base",
-            "Rover 2 route: base -> ta00 -> cx22 -> base -> xj84 -> base",
-            "Rover 3 route: base -> xj84 -> base",
-            "Rover 4 route: base -> ta00 -> base",
-            "Rover 5 route: base -> cx22 -> base",
-            "Rover 6 route: base -> xj84 -> cx22 -> base",
-            "Rover 7 route: base -> ta00 -> xj84 -> base",
-            "Rover 8 route: base -> cx22 -> ta00 -> xj84 -> base",
-            "Rover 9 route: base -> ta00 -> cx22 -> xj84 -> base",
-            "Rover 10 route: base -> cx22 -> base",
-          ],
-        },
-        expectedOutput: 2171044,
-        description: "simple test",
->>>>>>> dac1e9344cd05ee7bcb301bf2994b7e4c5f80ac7
+        expectedOutput: 2533,
+        description: "check if different length company names are handled",
+      },
+      {
+        input: [
+          "AAA: Seat 3000",
+          "AAA: Meals 1000",
+          "AAA: Luggage 2000",
+          "AAA: Fee 1000",
+          "AAA: Tax 1000",
+          "AAA: Rebate 500",
+          "AAA: Discount 200",
+          "BBB: Seat 5000",
+          "BBB: Meals 1000",
+          "BBB: Discount 200",
+          "CCC: Discount 300",
+          "CCC: Fee 1000",
+        ],
+        expectedOutput: 700,
+        description: "check if all cost types are accounted for",
       },
     ],
     templateCodes: [
@@ -264,7 +266,7 @@ int solution(const vector<string>& input) {
     } 
         `,
           language: LanguageName.cpp,
-      }
+      },
     ],
   },
   {
@@ -280,6 +282,22 @@ int solution(const vector<string>& input) {
     # insert your code here
 `,
         language: LanguageName.python,
+      },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+string solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
       },
     ],
     testCases: [
@@ -399,6 +417,22 @@ int solution(const vector<string>& input) {
 `,
         language: LanguageName.python,
       },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+double solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
+      },
     ],
   },
   {
@@ -410,17 +444,17 @@ int solution(const vector<string>& input) {
     ),
     testCases: [
       {
-        input: "856,40,12,1",
+        input:["856,40,12,1"],
         expectedOutput: 12,
         description: "",
       },
       {
-        input: /** middddd*/ "100,20,5,1",
+        input: /** middddd*/ ["100,20,5,1"],
         expectedOutput: 3127,
         description: "",
       },
       {
-        input: /** to test stac overflow limit  */ "999999,40000,2000,1",
+        input: /** to test stac overflow limit  */ ["999999,40000,2000,1"],
         expectedOutput: 7852401,
         description: "",
       },
@@ -431,6 +465,22 @@ int solution(const vector<string>& input) {
     # insert your code below
 `,
         language: LanguageName.python,
+      },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
       },
     ],
   },
@@ -536,10 +586,26 @@ int solution(const vector<string>& input) {
 `,
         language: LanguageName.python,
       },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
+      },
     ],
   },
   {
-    name: "CodeyTutorChallenge",
+    name: "Codey's Tutor Challenge",
     difficulty: QuestionDifficulty.medium,
     content: readFileSync(
       join(__dirname, "../assets/questions/CodeyTutorChallenge.md"),
@@ -583,6 +649,22 @@ int solution(const vector<string>& input) {
 `,
         language: LanguageName.python,
       },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+vector<int> solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
+      },
     ],
   },
   {
@@ -630,15 +712,26 @@ int solution(const vector<string>& input) {
     ],
     templateCodes: [
       {
-        code: `class Solution(object):
-    def orangesRotting(self, grid):
-        """
-        :type grid: List[List[int]]
-        :rtype: int
-        """
+        code: `def solution(data):
     # insert your code below
 `,
         language: LanguageName.python,
+      },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
       },
     ],
   },
@@ -694,116 +787,21 @@ int solution(const vector<string>& input) {
 `,
         language: LanguageName.python,
       },
-    ],
-  },
-  {
-    name: "Rotting Oranges",
-    difficulty: QuestionDifficulty.medium,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/RottingOranges.md"),
-      "utf-8"
-    ),
-    testCases: [
       {
-        input: [
-          /** Simple test: small matrix, clear path */ 
-          "[[2,1,1]",
-          "[1,1,0]",
-          "[0,1,1]]"
-        ],
-        expectedOutput: 4,
-        description: "",
-      },
-      {
-        input: [
-          /** Medium test: larger matrix, negative impact of wrong implementation */
-          "[[2,1,1,1,1]",
-          "[1,1,0,1,1]",
-          "[0,0,0,2,1]",
-          "[1,1,1,1,1]",
-          "[1,1,1,1,1]]"
-        ],
-        expectedOutput: 1150,
-        description: "",
-      },
-      {
-        input: [
-          /** Hard test: edge cases with large numbers and precision */
-          "[[2,1,1,1,1]",
-          "[1,1,0,1,1]",
-          "[0,0,0,0,1]",
-          "[1,0,0,0,1]",
-          "[1,1,1,1,1]]"
-        ],
-        expectedOutput: -1,
-        description: "",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `class Solution(object):
-    def orangesRotting(self, grid):
-        """
-        :type grid: List[List[int]]
-        :rtype: int
-        """
-    # insert your code below
-`,
-        language: LanguageName.python,
-      },
-    ],
-  },
-  {
-    name: "Supply Squad",
-    difficulty: QuestionDifficulty.medium,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/SupplySquad.md"),
-      "utf-8"
-    ),
-    testCases: [
-      {
-        input: [
-          /** Simple test: small matrix, clear path */ "alpha bravo charlie",
-          "alpha 0 10 20",
-          "bravo 10 0 15",
-          "charlie 20 15 0",
-        ],
-        expectedOutput: 45,
-        description: "",
-      },
-      {
-        input: [
-          /** Medium test: larger matrix, negative impact of wrong implementation */
-          "base camp ridge peak valley",
-          "base 0 100 500 300",
-          "camp 100 0 200 400",
-          "ridge 500 200 0 250",
-          "peak 300 400 250 0",
-        ],
-        expectedOutput: 1150,
-        description: "",
-      },
-      {
-        input: [
-          /** Hard test: edge cases with large numbers and precision */
-          "s1 s2 s3 s4 s5 s6",
-          "s1 0 999999 1000 500000 2000 3000",
-          "s2 999999 0 888888 777777 666666 555555",
-          "s3 1000 888888 0 444444 333333 222222",
-          "s4 500000 777777 444444 0 111111 100000",
-          "s5 2000 666666 333333 111111 0 50000",
-          "s6 3000 555555 222222 100000 50000 0",
-        ],
-        expectedOutput: 2164444,
-        description: "",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code below
-`,
-        language: LanguageName.python,
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+double solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
       },
     ],
   },
@@ -832,6 +830,22 @@ int solution(const vector<string>& input) {
     # insert your code below
 `,
         language: LanguageName.python,
+      },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
       },
     ],
   },
@@ -863,6 +877,22 @@ int solution(const vector<string>& input) {
     # insert your code below
 `,
         language: LanguageName.python,
+      },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
       },
     ],
   }

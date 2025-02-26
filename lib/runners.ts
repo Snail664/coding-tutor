@@ -230,8 +230,7 @@ export class CPPRunner implements LanguageRunner {
              */
               ${
                 Array.isArray(tc.input)
-                  ? (tc.input as (string | number | number[] | number[][])[])
-                      .map((line: string | number | number[] | number[][]) => {
+                  ? (tc.input as (unknown[])).map((line) => {
                         const strLine = typeof line === "string" ? line : JSON.stringify(line);
                         return `"${strLine.replace(/"/g, '\\"')}"`;
                       }).join(",\n                ")
