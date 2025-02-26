@@ -1,0 +1,37 @@
+{
+  "testCases": [
+    {
+      "actualOutput": "",
+      "passed": false,
+      "error": "not enough values to unpack (expected 2, got 1)",
+      "testCase": {
+        "input": [
+          "Star A: 1.0, 0.0, 0.0, 0.0",
+          "Star B: 1.0, 0.0, 2.0, 0.0",
+          "Star C: 1.0, 2.0, 1.0, 0.0"
+        ],
+        "expectedOutput": 2,
+        "description": ""
+      }
+    },
+    {
+      "actualOutput": "",
+      "passed": false,
+      "error": "not enough values to unpack (expected 2, got 1)",
+      "testCase": {
+        "input": [
+          "Alpha: 3.5, 1.0, -1.0, 2.0",
+          "Beta: 4.2, 2.0, -1.5, 2.5",
+          "Gamma: 5.1, -1.0, 2.0, -2.0",
+          "Delta: 2.8, -1.2, 2.3, -2.1",
+          "Epsilon: 6.3, 3.0, -2.0, 3.0"
+        ],
+        "expectedOutput": 0.374,
+        "description": ""
+      }
+    }
+  ],
+  "numPassed": 0,
+  "numFailed": 2,
+  "stderr": ""
+}

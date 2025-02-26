@@ -1,0 +1,15 @@
+{
+  "question": "closest_starsystems",
+  "1_correct": "Solution Correct",
+  "1_incomplete": "You need to iterate over the stars array and compute distances",
+  "1_logical": "You are incorrectly extracting the x,y,z coordinates from input data",
+  "1_syntax_logical": "You are iterating over undefined variable 'dat'",
+  "2_correct": "Solution Correct",
+  "2_incomplete": "Good job so far. Next, Next we need to check if distance is less than the minimum distance",
+  "2_logical": "You are splitting the input data with the wrong delimiter",
+  "2_syntax_logical": "You have incorrect indentation in the while loop",
+  "3_correct": "Solution Correct",
+  "3_incomplete": "Good job so far. Next, you need to compute distance between the two coordinates",
+  "3_logical": "There is an error in your distance formula",
+  "3_syntax_logical": "Word 'equals' used instead of '==' in the if statement"
+}

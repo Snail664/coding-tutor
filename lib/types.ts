@@ -6,7 +6,11 @@ export interface MessageT {
 }
 
 export interface TestCase {
+<<<<<<< HEAD
   input: string | string[] | number[] | number[][];
+=======
+  input: string[] | number[] | number[][] | object;
+>>>>>>> dac1e9344cd05ee7bcb301bf2994b7e4c5f80ac7
   expectedOutput: string | number | boolean | number[];
   description: string;
 }

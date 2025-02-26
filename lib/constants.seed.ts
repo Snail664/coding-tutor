@@ -5,6 +5,71 @@ import { join } from "path";
 
 export const QUESTIONS: QuestionT[] = [
   {
+<<<<<<< HEAD
+=======
+    name: "Purchase Tickets",
+    difficulty: QuestionDifficulty.easy,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/PurchaseTickets.md"),
+      "utf8"
+    ),
+    testCases: [
+      {
+        input: [
+          "AAA: Seat 9997",
+          "BBB: Discount 2886",
+          "DDD: Luggage 3500",
+          "CCC: Fee 9468",
+          "BBB: Fee 9378",
+          "AAA: Discount 3103",
+        ],
+        expectedOutput: 3500,
+        description: "Basic test",
+      },
+      {
+        input: [
+          "SuperSpace: Seat 9997",
+          "OrionTravles: Discount 2886",
+          "Galactica: Luggage 3500",
+          "SuperSpace: Tax 156",
+          "EarthExpress: Fee 9468",
+          "OrionTravles: Fee 9378",
+          "SuperSpace: Discount 3103",
+          "Galactica: Rebate 967",
+        ],
+        expectedOutput: 2533,
+        description: "check if different length company names are handled",
+      },
+      {
+        input: [
+          "AAA: Seat 3000",
+          "AAA: Meals 1000",
+          "AAA: Luggage 2000",
+          "AAA: Fee 1000",
+          "AAA: Tax 1000",
+          "AAA: Rebate 500",
+          "AAA: Discount 200",
+          "BBB: Seat 5000",
+          "BBB: Meals 1000",
+          "BBB: Discount 200",
+          "CCC: Discount 300",
+          "CCC: Fee 1000",
+        ],
+        expectedOutput: 700,
+        description: "check if all cost types are accounted for",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `def solution(data):
+    # insert your code below
+`,
+        language: LanguageName.python,
+      },
+    ],
+  },
+  {
+>>>>>>> dac1e9344cd05ee7bcb301bf2994b7e4c5f80ac7
     name: "Broken Firewall",
     difficulty: QuestionDifficulty.easy,
     content: readFileSync(
@@ -14,13 +79,14 @@ export const QUESTIONS: QuestionT[] = [
     testCases: [
       {
         input: [
-          /** simple */ "450000640000000083069f3fc0a80001c0a80002",
-          "450000c80000000083069f3f0A0000010A000002",
-          "4500012c0000000083069f3fc0a800030A000003",
+          /** simple */
+          "450000640000000083069f3fc0a80001c0a80002", // size: 100, src: 192.168.0.1, dst: 192.168.0.2
+          "450000c80000000083069f3f0A0000010A000002", // size: 200, src: 10.0.0.1, dst: 10.0.0.2
+          "4500012c0000000083069f3fc0a800030A000003", // size: 300, src: 192.168.0.3, dst: 10.0.0.3
           "450001900000000083069f3f0A000004c0a80004",
         ],
         expectedOutput: "800/900",
-        description: "",
+        description: "simple test",
       },
       {
         input: [
@@ -33,22 +99,22 @@ export const QUESTIONS: QuestionT[] = [
           "450003200000000083069f3fae241b07c0a80006",
         ],
         expectedOutput: "1300/1100",
-        description: "",
+        description: "medium test",
       },
       {
         input: [
           /** Hard test: edge cases and boundary values */
-          "45000001000000008306f39fc0a87f01c0a8ff02",
-          "45000002000000008306f39fc0a80001c0a80000",
-          "45000004000000008306f39fc0a8fe01c0a8fffe",
-          "45000008000000008306f39f0A00ff010A00ff02",
-          "45000010000000008306f39f0A0000010A000000",
-          "45000020000000008306f39f0A00fe010A00fffe",
-          "45ffffff000000008306f39fc0a80001c0a80002",
-          "45ffff00000000008306f39f0A0000010A000002",
+          "45000001000000008306f39fc0a87f01c0a8ff02", // size: 1, src: 192.168.127.1, dst: 192.168.255.2
+          "45000002000000008306f39fc0a80001c0a80000", // size: 2, src: 192.168.0.1, dst: 192.168.0.0
+          "45000004000000008306f39fc0a8fe01c0a8fffe", // size: 4, src: 192.168.254.1, dst: 192.168.255.254
+          "45000008000000008306f39f0A00ff010A00ff02", // size: 8, src: 10.0.255.1, dst: 10.0.255.2
+          "45000010000000008306f39f0A0000010A000000", // size: 16, src: 10.0.0.1, dst: 10.0.0.0
+          "45000020000000008306f39f0A00fe010A00fffe", // size: 32, src: 10.0.254.1, dst: 10.0.255.254
+          "45ffffff000000008306f39fc0a80001c0a80002", // size: 65535, src: 192.168.0.1, dst: 192.168.0.2
+          "45ffff00000000008306f39f0A0000010A000002", // size: 65280, src: 10.0.0.1, dst: 10.0.0.2
         ],
-        expectedOutput: "65542/65336",
-        description: "",
+        expectedOutput: "65542/65328",
+        description: "challenging test",
       },
     ],
     templateCodes: [
@@ -85,7 +151,8 @@ char* solution(const vector<string>& input) {
     testCases: [
       {
         input: [
-          /**simple test */ "Star A: 1.0, 0.0, 0.0, 0.0",
+          /**simple test */
+          "Star A: 1.0, 0.0, 0.0, 0.0",
           "Star B: 1.0, 0.0, 2.0, 0.0",
           "Star C: 1.0, 2.0, 1.0, 0.0",
         ],
@@ -94,22 +161,14 @@ char* solution(const vector<string>& input) {
       },
       {
         input: [
-          /** mix of +ve and -ve*/ "Alpha: 3.5, 1.0, -1.0, 2.0",
+          /** mix of +ve and -ve*/
+          "Alpha: 3.5, 1.0, -1.0, 2.0", // 1.225,
           "Beta: 4.2, 2.0, -1.5, 2.5",
           "Gamma: 5.1, -1.0, 2.0, -2.0",
           "Delta: 2.8, -1.2, 2.3, -2.1",
           "Epsilon: 6.3, 3.0, -2.0, 3.0",
         ],
-        expectedOutput: 0.458,
-        description: "",
-      },
-      {
-        input: [
-          /** edge caase  */ "Star-A1: 1e5, 2e5, 3e5, 0.0",
-          "Star-A2: 1e5, 2e5, 3e5, 0.0",
-          "Star-A3: 1e5, 2e5, 3e5 + 0.1, 0.0",
-        ],
-        expectedOutput: 0.1,
+        expectedOutput: 0.374,
         description: "",
       },
     ],
@@ -131,6 +190,7 @@ char* solution(const vector<string>& input) {
     ),
     testCases: [
       {
+<<<<<<< HEAD
         input: [
           "AAA: Pilot 9997",
           "BBB: Discount 2886",
@@ -155,6 +215,31 @@ char* solution(const vector<string>& input) {
         ],
         expectedOutput: 4700,
         description: "",
+=======
+        input: {
+          locations: ["base", "ta00", "cx22", "xj84"],
+          distances: [
+            [0, 55457, 63529, 61302],
+            [55457, 0, 111890, 35768],
+            [63529, 111890, 0, 98977],
+            [61302, 35768, 98977, 0],
+          ],
+          routes: [
+            "Rover 1 route: base -> cx22 -> ta00 -> base -> xj84 -> base",
+            "Rover 2 route: base -> ta00 -> cx22 -> base -> xj84 -> base",
+            "Rover 3 route: base -> xj84 -> base",
+            "Rover 4 route: base -> ta00 -> base",
+            "Rover 5 route: base -> cx22 -> base",
+            "Rover 6 route: base -> xj84 -> cx22 -> base",
+            "Rover 7 route: base -> ta00 -> xj84 -> base",
+            "Rover 8 route: base -> cx22 -> ta00 -> xj84 -> base",
+            "Rover 9 route: base -> ta00 -> cx22 -> xj84 -> base",
+            "Rover 10 route: base -> cx22 -> base",
+          ],
+        },
+        expectedOutput: 2171044,
+        description: "simple test",
+>>>>>>> dac1e9344cd05ee7bcb301bf2994b7e4c5f80ac7
       },
     ],
     templateCodes: [
