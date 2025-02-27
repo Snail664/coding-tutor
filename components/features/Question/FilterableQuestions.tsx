@@ -4,11 +4,12 @@ import React, { useState } from "react";
 import DifficultyTag from "./QuestionDifficultyTag";
 import { QuestionDifficulty } from "@prisma/client";
 import { Search as SearchIcon, Filter as FilterIcon } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface Question {
   name: string;
   difficulty: string;
-  //topics?: string[]; // If you have a topics field
+  topics?: string[]; // If you have a topics field
 }
 
 interface Props {
@@ -16,7 +17,25 @@ interface Props {
 }
 
 export default function FilterableQuestions({ questions }: Props) {
+  const allTopics = [
+    "Array",
+    "String",
+    "Hash Table",
+    "Dynamic Programming",
+    "Math",
+    "Sorting",
+    "Greedy",
+    "Depth-First Search",
+    "Binary Search",
+    "Database",
+    "Matrix",
+    "Tree",
+    // ...etc.
+  ];
+
+  // === State for Filters ===
   const [showFilters, setShowFilters] = useState(false);
+  // Search bar (for question names)
   const [searchTerm, setSearchTerm] = useState("");
 
   // Difficulty filters
@@ -24,8 +43,9 @@ export default function FilterableQuestions({ questions }: Props) {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
 
   // Topics filters (shown in UI, but not fully implemented)
+  const [topicsSearchTerm, setTopicsSearchTerm] = useState("");
   const [topicsCondition, setTopicsCondition] = useState<"is" | "is not">("is");
-  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
 
 // Filter questions by selected difficulty and search term.
 // const filteredQuestions = questions.filter((q) => {
@@ -38,6 +58,18 @@ export default function FilterableQuestions({ questions }: Props) {
 // // Define difficulties as an array of QuestionDifficulty.
 //   // If your enum doesn't export its values, you can cast your strings:
 //   const difficulties: QuestionDifficulty[] = ["easy", "medium", "hard"] as QuestionDifficulty[];
+
+  const visibleTopics = allTopics.filter((topic) =>
+    topic.toLowerCase().includes(topicsSearchTerm.toLowerCase())
+  );
+
+  // === Toggling a Topic Chip ===
+  function toggleTopic(topic: string) {
+    setSelectedTopics((prev) => 
+      prev.includes(topic) ? prev.filter((t) => t !== topic) // remove if selected
+      : [...prev, topic]               // add if not selected
+    );
+  }
 
 // === FILTERING LOGIC ===
   const filteredQuestions = questions.filter((question) => {
@@ -54,18 +86,20 @@ export default function FilterableQuestions({ questions }: Props) {
   };
 
   // Topics filter (currently not applied; feel free to implement later)
-    // let matchesTopics = true;
-    // if (selectedTopic) {
-    //   if (topicsCondition === "is") {
-    //     matchesTopics = q.topics?.includes(selectedTopic) ?? false;
-    //   } else {
-    //     matchesTopics = !(q.topics?.includes(selectedTopic) ?? false);
-    //   }
-    // }
+    let matchesTopics = true;
+    if (selectedTopics.length > 0 && question.topics) {
+      if (topicsCondition === "is") {
+        matchesTopics = selectedTopics.some((topic) => question.topics!.includes(topic));
+      } else {
+        matchesTopics = !selectedTopics.some((topic) => question.topics!.includes(topic));
+      }
+    }
 
   // Return the combined result of all filters
-  return matchesSearch && matchesDifficulty; // && matchesTopics (if implemented)
+  return matchesSearch && matchesDifficulty && matchesTopics;
 });
+
+
 
 // === RESET FUNCTION ===
 function handleReset() {
@@ -73,7 +107,8 @@ function handleReset() {
   setDifficultyCondition("is");
   setSelectedDifficulty(null);
   setTopicsCondition("is");
-  setSelectedTopic(null);
+  setTopicsSearchTerm("");
+  setSelectedTopics([]);
 }
 
   return (
@@ -159,23 +194,24 @@ function handleReset() {
             </select>
           </div>
 
-          {/* Topics Row (placeholder; not yet filtering) */}
+          {/* Topics Row */}
           <div className="flex items-center gap-2">
-            <label className="w-24 text-primary font-medium flex items-center gap-1">
-            <svg 
-              aria-hidden="true" 
-              focusable="false" 
-              data-prefix="far" 
-              data-icon="tags" 
-              className="svg-inline--fa fa-tags w-8 h-5" 
-              role="img" xmlns="http://www.w3.org/2000/svg" 
-              viewBox="0 0 512 512"
-            >
-              <path 
-              fill="currentColor" 
-              d="M345 39.1c-9.3-9.4-24.5-9.5-33.9-.2s-9.5 24.5-.2 33.9L438.6 202.1c33.9 34.3 33.9 89.4 0 123.7L326.7 439.1c-9.3 9.4-9.2 24.6 .2 33.9s24.6 9.2 33.9-.2L472.8 359.6c52.4-53 52.4-138.2 0-191.2L345 39.1zM242.7 50.7c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 0 80V229.5c0 17 6.7 33.3 18.7 45.3l168 168c25 25 65.5 25 90.5 0L410.7 309.3c25-25 25-65.5 0-90.5l-168-168zM48 80H197.5c4.2 0 8.3 1.7 11.3 4.7l168 168c6.2 6.2 6.2 16.4 0 22.6L243.3 408.8c-6.2 6.2-16.4 6.2-22.6 0l-168-168c-3-3-4.7-7.1-4.7-11.3V80zm96 64a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
-              />
-            </svg>
+            <label className="w-28 text-primary font-medium flex items-center gap-1">
+              <svg
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="far"
+                data-icon="tags"
+                className="svg-inline--fa fa-tags w-9 h-5"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M345 39.1c-9.3-9.4-24.5-9.5-33.9-.2s-9.5 24.5-.2 33.9L438.6 202.1c33.9 34.3 33.9 89.4 0 123.7L326.7 439.1c-9.3 9.4-9.2 24.6.2 33.9s24.6 9.2 33.9-.2L472.8 359.6c52.4-53 52.4-138.2 0-191.2L345 39.1zM242.7 50.7c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 0 80V229.5c0 17 6.7 33.3 18.7 45.3l168 168c25 25 65.5 25 90.5 0L410.7 309.3c25-25 25-65.5 0-90.5l-168-168zM48 80H197.5c4.2 0 8.3 1.7 11.3 4.7l168 168c6.2 6.2 6.2 16.4 0 22.6L243.3 408.8c-6.2 6.2-16.4 6.2-22.6 0l-168-168c-3-3-4.7-7.1-4.7-11.3V80zm96 64a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
+                />
+              </svg>
               Topics
             </label>
             <select
@@ -183,22 +219,55 @@ function handleReset() {
               onChange={(e) =>
                 setTopicsCondition(e.target.value as "is" | "is not")
               }
-              className="relative -right-5 border border-gray-300 rounded px-2 py-1"
+              className="border border-gray-300 rounded px-2 py-1"
             >
               <option value="is">is</option>
               <option value="is not">is not</option>
             </select>
-            <select
-              value={selectedTopic ?? ""}
-              onChange={(e) => setSelectedTopic(e.target.value || null)}
-              className="relative -right-5 border border-gray-300 rounded px-11 py-1"
-            >
-              <option value="">(any)</option>
-              <option value="arrays">arrays</option>
-              <option value="strings">strings</option>
-              <option value="graphs">graphs</option>
-            </select>
+            {/* Topics Dropdown Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="border border-gray-300 rounded px-16 py-0 flex items-center gap-2 hover:bg-gray-200 transition">
+                  {selectedTopics.length > 0
+                    ? selectedTopics.join(", ")
+                    : "(any)"}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="p-4 space-y-4 w-80">
+                {/* Topics Search Input */}
+                <div className="relative">
+                  <SearchIcon className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                  <input
+                    type="text"
+                    placeholder="search topics..."
+                    value={topicsSearchTerm}
+                    onChange={(e) => setTopicsSearchTerm(e.target.value)}
+                    className="pl-8 pr-2 py-1 border border-gray-300 rounded w-full"
+                  />
+                </div>
+                {/* Topic Chips */}
+                <div className="flex flex-wrap gap-2 max-h-30 overflow-y-auto">
+                  {visibleTopics.map((topic) => {
+                    const isSelected = selectedTopics.includes(topic);
+                    return (
+                      <button
+                        key={topic}
+                        onClick={() => toggleTopic(topic)}
+                        className={`px-3 py-1 rounded-full text-sm transition ${
+                          isSelected
+                            ? "bg-gray-500 text-white"
+                            : "bg-gray-300 text-black hover:bg-gray-400"
+                        }`}
+                      >
+                        {topic}
+                      </button>
+                    );
+                  })}
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
+
 
           {/* Reset Button */}
           <div className="flex justify-center">
