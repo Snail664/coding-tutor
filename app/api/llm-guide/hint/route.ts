@@ -3,11 +3,7 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { rateLimitMiddleware } from "@/app/middleware/rateLimitMiddleware";
 import { parseJSON } from "@/lib/utils";
-import {
-  getHintSystemPrompt,
-  getHintUserPrompt,
-  hint_prompt,
-} from "@/lib/prompts";
+import { getHintSystemPrompt, getHintUserPrompt } from "@/lib/prompts";
 import { llm } from "@/lib/llm";
 
 const OPEN_AI_API_KEY = process.env.OPEN_AI_API_KEY;
