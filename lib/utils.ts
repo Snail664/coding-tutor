@@ -132,3 +132,24 @@ export function base64ToAudioUrl(base64Audio: string): string {
   const audioBlob = new Blob([bytes], { type: "audio/mpeg" });
   return URL.createObjectURL(audioBlob);
 }
+
+export function parseJSON(str: string) {
+  try {
+    // Find the first '{' and last '}'
+    const start = str.indexOf("{");
+    const end = str.lastIndexOf("}") + 1;
+
+    if (start === -1 || end === 0) {
+      throw new Error("No JSON object found in string");
+    }
+
+    // Extract just the JSON part
+    const jsonStr = str.substring(start, end);
+
+    // Parse and return the JSON
+    return JSON.parse(jsonStr);
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
+}

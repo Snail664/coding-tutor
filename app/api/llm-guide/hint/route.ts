@@ -2,8 +2,14 @@ import { QuestionT, TestResult } from "@/lib/types";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { rateLimitMiddleware } from "@/app/middleware/rateLimitMiddleware";
-import { parseLLMResponse } from "@/lib/utils";
-import { getHintSystemPrompt, getHintUserPrompt } from "@/lib/prompts";
+import { parseJSON } from "@/lib/utils";
+import {
+  getHintSystemPrompt,
+  getHintUserPrompt,
+  hint_prompt,
+} from "@/lib/prompts";
+import { llm } from "@/lib/llm";
+
 const OPEN_AI_API_KEY = process.env.OPEN_AI_API_KEY;
 const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
 
@@ -27,21 +33,34 @@ export async function POST(request: Request) {
   if (error) return response;
   const data: HintRequestData = await request.json();
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o",
-    messages: [
-      {
-        role: "system",
-        content: getHintSystemPrompt(data["question"]["content"]),
-      },
+  const completion = await llm(
+    [
       {
         role: "user",
-        content: getHintUserPrompt(data["sourceCode"], data["testCases"]),
+        content: getHintUserPrompt(data.sourceCode, data.testCases),
       },
     ],
-  });
+    "claude-3-5-sonnet-20241022",
+    getHintSystemPrompt(data.question.content)
+  );
 
-  const hintText = parseLLMResponse(completion, "hint");
+  const hintText = parseJSON(completion.content)["hint"];
+
+  // const completion = await openai.chat.completions.create({
+  //   model: "gpt-4o",
+  //   messages: [
+  //     {
+  //       role: "system",
+  //       content: getHintSystemPrompt(data["question"]["content"]),
+  //     },
+  //     {
+  //       role: "user",
+  //       content: getHintUserPrompt(data["sourceCode"], data["testCases"]),
+  //     },
+  //   ],
+  // });
+
+  // const hintText = parseLLMResponse(completion, "hint");
 
   // Convert the text hint into speech
   const speechResponse = await openai.audio.speech.create({
