@@ -1,0 +1,6 @@
+{
+  "testCases": [],
+  "numPassed": 0,
+  "numFailed": 0,
+  "stderr": "  File \"/piston/jobs/b2497d07-d0ba-464c-819a-3c9553fc7145/script\", line 3\n    $total_distance = 0\n    ^\nSyntaxError: invalid syntax\n"
+}

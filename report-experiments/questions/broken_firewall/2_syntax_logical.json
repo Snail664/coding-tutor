@@ -1,0 +1,6 @@
+{
+  "testCases": [],
+  "numPassed": 0,
+  "numFailed": 0,
+  "stderr": "  File \"/piston/jobs/6a82eac5-f087-43f5-b53e-469b8ab16090/script\", line 19\n    for packet in data\n                      ^\nSyntaxError: expected ':'\n"
+}

@@ -1,99 +1,106 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    auth0_sid            String     @unique
-    auth0_sub            String     @id
-    auth0_given_name     String?
-    auth0_family_name    String?
-    auth0_name           String?
-    auth0_picture        String?
-    auth0_email          String?
-    auth0_email_verified Boolean    @default(false)
-    chats                Chat[]
-    isWalkthroughEnabled Boolean    @default(true)
-    Feedback             Feedback[]
+  auth0_email          String?
+  auth0_email_verified Boolean    @default(false)
+  auth0_family_name    String?
+  auth0_given_name     String?
+  auth0_name           String?
+  auth0_picture        String?
+  auth0_sid            String     @unique
+  auth0_sub            String     @id
+  isWalkthroughEnabled Boolean    @default(true)
+  chats                Chat[]
+  Feedback             Feedback[]
 }
 
 model Chat {
-    id          Int           @id @default(autoincrement())
-    dateStarted DateTime      @default(now())
-    messages    ChatMessage[]
-    userId      String
-    user        User          @relation(fields: [userId], references: [auth0_sub])
+  dateStarted DateTime      @default(now())
+  id          Int           @id @default(autoincrement())
+  userId      String
+  user        User          @relation(fields: [userId], references: [auth0_sub])
+  messages    ChatMessage[]
 }
 
 model Feedback {
-    id               Int          @id @default(autoincrement())
-    userId           String
-    user             User         @relation(fields: [userId], references: [auth0_sub])
-    systemPromptUsed String
-    userPromptUsed   String
-    LLMOutput        String
-    feedbackType     FeedbackType
-    createdAt        DateTime     @default(now())
-    feedbackText     String
-    Question         Question     @relation(fields: [questionName], references: [name])
-    questionName     String
-}
-
-enum FeedbackType {
-    hint
-    chat
-    general
+  id               Int          @id @default(autoincrement())
+  userId           String
+  LLMOutput        String
+  feedbackType     FeedbackType
+  createdAt        DateTime     @default(now())
+  feedbackText     String
+  questionName     String
+  systemPromptUsed String
+  userPromptUsed   String
+  Question         Question     @relation(fields: [questionName], references: [name])
+  user             User         @relation(fields: [userId], references: [auth0_sub])
 }
 
 model ChatMessage {
-    id      Int    @id @default(autoincrement())
-    chatId  Int
-    chat    Chat   @relation(fields: [chatId], references: [id])
-    role    String
-    content String
+  id      Int    @id @default(autoincrement())
+  role    String
+  content String
+  chatId  Int
+  chat    Chat   @relation(fields: [chatId], references: [id])
 }
 
-enum QuestionDifficulty {
-    easy
-    medium
-    hard
+model Tag {
+  name      String     @id
+  questions Question[] @relation("QuestionsOnTags")
 }
 
 model Question {
-    id            Int                @id @default(autoincrement())
-    name          String             @unique
-    difficulty    QuestionDifficulty
-    content       String             @db.VarChar(10000)
-    templateCodes TemplateCode[]
-    testCases     TestCase[]
-    Feedback      Feedback[]
-}
-
-enum LanguageName {
-    javascript
-    python
-    typescript
-    java
-    cpp
+  id            Int                @id @default(autoincrement())
+  name          String             @unique
+  difficulty    QuestionDifficulty
+  content       String             @db.VarChar(10000)
+  topics        String[]
+  Feedback      Feedback[]
+  templateCodes TemplateCode[]
+  testCases     TestCase[]
+  tags          Tag[]              @relation("QuestionsOnTags")
 }
 
 model TemplateCode {
-    id         Int          @id @default(autoincrement())
-    code       String
-    language   LanguageName
-    questionId Int
-    question   Question     @relation(fields: [questionId], references: [id])
+  id         Int          @id @default(autoincrement())
+  code       String
+  language   LanguageName
+  questionId Int
+  question   Question     @relation(fields: [questionId], references: [id])
 }
 
 model TestCase {
-    id             Int      @id @default(autoincrement())
-    input          String
-    expectedOutput String
-    description    String
-    questionId     Int
-    question       Question @relation(fields: [questionId], references: [id])
+  id             Int      @id @default(autoincrement())
+  input          String
+  expectedOutput String
+  description    String
+  questionId     Int
+  question       Question @relation(fields: [questionId], references: [id])
+}
+
+enum FeedbackType {
+  hint
+  chat
+  general
+}
+
+enum QuestionDifficulty {
+  easy
+  medium
+  hard
+}
+
+enum LanguageName {
+  javascript
+  python
+  typescript
+  java
+  cpp
 }

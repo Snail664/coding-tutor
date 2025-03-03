@@ -6,7 +6,7 @@ export interface MessageT {
 }
 
 export interface TestCase {
-  input: string | string[] | number[] | number[][];
+  input: string[] | number[] | number[][] | object;
   expectedOutput: string | number | boolean | number[];
   description: string;
 }
@@ -49,6 +49,7 @@ export type QuestionT = {
   content: string;
   templateCodes: TemplateCodeT[];
   testCases: TestCase[];
+  tags?: { name: string }[];
 };
 
 export enum CodeExecuteResponseCategory {

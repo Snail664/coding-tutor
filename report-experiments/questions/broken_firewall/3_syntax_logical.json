@@ -1,0 +1,6 @@
+{
+  "testCases": [],
+  "numPassed": 0,
+  "numFailed": 0,
+  "stderr": "  File \"/piston/jobs/fbbf0da9-cffe-44fa-a754-019380bd1bff/script\", line 3\n    def 3parse_packet(packet):\n        ^\nSyntaxError: invalid decimal literal\n"
+}

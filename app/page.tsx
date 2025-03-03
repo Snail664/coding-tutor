@@ -1,17 +1,29 @@
 import { getSession } from "@auth0/nextjs-auth0";
-import DifficultyTag from "@/components/features/Question/QuestionDifficultyTag";
+// import DifficultyTag from "@/components/features/Question/QuestionDifficultyTag";
 import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/Navbar";
+import FilterableQuestions from "@/components/features/Question/FilterableQuestions";
+// import { Search as SearchIcon, Filter as FilterIcon } from "lucide-react";
+
 
 export default async function Page() {
   const session = await getSession();
   const questions = await prisma.question.findMany({
-    select: {
-      name: true,
-      difficulty: true,
+    include: {
+      tags: {
+        select: {
+          name: true
+        }
+      }
     },
     cacheStrategy: { ttl: 3600, swr: 30 },
   });
+
+  const transformedQuestions = questions.map(q => ({
+    name: q.name,
+    difficulty: q.difficulty,
+    tags: (q as any).tags?.map((tag: { name: string }) => ({ name: tag.name })) || []
+  }));
 
   return (
     <div className="px-5">
@@ -26,15 +38,20 @@ export default async function Page() {
             with a bug or don&apos;t know how to continue.
           </p>
         </div>
-        {session ? null : (
+        {!session ? null : (
           <a
             href="/api/auth/login"
-            className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105"
+            className="inline-block relative -top-5 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105"
           >
             Get Started
           </a>
         )}
-        <div className="bg-menuBackground w-full max-w-md rounded-xl shadow-lg overflow-hidden mt-5">
+
+        {/* Render the FilterableQuestions client component */}
+        <FilterableQuestions questions={transformedQuestions} />
+
+
+        {/* <div className="bg-menuBackground w-full max-w-md rounded-xl shadow-lg overflow-hidden mt-5">
           <div className="max-h-96 overflow-y-auto">
             <ul className="divide-y divide-gray-300">
               {questions.map((question) => (
@@ -55,7 +72,8 @@ export default async function Page() {
               ))}
             </ul>
           </div>
-        </div>
+        </div> */}
+
       </div>
     </div>
   );

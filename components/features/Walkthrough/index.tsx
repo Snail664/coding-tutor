@@ -6,14 +6,12 @@ import { disableWalkthroughThunk } from "@/slices/AuthSlice";
 
 export default function Walkthrough() {
   const { user, isLoading } = useAppSelector((state) => state.auth);
-  const [run, setRun] = useState(user?.isWalkthroughEnabled ?? true);
+  const [run, setRun] = useState(false);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!isLoading && user) {
       setRun(user.isWalkthroughEnabled);
-    } else if (!isLoading && !user) {
-      setRun(true);
     }
   }, [isLoading, user]);
 
@@ -57,8 +55,11 @@ export default function Walkthrough() {
     }
   };
 
-  // Only show tour for new users
+  // Don't render anything if loading or no user
   if (isLoading || !user) return null;
+
+  // Don't render if walkthrough is disabled
+  if (!user.isWalkthroughEnabled) return null;
 
   return (
     <Joyride

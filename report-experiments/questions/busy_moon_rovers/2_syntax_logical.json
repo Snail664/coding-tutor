@@ -1,0 +1,6 @@
+{
+  "testCases": [],
+  "numPassed": 0,
+  "numFailed": 0,
+  "stderr": "  File \"/piston/jobs/59fac6c6-d3d8-4252-ba8e-10e2546f2419/script\", line 5\n    return 57890\n    ^\nIndentationError: expected an indented block after function definition on line 2\n"
+}
