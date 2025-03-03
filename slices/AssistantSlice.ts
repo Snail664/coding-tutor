@@ -208,18 +208,22 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
         return rejectWithValue("An Unexpected error occured.");
       }
 
-      console.log("response cmg: ", response.data);
-
       const assistantMsg = response.data["response"];
-      console.log("assistantMsg: ", assistantMsg);
 
-      await apiClient.post("/chat/add-message", {
-        chatId: state.assistant.chatId,
-        messages: [
-          { role: "user", content: userAudioTranscriptInput },
-          { role: "assistant", content: assistantMsg },
-        ],
-      });
+      // Perform the chat/add-message call in the background
+      (async () => {
+        try {
+          await apiClient.post("/chat/add-message", {
+            chatId: state.assistant.chatId,
+            messages: [
+              { role: "user", content: userAudioTranscriptInput },
+              { role: "assistant", content: assistantMsg },
+            ],
+          });
+        } catch (error) {
+          console.error("Error adding message to chat:", error);
+        }
+      })();
 
       return {
         assistantMsg,
