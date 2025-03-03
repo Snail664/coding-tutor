@@ -1,0 +1,15 @@
+{
+  "question": "purchase_tickets",
+  "1_correct": "Solution Correct",
+  "1_incomplete": "Solution is correct so far, you only need to return the minimum cost at the end",
+  "1_logical": "There is an error. Costs are being subtracted and discounts are being added",
+  "1_syntax_logical": "Missing ':' in the for loop",
+  "2_correct": "Solution Correct",
+  "2_incomplete": "Company code has been extracted, now the cost and item type should be also extracted from rest",
+  "2_logical": "Incorrect to skip current loop iteration if parts does not have a length of 3",
+  "2_syntax_logical": "Keyword'while' used instead of 'for'",
+  "3_correct": "Solution Correct",
+  "3_incomplete": "So far only total costs dictionary has been initialised, next step it to iterate over the input data and extract relavant information",
+  "3_logical": "'fee' is not correctly capitalised.",
+  "3_syntax_logical": "You are missing the closing bracket of the min function"
+}

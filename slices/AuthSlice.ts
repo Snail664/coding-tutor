@@ -60,6 +60,22 @@ export const fetchUserDataThunk = createAsyncThunk<
   }
 });
 
+export const enableWalkthroughThunk = createAsyncThunk<
+  { isWalkthroughEnabled: boolean },
+  void,
+  { state: RootState }
+>("auth/enableWalkthrough", async (_, { rejectWithValue }) => {
+  try {
+    await apiClient.post("/user/walkthrough", {
+      isWalkthroughEnabled: true,
+    });
+    return { isWalkthroughEnabled: true };
+  } catch (error: any) {
+    console.error("Error in enableWalkthroughThunk:", error);
+    return rejectWithValue(error.message || "Unknown error occurred");
+  }
+});
+
 const AuthSlice = createSlice({
   name: "auth",
   initialState,
@@ -91,6 +107,11 @@ const AuthSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(disableWalkthroughThunk.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user.isWalkthroughEnabled = action.payload.isWalkthroughEnabled;
+        }
+      })
+      .addCase(enableWalkthroughThunk.fulfilled, (state, action) => {
         if (state.user) {
           state.user.isWalkthroughEnabled = action.payload.isWalkthroughEnabled;
         }

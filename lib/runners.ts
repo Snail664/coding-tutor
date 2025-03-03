@@ -136,7 +136,7 @@ if __name__ == "__main__":
 }
 
 export class CPPRunner implements LanguageRunner {
-  private language = LANGUAGES.find(lang => lang.name === "cpp");
+  private language = LANGUAGES.find((lang) => lang.name === "cpp");
 
   constructor() {
     if (!this.language) {
@@ -148,7 +148,9 @@ export class CPPRunner implements LanguageRunner {
 
   // Extract function signature from C++ code
   private extractFunctionName(code: string): string | null {
-    const match = code.match(/\b(\w+)\s*\(/);
+    const match = code.match(
+      /(\w+)\s*\([^)]*const\s+vector\s*<\s*string\s*>\s*&[^)]*\)\s*\{/
+    );
     return match ? match[1] : null;
   }
 
@@ -158,71 +160,141 @@ export class CPPRunner implements LanguageRunner {
       throw new Error("No function definition found in the user code.");
     }
 
-    // Convert test cases to a JSON string
-    const testCasesJSON = JSON.stringify(testCases);
-
     // Generate C++ test runner code
     const testRunnerCode = `
     #include <iostream>
     #include <vector>
     #include <string>
     #include <sstream>
+    #include <algorithm>
+    #include <regex>
 
     using namespace std;
 
+    // Overload operator<< for unordered_map for debugging purposes.
+    template<typename K, typename V>
+    ostream& operator<<(ostream& os, const unordered_map<K, V>& m) {
+        os << "{";
+        bool first = true;
+        for (const auto& pair : m) {
+            if (!first) {
+                os << ", ";
+            }
+            first = false;
+            os << pair.first << ": " << pair.second;
+        }
+        return os << "}";
+    }
+
     struct TestCase {
-        vector<string> input;
-        string expectedOutput;
+      vector<string> input;
+      string expectedOutput;
     };
 
+    struct TestResult {
+      string actualOutput;
+      bool passed;
+      string userPrints;
+      string error;
+    };
+
+    ${userCode}
+
+    string escapeJson(const string& s) {
+      string escaped;
+      for (char c : s) {
+          switch (c) {
+              case '"':  escaped += "\\\\\\""; break;
+              case '\\\\': escaped += "\\\\\\\\"; break;
+              case '\\n': escaped += "\\\\n";  break;
+              case '\\r': escaped += "\\\\r";  break;
+              case '\\t': escaped += "\\\\t";  break;
+              default:   escaped += c;
+          }
+      }
+      return escaped;
+    }
+
     int main() {
-        string testCasesStr = R"(${testCasesJSON})";
-        vector<TestCase> testCases;
-        vector<string> results;
+      string functionName = "${functionName}";
+      cerr << "Function Name: " << functionName << endl;    //Debugging line to print function name injected 
 
-        // Manually parse testCasesStr into testCases (assuming simple format)
-        stringstream ss(testCasesStr);
-        string line;
-        while (getline(ss, line, ',')) {
-            TestCase tc;
-            tc.input.push_back(line);
-            testCases.push_back(tc);
-        }
+      vector<TestCase> testCases = {
+        ${testCases.map((tc) => `{
+          {
+            /**
+             * Convert the input of the test case into a string format:
+             * - If the input is an array, convert each element to a string.
+             * - If the element is a string, escape double quotes.
+             * - If the element is a number or an array of numbers/number arrays, convert it to a JSON string.
+             */
+              ${
+                Array.isArray(tc.input)
+                  ? (tc.input as (unknown[])).map((line) => {
+                        const strLine = typeof line === "string" ? line : JSON.stringify(line);
+                        return `"${strLine.replace(/"/g, '\\"')}"`;
+                      }).join(",\n                ")
+                  : `"${String(tc.input).replace(/"/g, '\\"')}"`
+              }
+          },
+          /**
+           * Convert the expected output of the test case into a string format:
+           * - If the expected output is a string, escape double quotes.
+           * - If the expected output is not a string, convert it to a JSON string.
+           */
+          "${
+            typeof tc.expectedOutput === "string"
+              ? tc.expectedOutput.replace(/"/g, '\\"')
+              : JSON.stringify(tc.expectedOutput)
+          }"
+        }`).join(",\n        ")}
+      };
+      
+      vector<TestResult> results;
+      streambuf* origCout = cout.rdbuf();
+      stringstream outputCapture;
 
-        for (auto& test_case : testCases) {
-            vector<string> input_data = test_case.input;
-            string expected_output = test_case.expectedOutput;
-            try {
-                stringstream userOutput;
-                cout << "Executing: ${functionName} with input ";
-                for (const auto& input : input_data) {
-                    cout << input << " ";
-                }
-                cout << endl;
-                
-                auto result = ${functionName}(input_data);
-                userOutput << result;
-                string actualOutput = userOutput.str();
+      for (auto& tc : testCases) {
+          TestResult res;
+          outputCapture.str("");
+          cout.rdbuf(outputCapture.rdbuf());
+          try {
+              auto actual = ${functionName}(tc.input);
+              cout.rdbuf(origCout);
+              res.userPrints = outputCapture.str();
+              stringstream ss;
+              ss << actual;
+              res.actualOutput = escapeJson(ss.str());
+              res.passed = (ss.str() == tc.expectedOutput);
+          } catch (const exception& e) {
+              cout.rdbuf(origCout);
+              res.error = escapeJson(e.what());
+              res.passed = false;
+          } catch (...) {
+              cout.rdbuf(origCout);
+              res.error = "Unknown error";
+              res.passed = false;
+          }
+          results.push_back(res);
+      }
 
-                bool passed = (actualOutput == expected_output);
-                results.push_back(actualOutput + ", Passed: " + (passed ? "true" : "false"));
-            } catch (exception &e) {
-                results.push_back("Error: " + string(e.what()));
-            }
-        }
-
-        for (const auto& res : results) {
-            cout << res << endl;
-        }
-        cout.flush();
-
-        return 0;
-}`;
+      // Generate JSON output manually
+      std::string output = "{\\\"testCases\\\":[";
+      for (size_t i = 0; i < results.size(); ++i) {
+        auto& r = results[i];
+        output += "{\\\"actualOutput\\\":\\\"" + r.actualOutput + "\\\","
+            "\\\"passed\\\":" + (r.passed ? "true" : "false") + ","
+            "\\\"userPrints\\\":\\\"" + escapeJson(r.userPrints) + "\\\","
+            "\\\"error\\\":\\\"" + r.error + "\\\"" + "}";
+        output += (i < results.size()-1) ? "," : "";
+      }
+      output += "]}";
+      fprintf(stdout, "%s", output.c_str());
+      return 0;
+      }`;
 
     // Combine user's code with the test runner
-    return `${userCode}
-
-${testRunnerCode}`;
+    return testRunnerCode;
   }
 
   async runCode(
@@ -234,15 +306,20 @@ ${testRunnerCode}`;
       version: this.language?.version,
       code: preparedCode,
     });
-
+    
     let numPassed = 0;
     let numFailed = 0;
     let resultArr: TestResult[] = [];
     if (response.data.run["stdout"]) {
-      resultArr = JSON.parse(response.data.run["stdout"]);
-      resultArr.map((x: TestResult) => {
-        x.passed ? numPassed++ : numFailed++;
-      });
+      try {
+        resultArr = JSON.parse(response.data.run["stdout"])["testCases"]; //key line to process test cases
+        resultArr.map((x: TestResult) => {
+          x.passed ? numPassed++ : numFailed++;
+        });
+      } catch (error) {
+        console.error("Failed to parse runner output:", error);
+        console.log("Raw stdout:", response.data.run["stdout"]);
+      }
     }
     return {
       testCases: resultArr,
@@ -254,7 +331,9 @@ ${testRunnerCode}`;
       category: response.data.run["stderr"]
         ? CodeExecuteResponseCategory.Error
         : CodeExecuteResponseCategory.Success,
-      message: "",
+      message: response.data.run?.stderr
+        ? "Execution failed"
+        : "Execution successful",
     };
   }
 }

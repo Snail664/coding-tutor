@@ -5,22 +5,84 @@ import { join } from "path";
 
 export const QUESTIONS: QuestionT[] = [
   {
+    name: "Busy Moon Rovers",
+    difficulty: QuestionDifficulty.easy,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/BusyMoonRovers.md"),
+      "utf8"
+    ),
+    tags: [{ name: "Graph" }, { name: "Matrix" }, {name: "String Parsing"}],
+    testCases: [
+      {
+        input: {
+          locations: ["base", "ta00", "cx22", "xj84"],
+          distances: [
+            [0, 55457, 63529, 61302],
+            [55457, 0, 111890, 35768],
+            [63529, 111890, 0, 98977],
+            [61302, 35768, 98977, 0],
+          ],
+          routes: [
+            "Rover 1 route: base -> cx22 -> ta00 -> base -> xj84 -> base",
+            "Rover 2 route: base -> ta00 -> cx22 -> base -> xj84 -> base",
+            "Rover 3 route: base -> xj84 -> base",
+            "Rover 4 route: base -> ta00 -> base",
+            "Rover 5 route: base -> cx22 -> base",
+            "Rover 6 route: base -> xj84 -> cx22 -> base",
+            "Rover 7 route: base -> ta00 -> xj84 -> base",
+            "Rover 8 route: base -> cx22 -> ta00 -> xj84 -> base",
+            "Rover 9 route: base -> ta00 -> cx22 -> xj84 -> base",
+            "Rover 10 route: base -> cx22 -> base",
+          ],
+        },
+        expectedOutput: 2171044,
+        description: "simple test",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `def solution(data):
+    # insert your code below as soon as possible
+`,
+        language: LanguageName.python,
+      },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
+      },
+    ],
+  },
+  {
     name: "Broken Firewall",
     difficulty: QuestionDifficulty.easy,
     content: readFileSync(
       join(__dirname, "../assets/questions/BrokenFirewall.md"),
       "utf-8"
     ),
+    tags: [{ name: "String" }, { name: "Bit Manipulation" }, {name: "Math"}],
     testCases: [
       {
         input: [
-          /** simple */ "450000640000000083069f3fc0a80001c0a80002",
-          "450000c80000000083069f3f0A0000010A000002",
-          "4500012c0000000083069f3fc0a800030A000003",
+          /** simple */
+          "450000640000000083069f3fc0a80001c0a80002", // size: 100, src: 192.168.0.1, dst: 192.168.0.2
+          "450000c80000000083069f3f0A0000010A000002", // size: 200, src: 10.0.0.1, dst: 10.0.0.2
+          "4500012c0000000083069f3fc0a800030A000003", // size: 300, src: 192.168.0.3, dst: 10.0.0.3
           "450001900000000083069f3f0A000004c0a80004",
         ],
         expectedOutput: "800/900",
-        description: "",
+        description: "simple test",
       },
       {
         input: [
@@ -33,22 +95,22 @@ export const QUESTIONS: QuestionT[] = [
           "450003200000000083069f3fae241b07c0a80006",
         ],
         expectedOutput: "1300/1100",
-        description: "",
+        description: "medium test",
       },
       {
         input: [
           /** Hard test: edge cases and boundary values */
-          "45000001000000008306f39fc0a87f01c0a8ff02",
-          "45000002000000008306f39fc0a80001c0a80000",
-          "45000004000000008306f39fc0a8fe01c0a8fffe",
-          "45000008000000008306f39f0A00ff010A00ff02",
-          "45000010000000008306f39f0A0000010A000000",
-          "45000020000000008306f39f0A00fe010A00fffe",
-          "45ffffff000000008306f39fc0a80001c0a80002",
-          "45ffff00000000008306f39f0A0000010A000002",
+          "45000001000000008306f39fc0a87f01c0a8ff02", // size: 1, src: 192.168.127.1, dst: 192.168.255.2
+          "45000002000000008306f39fc0a80001c0a80000", // size: 2, src: 192.168.0.1, dst: 192.168.0.0
+          "45000004000000008306f39fc0a8fe01c0a8fffe", // size: 4, src: 192.168.254.1, dst: 192.168.255.254
+          "45000008000000008306f39f0A00ff010A00ff02", // size: 8, src: 10.0.255.1, dst: 10.0.255.2
+          "45000010000000008306f39f0A0000010A000000", // size: 16, src: 10.0.0.1, dst: 10.0.0.0
+          "45000020000000008306f39f0A00fe010A00fffe", // size: 32, src: 10.0.254.1, dst: 10.0.255.254
+          "45ffffff000000008306f39fc0a80001c0a80002", // size: 65535, src: 192.168.0.1, dst: 192.168.0.2
+          "45ffff00000000008306f39f0A0000010A000002", // size: 65280, src: 10.0.0.1, dst: 10.0.0.2
         ],
-        expectedOutput: "65542/65336",
-        description: "",
+        expectedOutput: "65542/65328",
+        description: "challenging test",
       },
     ],
     templateCodes: [
@@ -57,6 +119,21 @@ export const QUESTIONS: QuestionT[] = [
     # insert your code below
 `,
         language: LanguageName.python,
+      },
+      {
+        code: `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+char* solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+`,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -67,10 +144,12 @@ export const QUESTIONS: QuestionT[] = [
       join(__dirname, "../assets/questions/ClosestStarSystems.md"),
       "utf-8"
     ),
+    tags: [{ name: "Sorting" }, { name: "Divide and Conquer" }, {name: "Math"}],
     testCases: [
       {
         input: [
-          /**simple test */ "Star A: 1.0, 0.0, 0.0, 0.0",
+          /**simple test */
+          "Star A: 1.0, 0.0, 0.0, 0.0",
           "Star B: 1.0, 0.0, 2.0, 0.0",
           "Star C: 1.0, 2.0, 1.0, 0.0",
         ],
@@ -79,22 +158,14 @@ export const QUESTIONS: QuestionT[] = [
       },
       {
         input: [
-          /** mix of +ve and -ve*/ "Alpha: 3.5, 1.0, -1.0, 2.0",
+          /** mix of +ve and -ve*/
+          "Alpha: 3.5, 1.0, -1.0, 2.0", // 1.225,
           "Beta: 4.2, 2.0, -1.5, 2.5",
           "Gamma: 5.1, -1.0, 2.0, -2.0",
           "Delta: 2.8, -1.2, 2.3, -2.1",
           "Epsilon: 6.3, 3.0, -2.0, 3.0",
         ],
-        expectedOutput: 0.458,
-        description: "",
-      },
-      {
-        input: [
-          /** edge caase  */ "Star-A1: 1e5, 2e5, 3e5, 0.0",
-          "Star-A2: 1e5, 2e5, 3e5, 0.0",
-          "Star-A3: 1e5, 2e5, 3e5 + 0.1, 0.0",
-        ],
-        expectedOutput: 0.1,
+        expectedOutput: 0.374,
         description: "",
       },
     ],
@@ -104,6 +175,22 @@ export const QUESTIONS: QuestionT[] = [
     # insert your code below
 `,
         language: LanguageName.python,
+      },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+double solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
       },
     ],
   },
@@ -114,39 +201,75 @@ export const QUESTIONS: QuestionT[] = [
       join(__dirname, "../assets/questions/GalacticBountyContract.md"),
       "utf8"
     ),
+    tags: [{ name: "Hash Table" },{name: "String Parsing"}],
     testCases: [
       {
         input: [
-          "AAA: Pilot 9997",
+          "AAA: Seat 9997",
           "BBB: Discount 2886",
-          "DDD: Maintenance  3500",
-          "AAA: Tax 156",
-          "CCC: Docking  9468",
-          "BBB: Docking  9378",
+          "DDD: Luggage 3500",
+          "CCC: Fee 9468",
+          "BBB: Fee 9378",
           "AAA: Discount 3103",
-          "DDD: Rebate 967",
         ],
-        expectedOutput: 2533,
-        description: "",
+        expectedOutput: 3500,
+        description: "Basic test",
       },
       {
         input: [
-          "Starfire: Pilot 5000",
-          "Voidwalkers: Docking 2000", 
-          "Starfire: Tax 300",
-          "Voidwalkers: Discount 1500",
-          "Starfire: Discount 600",
+          "SuperSpace: Seat 9997",
+          "OrionTravles: Discount 2886",
+          "Galactica: Luggage 3500",
+          "SuperSpace: Tax 156",
+          "EarthExpress: Fee 9468",
+          "OrionTravles: Fee 9378",
+          "SuperSpace: Discount 3103",
+          "Galactica: Rebate 967",
         ],
-        expectedOutput: 4700,
-        description: "",
+        expectedOutput: 2533,
+        description: "check if different length company names are handled",
+      },
+      {
+        input: [
+          "AAA: Seat 3000",
+          "AAA: Meals 1000",
+          "AAA: Luggage 2000",
+          "AAA: Fee 1000",
+          "AAA: Tax 1000",
+          "AAA: Rebate 500",
+          "AAA: Discount 200",
+          "BBB: Seat 5000",
+          "BBB: Meals 1000",
+          "BBB: Discount 200",
+          "CCC: Discount 300",
+          "CCC: Fee 1000",
+        ],
+        expectedOutput: 700,
+        description: "check if all cost types are accounted for",
       },
     ],
     templateCodes: [
       {
         code: `def solution(data):
-    # insert your code below
+    # insert your code below as soon as possible
 `,
         language: LanguageName.python,
+      },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
       },
     ],
   },
@@ -157,12 +280,29 @@ export const QUESTIONS: QuestionT[] = [
       join(__dirname, "../assets/questions/TimeToPlayFair.md"),
       "utf-8"
     ),
+    tags: [{ name: "String" }, {name: "Matrix"}, {name: "Graph"}],
     templateCodes: [
       {
         code: `def solution(data):
     # insert your code here
 `,
         language: LanguageName.python,
+      },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+string solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
       },
     ],
     testCases: [
@@ -196,6 +336,7 @@ export const QUESTIONS: QuestionT[] = [
       join(__dirname, "../assets/questions/ThePurge.md"),
       "utf-8"
     ),
+    tags: [{ name: "Graph" }, {name: "Depth-First Search"}, {name: "Hash Table"}],
     testCases: [
       {
         input: [
@@ -282,6 +423,22 @@ export const QUESTIONS: QuestionT[] = [
 `,
         language: LanguageName.python,
       },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+double solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
+      },
     ],
   },
   {
@@ -291,19 +448,20 @@ export const QUESTIONS: QuestionT[] = [
       join(__dirname, "../assets/questions/ConnectingTrainStations.md"),
       "utf-8"
     ),
+    tags: [{ name: "Dynamic Programming" }, { name: "Combinatorics "}, {name: "Recursion"}],
     testCases: [
       {
-        input: "856,40,12,1",
+        input:["856,40,12,1"],
         expectedOutput: 12,
         description: "",
       },
       {
-        input: /** middddd*/ "100,20,5,1",
+        input: /** middddd*/ ["100,20,5,1"],
         expectedOutput: 3127,
         description: "",
       },
       {
-        input: /** to test stac overflow limit  */ "999999,40000,2000,1",
+        input: /** to test stac overflow limit  */ ["999999,40000,2000,1"],
         expectedOutput: 7852401,
         description: "",
       },
@@ -315,6 +473,22 @@ export const QUESTIONS: QuestionT[] = [
 `,
         language: LanguageName.python,
       },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
+      },
     ],
   },
   {
@@ -324,6 +498,7 @@ export const QUESTIONS: QuestionT[] = [
       join(__dirname, "../assets/questions/MiningTunnels.md"),
       "utf-8"
     ),
+    tags: [{ name: "Graph" }, { name: "Shortest Path" }, {name: "Breadth-First Search"}],
     testCases: [
       {
         input: [
@@ -419,15 +594,32 @@ export const QUESTIONS: QuestionT[] = [
 `,
         language: LanguageName.python,
       },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
+      },
     ],
   },
   {
-    name: "CodeyTutorChallenge",
+    name: "Codey's Tutor Challenge",
     difficulty: QuestionDifficulty.medium,
     content: readFileSync(
       join(__dirname, "../assets/questions/CodeyTutorChallenge.md"),
       "utf8"
     ),
+    tags: [{ name: "Heap (Priority Queue)" }, { name: "Greedy" }, {name: "Sorting"}],
     testCases: [
       {
         input: ["9",
@@ -466,6 +658,22 @@ export const QUESTIONS: QuestionT[] = [
 `,
         language: LanguageName.python,
       },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+vector<int> solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
+      },
     ],
   },
   {
@@ -475,6 +683,7 @@ export const QUESTIONS: QuestionT[] = [
       join(__dirname, "../assets/questions/RottingOranges.md"),
       "utf-8"
     ),
+    tags: [{ name: "Graph" }, { name: "Breadth-First Search" }, {name: "Matrix"}, {name: "Queue"}],
     testCases: [
       {
         input: [
@@ -513,15 +722,26 @@ export const QUESTIONS: QuestionT[] = [
     ],
     templateCodes: [
       {
-        code: `class Solution(object):
-    def orangesRotting(self, grid):
-        """
-        :type grid: List[List[int]]
-        :rtype: int
-        """
+        code: `def solution(data):
     # insert your code below
 `,
         language: LanguageName.python,
+      },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
       },
     ],
   },
@@ -532,6 +752,7 @@ export const QUESTIONS: QuestionT[] = [
       join(__dirname, "../assets/questions/SupplySquad.md"),
       "utf-8"
     ),
+    tags: [{ name: "Graph" }, { name: "Shortest Path" }, {name: "Backtracking"}, {name: "Dynamic Programming"}, {name: "Heap(Priority Queue)"}],
     testCases: [
       {
         input: [
@@ -577,116 +798,21 @@ export const QUESTIONS: QuestionT[] = [
 `,
         language: LanguageName.python,
       },
-    ],
-  },
-  {
-    name: "Rotting Oranges",
-    difficulty: QuestionDifficulty.medium,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/RottingOranges.md"),
-      "utf-8"
-    ),
-    testCases: [
       {
-        input: [
-          /** Simple test: small matrix, clear path */ 
-          "[[2,1,1]",
-          "[1,1,0]",
-          "[0,1,1]]"
-        ],
-        expectedOutput: 4,
-        description: "",
-      },
-      {
-        input: [
-          /** Medium test: larger matrix, negative impact of wrong implementation */
-          "[[2,1,1,1,1]",
-          "[1,1,0,1,1]",
-          "[0,0,0,2,1]",
-          "[1,1,1,1,1]",
-          "[1,1,1,1,1]]"
-        ],
-        expectedOutput: 1150,
-        description: "",
-      },
-      {
-        input: [
-          /** Hard test: edge cases with large numbers and precision */
-          "[[2,1,1,1,1]",
-          "[1,1,0,1,1]",
-          "[0,0,0,0,1]",
-          "[1,0,0,0,1]",
-          "[1,1,1,1,1]]"
-        ],
-        expectedOutput: -1,
-        description: "",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `class Solution(object):
-    def orangesRotting(self, grid):
-        """
-        :type grid: List[List[int]]
-        :rtype: int
-        """
-    # insert your code below
-`,
-        language: LanguageName.python,
-      },
-    ],
-  },
-  {
-    name: "Supply Squad",
-    difficulty: QuestionDifficulty.medium,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/SupplySquad.md"),
-      "utf-8"
-    ),
-    testCases: [
-      {
-        input: [
-          /** Simple test: small matrix, clear path */ "alpha bravo charlie",
-          "alpha 0 10 20",
-          "bravo 10 0 15",
-          "charlie 20 15 0",
-        ],
-        expectedOutput: 45,
-        description: "",
-      },
-      {
-        input: [
-          /** Medium test: larger matrix, negative impact of wrong implementation */
-          "base camp ridge peak valley",
-          "base 0 100 500 300",
-          "camp 100 0 200 400",
-          "ridge 500 200 0 250",
-          "peak 300 400 250 0",
-        ],
-        expectedOutput: 1150,
-        description: "",
-      },
-      {
-        input: [
-          /** Hard test: edge cases with large numbers and precision */
-          "s1 s2 s3 s4 s5 s6",
-          "s1 0 999999 1000 500000 2000 3000",
-          "s2 999999 0 888888 777777 666666 555555",
-          "s3 1000 888888 0 444444 333333 222222",
-          "s4 500000 777777 444444 0 111111 100000",
-          "s5 2000 666666 333333 111111 0 50000",
-          "s6 3000 555555 222222 100000 50000 0",
-        ],
-        expectedOutput: 2164444,
-        description: "",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code below
-`,
-        language: LanguageName.python,
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+double solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
       },
     ],
   },
@@ -697,6 +823,7 @@ export const QUESTIONS: QuestionT[] = [
       join(__dirname, "../assets/questions/CosmicCandyCrush.md"),
       "utf8"
     ),
+    tags: [{ name: "Dynamic Programming" }, { name: "Memoization" }, {name: "Divide and Conquer"}],
     testCases: [
       {
         input: [3, 1, 5, 8],
@@ -716,6 +843,22 @@ export const QUESTIONS: QuestionT[] = [
 `,
         language: LanguageName.python,
       },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
+      },
     ],
   },
   {
@@ -725,6 +868,7 @@ export const QUESTIONS: QuestionT[] = [
       join(__dirname, "../assets/questions/MagicalMedianChallenge.md"),
       "utf8"
     ),
+    tags: [{ name: "Binary Search" }, { name: "Divide and Conquer" }, {name: "Math"}, {name: "Sorting "}],
     testCases: [
       {
         input: [[1, 3], [2]],
@@ -746,6 +890,22 @@ export const QUESTIONS: QuestionT[] = [
     # insert your code below
 `,
         language: LanguageName.python,
+      },
+      {
+        code:
+        `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+          language: LanguageName.cpp,
       },
     ],
   }

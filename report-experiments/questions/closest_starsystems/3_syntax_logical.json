@@ -1,0 +1,6 @@
+{
+  "testCases": [],
+  "numPassed": 0,
+  "numFailed": 0,
+  "stderr": "  File \"/piston/jobs/5fa9608a-5c79-4ad3-a990-428adcba4aec/script\", line 13\n    if item equals other_item:\n            ^^^^^^^^^^^^^^^^^\nSyntaxError: invalid syntax. Perhaps you forgot a comma?\n"
+}

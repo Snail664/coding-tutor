@@ -42,7 +42,7 @@ export default function TestCaseResult({
           <div className="mb-1">
             <span className="font-semibold">Input:</span>{" "}
             <span className="whitespace-normal break-words">
-              {testCase.testCase.input}
+              {JSON.stringify(testCase.testCase.input)}
             </span>
           </div>
           <div className="mb-1">

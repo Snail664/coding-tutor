@@ -8,30 +8,47 @@ import { QUESTIONS } from "../lib/constants.seed";
 const prisma = new PrismaClient();
 
 async function main() {
-  // delete all existing data
+  // delete all existing data in the correct order
   await prisma.templateCode.deleteMany({});
   await prisma.testCase.deleteMany({});
+  await prisma.feedback.deleteMany({}); // delete feedback before questions
   await prisma.question.deleteMany({});
 
   // seed the database
   for (const questionData of QUESTIONS) {
+    const existingQuestion = await prisma.question.findUnique({
+      where: { name: questionData.name },
+    });
+  
+    if (existingQuestion) {
+      console.log(`Updating existing record for ${questionData.name}`);
+    } else {
+      console.log(`Creating new record for ${questionData.name}`);
+    }
+    
     const questionDetails = {
       name: questionData.name,
       difficulty: questionData.difficulty,
       content: questionData.content.replace(/\\n/g, "\n"),
       templateCodes: {
-        create: questionData.templateCodes.map((tc) => ({
-          code: tc.code,
-          language: tc.language as LanguageName,
+        create: questionData.templateCodes.map((templateCode) => ({
+          code: templateCode.code,
+          language: templateCode.language,
         })),
       },
       testCases: {
-        create: questionData.testCases.map((tc) => ({
-          input: JSON.stringify(tc.input),
-          expectedOutput: JSON.stringify(tc.expectedOutput),
-          description: tc.description,
+        create: questionData.testCases.map((testCase) => ({
+          input: JSON.stringify(testCase.input),
+          expectedOutput: JSON.stringify(testCase.expectedOutput),
+          description: testCase.description,
         })),
       },
+      tags: questionData.tags ? {
+        connectOrCreate: questionData.tags.map((tag) => ({
+          where: { name: tag.name },
+          create: { name: tag.name }
+        }))
+      } : undefined
     };
 
     await prisma.question.upsert({
@@ -43,12 +60,10 @@ async function main() {
 }
 
 main()
-  .then(async () => {
-    console.log("Seeding completed successfully!");
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
+  .catch((e) => {
     console.error(e);
-    await prisma.$disconnect();
     process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });
