@@ -2,44 +2,67 @@ import { OpenAI } from "openai";
 import { Anthropic } from "@anthropic-ai/sdk";
 import { parseJSON } from "@/lib/utils";
 
-type Message = {
+export type Message = {
   role: "user" | "assistant";
   content: string;
 };
 
-type MetricsT = {
+export type MetricsT = {
   tokens?: number;
   words: number;
 };
 
-type LLMResponse<T = any> = {
+export type LLMResponse<T = unknown> = {
   content: T;
   inputMetrics: MetricsT;
   outputMetrics: MetricsT;
   timeTaken: number;
 };
 
-class LLMService {
-  private openaiClient: OpenAI;
-  private anthropicClient: Anthropic;
+export type LLMProvider = "openai" | "anthropic";
 
-  constructor() {
-    this.openaiClient = new OpenAI({
-      apiKey: process.env.OPEN_AI_API_KEY,
-    });
+export type LLMConfig = {
+  provider: LLMProvider;
+  apiKey: string;
+  model: string;
+};
 
-    this.anthropicClient = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY,
-    });
+export class LLM {
+  private provider: LLMProvider;
+  private openaiClient?: OpenAI;
+  private anthropicClient?: Anthropic;
+  private model: string;
+
+  constructor(config: LLMConfig) {
+    this.provider = config.provider;
+    this.model = config.model;
+
+    if (config.provider === "openai") {
+      this.openaiClient = new OpenAI({ apiKey: config.apiKey });
+    } else {
+      this.anthropicClient = new Anthropic({ apiKey: config.apiKey });
+    }
   }
 
   private countWords(text: string): number {
     return text.split(/\s+/).filter((word) => word.trim().length > 0).length;
   }
 
+  private createMetrics(tokens: number | undefined, text: string): MetricsT {
+    return {
+      tokens,
+      words: this.countWords(text),
+    };
+  }
+
   private processResponse<T>(
     content: string,
-    usage: any,
+    usage: {
+      prompt_tokens?: number;
+      completion_tokens?: number;
+      input_tokens?: number;
+      output_tokens?: number;
+    },
     totalInputContent: string,
     startTime: number
   ): LLMResponse<T> {
@@ -50,44 +73,47 @@ class LLMService {
 
     return {
       content: parsedContent as T,
-      inputMetrics: {
-        tokens: usage.input_tokens || usage?.prompt_tokens,
-        words: this.countWords(totalInputContent),
-      },
-      outputMetrics: {
-        tokens: usage.output_tokens || usage?.completion_tokens,
-        words: this.countWords(content),
-      },
+      inputMetrics: this.createMetrics(
+        usage.prompt_tokens || usage.input_tokens,
+        totalInputContent
+      ),
+      outputMetrics: this.createMetrics(
+        usage.completion_tokens || usage.output_tokens,
+        content
+      ),
       timeTaken: (performance.now() - startTime) / 1000,
     };
   }
 
-  async generate<T = any>(
+  async generate<T = unknown>(
     messages: Message[],
-    model: string = "gpt-4",
-    systemPrompt: string
+    systemPrompt?: string
   ): Promise<LLMResponse<T>> {
     const startTime = performance.now();
+    const totalInputContent = messages.map((m) => m.content).join(" ");
 
     try {
-      const totalInputContent = messages.map((m) => m.content).join(" ");
+      if (this.provider === "anthropic") {
+        if (!this.anthropicClient)
+          throw new Error("Anthropic client not initialized");
 
-      // Handle Anthropic models
-      if (model.startsWith("claude")) {
         const response = await this.anthropicClient.messages.create({
-          model: model,
+          model: this.model,
           max_tokens: 1024,
-          system: [
-            {
-              type: "text",
-              text: systemPrompt,
-              cache_control: { type: "ephemeral" },
-            },
-          ],
-          messages: messages,
+          ...(systemPrompt
+            ? {
+                system: [
+                  {
+                    type: "text",
+                    text: systemPrompt,
+                    cache_control: { type: "ephemeral" },
+                  },
+                ],
+              }
+            : {}),
+          messages,
         });
 
-        console.log("debugging cache: ", response);
         const content =
           response.content[0].type === "text" ? response.content[0].text : "";
         return this.processResponse<T>(
@@ -96,31 +122,28 @@ class LLMService {
           totalInputContent,
           startTime
         );
+      } else {
+        if (!this.openaiClient)
+          throw new Error("OpenAI client not initialized");
+
+        const response = await this.openaiClient.chat.completions.create({
+          model: this.model,
+          messages: systemPrompt
+            ? [{ role: "system", content: systemPrompt }, ...messages]
+            : messages,
+        });
+
+        const content = response.choices[0].message.content || "";
+        return this.processResponse<T>(
+          content,
+          response.usage!,
+          totalInputContent,
+          startTime
+        );
       }
-
-      // Handle OpenAI models
-      const response = await this.openaiClient.chat.completions.create({
-        model: model,
-        messages: messages,
-      });
-
-      const content = response.choices[0].message.content || "";
-      return this.processResponse<T>(
-        content,
-        response.usage,
-        totalInputContent,
-        startTime
-      );
     } catch (error) {
-      console.error(`Error in LLMService with model ${model}:`, error);
+      console.error(`Error in LLM with model ${this.model}:`, error);
       throw error;
     }
   }
 }
-
-// Export a singleton instance
-export const llmService = new LLMService();
-
-// Export the generate function to maintain the same interface
-export const llm = (messages: Message[], model: string, systemPrompt: string) =>
-  llmService.generate(messages, model, systemPrompt);

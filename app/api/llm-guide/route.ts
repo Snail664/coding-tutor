@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import { rateLimitMiddleware } from "@/app/middleware/rateLimitMiddleware";
-import { parseJSON } from "@/lib/utils";
 import { getTutorSystemPrompt, getTutorUserPrompt } from "@/lib/prompts";
-import { llm } from "@/lib/llm";
+import { LLM, Message } from "@/lib/llm";
+
+const llm = new LLM({
+  provider: "anthropic",
+  apiKey: process.env.ANTHROPIC_API_KEY || "",
+  model: "claude-3-5-sonnet-20240620",
+});
 
 export async function GET() {
   return NextResponse.json({
@@ -14,19 +19,15 @@ export async function GET() {
 async function callLLM(
   system_prompt: string,
   prompt: string,
-  chat_history: Array<{
-    role: "user" | "assistant";
-    content: string;
-  }>
+  chat_history: Message[]
 ) {
   const messages = [
     ...chat_history,
     { role: "user" as const, content: prompt },
   ];
 
-  const response = await llm(
+  const response = await llm.generate<{ reply: string }>(
     messages,
-    "claude-3-5-sonnet-20240620",
     system_prompt
   );
 

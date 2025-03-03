@@ -3,16 +3,22 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { rateLimitMiddleware } from "@/app/middleware/rateLimitMiddleware";
 import { getHintSystemPrompt, getHintUserPrompt } from "@/lib/prompts";
-import { llm } from "@/lib/llm";
+import { LLM } from "@/lib/llm";
 
 const OPEN_AI_API_KEY = process.env.OPEN_AI_API_KEY;
 const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
+
+const llm = new LLM({
+  provider: "anthropic",
+  apiKey: process.env.ANTHROPIC_API_KEY || "",
+  model: "claude-3-5-sonnet-20240620",
+});
 
 // Handle GET requests
 export async function GET() {
   return NextResponse.json({
     message:
-      "Post to this endpoint to prompt the openai api to get guidance from the lLM",
+      "Post to this endpoint to prompt the openai api to get guidance from the LLM",
   });
 }
 
@@ -28,14 +34,13 @@ export async function POST(request: Request) {
   if (error) return response;
   const data: HintRequestData = await request.json();
 
-  const completion = await llm(
+  const completion = await llm.generate<{ hint: string }>(
     [
       {
         role: "user",
         content: getHintUserPrompt(data.sourceCode, data.testCases),
       },
     ],
-    "claude-3-5-sonnet-20241022",
     getHintSystemPrompt(data.question.content)
   );
 
