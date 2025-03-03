@@ -2,7 +2,6 @@ import { QuestionT, TestResult } from "@/lib/types";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { rateLimitMiddleware } from "@/app/middleware/rateLimitMiddleware";
-import { parseJSON } from "@/lib/utils";
 import { getHintSystemPrompt, getHintUserPrompt } from "@/lib/prompts";
 import { llm } from "@/lib/llm";
 
@@ -40,7 +39,7 @@ export async function POST(request: Request) {
     getHintSystemPrompt(data.question.content)
   );
 
-  const hintText = parseJSON(completion.content)["hint"];
+  const hintText = completion.content.hint;
 
   // const completion = await openai.chat.completions.create({
   //   model: "gpt-4o",

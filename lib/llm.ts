@@ -1,5 +1,6 @@
 import { OpenAI } from "openai";
 import { Anthropic } from "@anthropic-ai/sdk";
+import { parseJSON } from "@/lib/utils";
 
 type Message = {
   role: "user" | "assistant";
@@ -11,93 +12,115 @@ type MetricsT = {
   words: number;
 };
 
-type LLMResponse = {
-  content: string;
+type LLMResponse<T = any> = {
+  content: T;
   inputMetrics: MetricsT;
   outputMetrics: MetricsT;
   timeTaken: number;
 };
 
-// Initialize clients
-const openaiClient = new OpenAI({
-  apiKey: process.env.OPEN_AI_API_KEY,
-});
+class LLMService {
+  private openaiClient: OpenAI;
+  private anthropicClient: Anthropic;
 
-const anthropicClient = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+  constructor() {
+    this.openaiClient = new OpenAI({
+      apiKey: process.env.OPEN_AI_API_KEY,
+    });
 
-function countWords(text: string): number {
-  return text.split(/\s+/).filter((word) => word.trim().length > 0).length;
-}
+    this.anthropicClient = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY,
+    });
+  }
 
-export async function llm(
-  messages: Message[],
-  model: string = "gpt-4",
-  systemPrompt: string
-): Promise<LLMResponse> {
-  const startTime = performance.now();
+  private countWords(text: string): number {
+    return text.split(/\s+/).filter((word) => word.trim().length > 0).length;
+  }
 
-  try {
-    // Calculate total input content for word counting
-    const totalInputContent = messages.map((m) => m.content).join(" ");
+  private processResponse<T>(
+    content: string,
+    usage: any,
+    totalInputContent: string,
+    startTime: number
+  ): LLMResponse<T> {
+    const parsedContent = parseJSON(content);
+    if (!parsedContent) {
+      throw new Error("Failed to parse JSON response from LLM");
+    }
 
-    // Handle Anthropic models
-    if (model.startsWith("claude")) {
-      const response = await anthropicClient.messages.create({
+    return {
+      content: parsedContent as T,
+      inputMetrics: {
+        tokens: usage.input_tokens || usage?.prompt_tokens,
+        words: this.countWords(totalInputContent),
+      },
+      outputMetrics: {
+        tokens: usage.output_tokens || usage?.completion_tokens,
+        words: this.countWords(content),
+      },
+      timeTaken: (performance.now() - startTime) / 1000,
+    };
+  }
+
+  async generate<T = any>(
+    messages: Message[],
+    model: string = "gpt-4",
+    systemPrompt: string
+  ): Promise<LLMResponse<T>> {
+    const startTime = performance.now();
+
+    try {
+      const totalInputContent = messages.map((m) => m.content).join(" ");
+
+      // Handle Anthropic models
+      if (model.startsWith("claude")) {
+        const response = await this.anthropicClient.messages.create({
+          model: model,
+          max_tokens: 1024,
+          system: [
+            {
+              type: "text",
+              text: systemPrompt,
+              cache_control: { type: "ephemeral" },
+            },
+          ],
+          messages: messages,
+        });
+
+        console.log("debugging cache: ", response);
+        const content =
+          response.content[0].type === "text" ? response.content[0].text : "";
+        return this.processResponse<T>(
+          content,
+          response.usage,
+          totalInputContent,
+          startTime
+        );
+      }
+
+      // Handle OpenAI models
+      const response = await this.openaiClient.chat.completions.create({
         model: model,
-        max_tokens: 1024,
-        system: [
-          {
-            type: "text",
-            text: systemPrompt,
-            cache_control: { type: "ephemeral" },
-          },
-        ],
         messages: messages,
       });
 
-      console.log("debugging cache: ", response);
-
-      const content =
-        response.content[0].type === "text" ? response.content[0].text : "";
-
-      return {
+      const content = response.choices[0].message.content || "";
+      return this.processResponse<T>(
         content,
-        inputMetrics: {
-          tokens: response.usage.input_tokens,
-          words: countWords(totalInputContent),
-        },
-        outputMetrics: {
-          tokens: response.usage.output_tokens,
-          words: countWords(content),
-        },
-        timeTaken: (performance.now() - startTime) / 1000, // Convert to seconds
-      };
+        response.usage,
+        totalInputContent,
+        startTime
+      );
+    } catch (error) {
+      console.error(`Error in LLMService with model ${model}:`, error);
+      throw error;
     }
-
-    // Handle OpenAI models
-    const response = await openaiClient.chat.completions.create({
-      model: model,
-      messages: messages,
-    });
-
-    const content = response.choices[0].message.content || "";
-
-    return {
-      content,
-      inputMetrics: {
-        tokens: response.usage?.prompt_tokens,
-        words: countWords(totalInputContent),
-      },
-      outputMetrics: {
-        tokens: response.usage?.completion_tokens,
-        words: countWords(content),
-      },
-      timeTaken: (performance.now() - startTime) / 1000, // Convert to seconds
-    };
-  } catch (error) {
-    console.error(`Error in llm function with model ${model}:`, error);
-    throw error;
   }
 }
+
+// Export a singleton instance
+export const llmService = new LLMService();
+
+// Export the generate function to maintain the same interface
+export const llm = (messages: Message[], model: string, systemPrompt: string) =>
+  llmService.generate(messages, model, systemPrompt);

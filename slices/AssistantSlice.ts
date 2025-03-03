@@ -208,7 +208,10 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
         return rejectWithValue("An Unexpected error occured.");
       }
 
+      console.log("response cmg: ", response.data);
+
       const assistantMsg = response.data["response"];
+      console.log("assistantMsg: ", assistantMsg);
 
       await apiClient.post("/chat/add-message", {
         chatId: state.assistant.chatId,
