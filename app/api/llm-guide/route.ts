@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 import { rateLimitMiddleware } from "@/app/middleware/rateLimitMiddleware";
 import { getTutorSystemPrompt, getTutorUserPrompt } from "@/lib/prompts";
-import { LLM, Message } from "@/lib/llm";
+import { LLM, Message, LLMError } from "@/lib/llm";
 
 const llm = new LLM({
   provider: "anthropic",
-  apiKey: process.env.ANTHROPIC_API_KEY || "",
   model: "claude-3-5-sonnet-20240620",
 });
 
@@ -43,25 +42,42 @@ export async function POST(request: Request) {
   try {
     const { error, response } = await rateLimitMiddleware(request, "chat");
     if (error) return response;
+
     const data = await request.json();
 
-    const tutorSystemPrompt = getTutorSystemPrompt(data["question"].content);
-    const tutorUserPrompt = getTutorUserPrompt(
-      data["sourceCode"],
-      data["userAudioTranscript"]
-    );
+    try {
+      const tutorSystemPrompt = getTutorSystemPrompt(data["question"].content);
+      const tutorUserPrompt = getTutorUserPrompt(
+        data["sourceCode"],
+        data["userAudioTranscript"]
+      );
 
-    const promise_a = callLLM(
-      tutorSystemPrompt,
-      tutorUserPrompt,
-      data["chatHistory"]
-    );
+      const response_a = await callLLM(
+        tutorSystemPrompt,
+        tutorUserPrompt,
+        data["chatHistory"]
+      );
 
-    const response_a = await promise_a;
-    return NextResponse.json({ response: response_a.reply });
+      return NextResponse.json({ response: response_a.reply });
+    } catch (error) {
+      if (error instanceof LLMError) {
+        return NextResponse.json(
+          {
+            error: error.message,
+            type: error.type,
+            retryable: error.retryable,
+          },
+          { status: error.type === "RATE_LIMIT" ? 429 : 500 }
+        );
+      }
+      throw error;
+    }
   } catch (e: unknown) {
     const error = e as Error;
-    console.log("error: ", error);
-    return NextResponse.json({ error: error.message });
+    console.error("Error in llm-guide:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

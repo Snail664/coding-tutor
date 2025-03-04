@@ -81,6 +81,7 @@ export default function Chat() {
       });
       return;
     }
+
     dispatch(getAssistantFeedbackThunk());
   };
 
@@ -100,10 +101,18 @@ export default function Chat() {
           <DialogTitle>Chat with Codey</DialogTitle>
         </DialogHeader>
         <div className="h-80 overflow-y-auto">
-          <LLMFeedback
-            userQuestion={userAudioTranscript}
-            LLMResponse={LLMResponse}
-          />
+          {LLMResponseError ? (
+            <div className="flex flex-col items-center justify-center h-full text-red-500">
+              <p className="text-sm text-gray-500">
+                An Error Occured. Please try again
+              </p>
+            </div>
+          ) : (
+            <LLMFeedback
+              userQuestion={userAudioTranscript}
+              LLMResponse={LLMResponse}
+            />
+          )}
         </div>
         <div className="border-gray-300 border rounded-md p-2">
           <Textarea
@@ -123,7 +132,7 @@ export default function Chat() {
               stopRecording={stopRecording}
               disabled={LLMFeedbackLoading}
             />
-            {!LLMFeedbackLoading && LLMResponse ? (
+            {!LLMFeedbackLoading && LLMResponse && !LLMResponseError ? (
               <FeedbackDialog feedbackType="chat" />
             ) : null}
             <Button

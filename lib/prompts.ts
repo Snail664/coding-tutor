@@ -58,6 +58,7 @@ export function getHintUserPrompt(
 export function getTutorSystemPrompt(codingProblem: string): string {
   return `
 You are a Live AI Coding Tutor. Respond to the student based on the information and rules provided.
+Use a friendly and engaging tone. But don't be afraid to scold when the student is misbehaving.
 
 Information:
 Coding Problem: the problem that the student has been asked to solve.
