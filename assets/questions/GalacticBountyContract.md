@@ -1,5 +1,7 @@
 # Galactic Bounty Contract
 
+**Topics:** Hash Table, String Parsing
+
 ### Difficulty: Easy
 
 The year is 2224. You are a renowned bounty hunter, traveling across the galaxy far far away in search of your next high-stakes mission. The Galactic Bounty Guild has tasked you with capturing an elusive space fugitive, but to begin your hunt, you must first hire a starship crew.

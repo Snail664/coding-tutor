@@ -1,5 +1,7 @@
 # Mining Tunnels
 
+**Topics:** Graph, Shortest Path, Breadth-First Search
+
 It's your second last day on the moon before your return to Earth, so you have taken a tour of the old mining tunnels that were dug out in the early days of the moon's settlement. You've thoroughly enjoyed the tour but have become separated from the tour guide and realized you need to find your own way out. Fortunately, there is a big map on the wall nearby. It seems a lot of the tunnels have dead ends, but there are still many different paths you could take to exit. You're starting to get a little hungry though (it is dinner time after all!), so you don't want to wander the tunnels longer than necessary.
 
 One important issue with the tunnels is that there are tunnels on two different levels. Sometimes it is quicker to go up or down a level as part of your journey to the exit.

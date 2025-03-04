@@ -1,5 +1,7 @@
 # Connecting Train Stations
 
+**Topics:** Dynamic Programming, Combinatorics, Recursion
+
 While there are a couple of major train stations in the region, the current railway network only connects them indirectly with several transfers. Transportation planners are now exploring alternative ways to establish a direct railway connection between these stations, which lie **856 kilometres** apart.
 
 ### Options:

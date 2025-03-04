@@ -1,5 +1,7 @@
 # Broken Firewall
 
+**Topics:** String, Bit Manipulation, Math
+
 ### Difficulty: Easy
 
 During a critical security audit, you discover that a network firewall misconfiguration has disrupted packet filtering. As a network security analyst, you need to classify traffic based on the source and destination IP addresses.

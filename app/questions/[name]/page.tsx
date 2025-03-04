@@ -9,6 +9,7 @@ import AssistantStateInitializer from "@/components/AssistantStateInitializer";
 import { MessageT } from "@/lib/types";
 import CodeStateInitializer from "@/components/CodeStateInitializer";
 import { notFound } from "next/navigation";
+
 export default async function QuestionPage({
   params,
 }: {
@@ -21,6 +22,7 @@ export default async function QuestionPage({
       include: {
         templateCodes: true,
         testCases: true,
+        tags: true,
       },
       cacheStrategy: { ttl: 3600, swr: 30 },
     }),
@@ -28,6 +30,7 @@ export default async function QuestionPage({
       select: {
         name: true,
         difficulty: true,
+        tags: true,
       },
       cacheStrategy: { ttl: 3600, swr: 30 },
     }),
@@ -79,7 +82,7 @@ export default async function QuestionPage({
         width: "100vw",
       }}
     >
-      {userData && <AuthStateInitializer user={userData} />}
+      {userData && <AuthStateInitializer />}
       {question && (
         <>
           <QuestionStateInitializer

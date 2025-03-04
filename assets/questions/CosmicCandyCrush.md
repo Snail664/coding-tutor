@@ -1,5 +1,7 @@
 # Cosmic Candy Crush
 
+**Topics:** Dynamic Programming, Memoization, Divide and Conquer
+
 Step into "Cosmic Candy Crush," where your strategic sweet-smashing skills can earn you a fortune in stardust coins!
 You're facing a row of colorful space candies, each with a mysterious cosmic number etched on it. Your mission? Crush every single candy and collect as much stardust as possible. But here's the twist: the order in which you crush them matters!
 

@@ -1,5 +1,7 @@
 # Magical Median Challenge
 
+**Topics:** Binary Search, Divide and Conquer, Math, Sorting
+
 In this enchanted coding challenge, you'll be presented with two magical scrolls, each containing a list of numbers in perfect order. Your mission, should you choose to accept it, is to find the elusive median that lies hidden within these scrolls! 
 
 Scroll One (**nums1**): A sorted array of 'm' mysterious numbers

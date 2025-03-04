@@ -1,5 +1,7 @@
 # Supply Squad
 
+**Topics:** Graph, Shortest Path, Backtracking, Dynamic Programming, Heap (Priority Queue)
+
 ### Difficulty: Medium
 
 You are part of a mountain rescue team, responsible for delivering critical supplies between camps, peaks, and valleys in a vast mountain range.

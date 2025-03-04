@@ -1,5 +1,7 @@
 # Closest Star Systems
 
+**Topics:** Sorting, Divide and Conquer, Math
+
 ### Difficulty : Easy
 
 You are a stellar cartographer working for the Galactic Survey Corps. Your mission is to analyze the positions of star systems across the Milky Way and determine which two star systems are closest to each other.

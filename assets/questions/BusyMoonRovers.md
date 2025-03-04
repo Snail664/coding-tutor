@@ -1,5 +1,7 @@
 # Busy Moon Rovers
 
+**Topics:** Graph, Matrix, String Parsing
+
 You make the short trip from the Space Station over to the Moon base, Luna city, for a few days. You bump into an old friend of yours who runs a logistics and delivery business there, running automated rovers to deliver supplies to the various outposts around the moon.
 
 Your friend expresses to you that they are curious how far their rovers travel per day, and you offer to help out.

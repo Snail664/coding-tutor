@@ -1,5 +1,7 @@
 # Time to Play Fair
 
+**Topics:** String, Matrix, Graph
+
 ### Difficulty : Easy 
 
 Your sister is a puzzle enthusiast, and for years, the two of you have shared a private cipher system to communicate hidden messages. Recently, she challenged you to decode her latest message using a **Playfair cipher**.

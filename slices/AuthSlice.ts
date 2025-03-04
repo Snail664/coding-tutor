@@ -26,12 +26,13 @@ export const disableWalkthroughThunk = createAsyncThunk<
   { isWalkthroughEnabled: boolean },
   void,
   { state: RootState }
->("auth/disableWalkthrough", async (_, { rejectWithValue }) => {
+>("auth/disableWalkthrough", async (_, { rejectWithValue, dispatch }) => {
   try {
-    await apiClient.post("/user/walkthrough", {
+    const response = await apiClient.post("/user/walkthrough", {
       isWalkthroughEnabled: false,
     });
-    return { isWalkthroughEnabled: false };
+    // Update the state immediately with the response data
+    return response.data;
   } catch (error: any) {
     console.error("Error in disableWalkthroughThunk:", error);
     return rejectWithValue(error.message || "Unknown error occurred");
@@ -64,12 +65,13 @@ export const enableWalkthroughThunk = createAsyncThunk<
   { isWalkthroughEnabled: boolean },
   void,
   { state: RootState }
->("auth/enableWalkthrough", async (_, { rejectWithValue }) => {
+>("auth/enableWalkthrough", async (_, { rejectWithValue, dispatch }) => {
   try {
-    await apiClient.post("/user/walkthrough", {
+    const response = await apiClient.post("/user/walkthrough", {
       isWalkthroughEnabled: true,
     });
-    return { isWalkthroughEnabled: true };
+    // Update the state immediately with the response data
+    return response.data;
   } catch (error: any) {
     console.error("Error in enableWalkthroughThunk:", error);
     return rejectWithValue(error.message || "Unknown error occurred");

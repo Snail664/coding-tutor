@@ -1,12 +1,14 @@
 # The Purge
 
-Your company’s database is running critically low on storage, and the boss has tasked the team with clearing out unnecessary files to free up space. Upon inspection, you notice that the database is cluttered with outdated files and folders left over from past projects. Many of these files are stored in directories labeled with names like `TEMPORARY` or `DELETE LATER`.
+**Topics:** Graph, Depth-First Search, Hash Table
 
-The boss has made it clear: any file or folder containing the words **delete** or **temporary** is safe to remove, but how much disk space can be reclaimed? It’s one thing to total all the files containing `delete` or `temporary`, but if a folder name contains one of these keywords, then everything within that folder (including all subfolders and their contents) must also be deleted. This means you may need to dig through multiple layers of folders to calculate the total size of deletable files.
+Your company's database is running critically low on storage, and the boss has tasked the team with clearing out unnecessary files to free up space. Upon inspection, you notice that the database is cluttered with outdated files and folders left over from past projects. Many of these files are stored in directories labeled with names like `TEMPORARY` or `DELETE LATER`.
+
+The boss has made it clear: any file or folder containing the words **delete** or **temporary** is safe to remove, but how much disk space can be reclaimed? It's one thing to total all the files containing `delete` or `temporary`, but if a folder name contains one of these keywords, then everything within that folder (including all subfolders and their contents) must also be deleted. This means you may need to dig through multiple layers of folders to calculate the total size of deletable files.
 
 ## Example
 
-The root directory of the company’s database is referred to as Folder 0. All other folders and files are organized within it. Let’s look at a small example:
+The root directory of the company's database is referred to as Folder 0. All other folders and files are organized within it. Let's look at a small example:
 
 #### Folder: 0
 

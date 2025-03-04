@@ -11,6 +11,7 @@ export default function Walkthrough() {
 
   useEffect(() => {
     if (!isLoading && user) {
+      console.log('Walkthrough state:', { isWalkthroughEnabled: user.isWalkthroughEnabled, run });
       setRun(user.isWalkthroughEnabled);
     }
   }, [isLoading, user]);
@@ -49,6 +50,7 @@ export default function Walkthrough() {
 
   const handleJoyrideCallback = (data: CallBackProps) => {
     const { status } = data;
+    console.log('Joyride callback:', status);
     if (status === "finished" || status === "skipped") {
       setRun(false);
       dispatch(disableWalkthroughThunk());
@@ -57,9 +59,6 @@ export default function Walkthrough() {
 
   // Don't render anything if loading or no user
   if (isLoading || !user) return null;
-
-  // Don't render if walkthrough is disabled
-  if (!user.isWalkthroughEnabled) return null;
 
   return (
     <Joyride
