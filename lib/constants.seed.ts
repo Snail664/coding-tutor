@@ -11,6 +11,7 @@ export const QUESTIONS: QuestionT[] = [
       join(__dirname, "../assets/questions/BusyMoonRovers.md"),
       "utf8"
     ),
+    tags: [{ name: "graph" }],
     testCases: [
       {
         input: {
@@ -46,8 +47,7 @@ export const QUESTIONS: QuestionT[] = [
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -59,7 +59,7 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -70,6 +70,7 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/BrokenFirewall.md"),
       "utf-8"
     ),
+    tags: [{ name: "string" }],
     testCases: [
       {
         input: [
@@ -142,6 +143,7 @@ char* solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/ClosestStarSystems.md"),
       "utf-8"
     ),
+    tags: [{ name: "math" }],
     testCases: [
       {
         input: [
@@ -174,8 +176,7 @@ char* solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -187,7 +188,7 @@ double solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -198,6 +199,7 @@ double solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/GalacticBountyContract.md"),
       "utf8"
     ),
+    tags: [{ name: "math" }],
     testCases: [
       {
         input: [
@@ -252,8 +254,7 @@ double solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -265,7 +266,7 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -276,6 +277,7 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/TimeToPlayFair.md"),
       "utf-8"
     ),
+    tags: [{ name: "string" }],
     templateCodes: [
       {
         code: `def solution(data):
@@ -284,8 +286,7 @@ int solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -297,7 +298,7 @@ string solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
     testCases: [
@@ -331,6 +332,7 @@ string solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/ThePurge.md"),
       "utf-8"
     ),
+    tags: [{ name: "string" }],
     testCases: [
       {
         input: [
@@ -418,8 +420,7 @@ string solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -431,7 +432,7 @@ double solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -442,9 +443,10 @@ double solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/ConnectingTrainStations.md"),
       "utf-8"
     ),
+    tags: [{ name: "math" }],
     testCases: [
       {
-        input:["856,40,12,1"],
+        input: ["856,40,12,1"],
         expectedOutput: 12,
         description: "",
       },
@@ -467,8 +469,7 @@ double solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -480,7 +481,7 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -491,6 +492,7 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/MiningTunnels.md"),
       "utf-8"
     ),
+    tags: [],
     testCases: [
       {
         input: [
@@ -587,8 +589,7 @@ int solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -600,7 +601,7 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -611,9 +612,11 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/CodeyTutorChallenge.md"),
       "utf8"
     ),
+    tags: [{ name: "math" }],
     testCases: [
       {
-        input: ["9",
+        input: [
+          "9",
           "add 8 10",
           "add 3 25",
           "add 5 6",
@@ -622,7 +625,8 @@ int solution(const vector<string>& input) {
           "add 1 9",
           "add 2 13",
           "tutor 20",
-          "tutor 1"],
+          "tutor 1",
+        ],
         expectedOutput: [6, 25, 32, 0],
         description: "",
       },
@@ -634,11 +638,9 @@ int solution(const vector<string>& input) {
           "add 1 100000",
           "tutor 100000",
           "add 50000 1",
-          "tutor 100000"
-        ]
-          ,
-        expectedOutput: [0, 100000, 100001]
-        ,
+          "tutor 100000",
+        ],
+        expectedOutput: [0, 100000, 100001],
         description: "",
       },
     ],
@@ -650,8 +652,7 @@ int solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -663,7 +664,7 @@ vector<int> solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -674,13 +675,14 @@ vector<int> solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/RottingOranges.md"),
       "utf-8"
     ),
+    tags: [{ name: "graph" }],
     testCases: [
       {
         input: [
-          /** Simple test: small matrix, clear path */ 
+          /** Simple test: small matrix, clear path */
           "[[2,1,1]",
           "[1,1,0]",
-          "[0,1,1]]"
+          "[0,1,1]]",
         ],
         expectedOutput: 4,
         description: "",
@@ -692,7 +694,7 @@ vector<int> solution(const vector<string>& input) {
           "[1,1,0,1,1]",
           "[0,0,0,2,1]",
           "[1,1,1,1,1]",
-          "[1,1,1,1,1]]"
+          "[1,1,1,1,1]]",
         ],
         expectedOutput: 1150,
         description: "",
@@ -704,7 +706,7 @@ vector<int> solution(const vector<string>& input) {
           "[1,1,0,1,1]",
           "[0,0,0,0,1]",
           "[1,0,0,0,1]",
-          "[1,1,1,1,1]]"
+          "[1,1,1,1,1]]",
         ],
         expectedOutput: -1,
         description: "",
@@ -718,8 +720,7 @@ vector<int> solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -731,7 +732,7 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -742,6 +743,7 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/SupplySquad.md"),
       "utf-8"
     ),
+    tags: [],
     testCases: [
       {
         input: [
@@ -788,8 +790,7 @@ int solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -801,7 +802,7 @@ double solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -812,6 +813,7 @@ double solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/CosmicCandyCrush.md"),
       "utf8"
     ),
+    tags: [{ name: "array" }],
     testCases: [
       {
         input: [3, 1, 5, 8],
@@ -832,8 +834,7 @@ double solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -845,7 +846,7 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -856,6 +857,7 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/MagicalMedianChallenge.md"),
       "utf8"
     ),
+    tags: [{ name: "array" }],
     testCases: [
       {
         input: [[1, 3], [2]],
@@ -879,8 +881,7 @@ int solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -892,8 +893,8 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
-  }
+  },
 ];

@@ -12,6 +12,7 @@ async function main() {
   await prisma.templateCode.deleteMany({});
   await prisma.testCase.deleteMany({});
   await prisma.feedback.deleteMany({}); // delete feedback before questions
+  await prisma.tag.deleteMany({});
   await prisma.question.deleteMany({});
 
   // seed the database
@@ -19,13 +20,13 @@ async function main() {
     const existingQuestion = await prisma.question.findUnique({
       where: { name: questionData.name },
     });
-  
+
     if (existingQuestion) {
       console.log(`Updating existing record for ${questionData.name}`);
     } else {
       console.log(`Creating new record for ${questionData.name}`);
     }
-    
+
     const questionDetails = {
       name: questionData.name,
       difficulty: questionData.difficulty,
@@ -41,6 +42,12 @@ async function main() {
           input: JSON.stringify(tc.input),
           expectedOutput: JSON.stringify(tc.expectedOutput),
           description: tc.description,
+        })),
+      },
+      tags: {
+        connectOrCreate: questionData.tags.map((tag) => ({
+          where: { name: tag.name },
+          create: { name: tag.name },
         })),
       },
     };
