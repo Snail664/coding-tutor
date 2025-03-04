@@ -175,10 +175,7 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
   "assistant/getAssistantFeedback",
   async (_, { getState, dispatch, rejectWithValue }) => {
     try {
-      // clear old feedback
       dispatch(setLLMResponse(""));
-
-      // run code first
       await dispatch(runCodeThunk()).unwrap();
 
       const state = getState();
@@ -188,12 +185,12 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
         assistant: { userAudioTranscriptInput, chatHistory },
       } = state;
 
+      const recentChatHistory = chatHistory.slice(-10);
       const updatedChatHistory = [
-        ...chatHistory,
+        ...recentChatHistory,
         { role: "user", content: userAudioTranscriptInput },
       ];
 
-      // Set the transcript for display
       dispatch(setUserAudioTranscript(userAudioTranscriptInput));
 
       const response = await apiClient.post("/llm-guide", {
@@ -204,33 +201,48 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
         chatHistory: updatedChatHistory,
       });
 
-      if (response.status != 200) {
-        return rejectWithValue("An Unexpected error occured.");
+      if (response.status !== 200) {
+        return rejectWithValue(
+          response.data.error || "An unexpected error occurred"
+        );
       }
 
-      const assistantMsg = response.data["response"];
+      const assistantMsg = response.data.response;
 
-      await apiClient.post("/chat/add-message", {
-        chatId: state.assistant.chatId,
-        messages: [
-          { role: "user", content: userAudioTranscriptInput },
-          { role: "assistant", content: assistantMsg },
-        ],
-      });
+      // Only save to DB if we have valid content
+      if (assistantMsg) {
+        try {
+          await apiClient.post("/chat/add-message", {
+            chatId: state.assistant.chatId,
+            messages: [
+              { role: "user", content: userAudioTranscriptInput },
+              { role: "assistant", content: assistantMsg },
+            ],
+          });
+        } catch (error) {
+          console.error("Error saving to chat:", error);
+          // Don't throw here, just log the error
+        }
+      }
 
       return {
         assistantMsg,
         userMsg: userAudioTranscriptInput,
       };
     } catch (error: any) {
-      // Handle axios error responses
-      if (error.response) {
+      // Handle specific error types
+      if (error.response?.data?.type === "RATE_LIMIT") {
+        return rejectWithValue("Please wait a moment before trying again");
+      }
+      if (error.response?.data?.type === "JSON_PARSE") {
         return rejectWithValue(
-          error.response.data.error || "An error occurred"
+          "Failed to process the response. Please try again"
         );
       }
-      // Handle other errors
-      return rejectWithValue(error.message || "Unknown error occurred");
+
+      return rejectWithValue(
+        error.response?.data?.error || error.message || "An error occurred"
+      );
     }
   }
 );
@@ -310,6 +322,7 @@ const AssistantSlice = createSlice({
     builder
       .addCase(getAssistantFeedbackThunk.pending, (state) => {
         state.LLMFeedbackLoading = true;
+        state.LLMResponseError = ""; // Clear any previous errors
       })
       .addCase(getAssistantFeedbackThunk.fulfilled, (state, action) => {
         state.LLMResponse = action.payload.assistantMsg;
@@ -323,11 +336,13 @@ const AssistantSlice = createSlice({
         });
         state.userAudioTranscriptInput = "";
         state.LLMFeedbackLoading = false;
+        state.LLMResponseError = ""; // Clear any errors on success
       })
       .addCase(getAssistantFeedbackThunk.rejected, (state, action) => {
         state.LLMFeedbackLoading = false;
         state.LLMResponseError =
           (action.payload as string) || "Error in getting assistant feedback";
+        // Don't update chat history on error
       })
       .addCase(getHintThunk.pending, (state) => {
         state.hintLoading = true;

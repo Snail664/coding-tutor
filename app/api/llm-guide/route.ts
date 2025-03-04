@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
 import { rateLimitMiddleware } from "@/app/middleware/rateLimitMiddleware";
-import { parseLLMResponse } from "@/lib/utils";
 import { getTutorSystemPrompt, getTutorUserPrompt } from "@/lib/prompts";
+import { LLM, Message, LLMError } from "@/lib/llm";
 
-const OPEN_AI_API_KEY = process.env.OPEN_AI_API_KEY;
-const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
+const llm = new LLM({
+  provider: "anthropic",
+  model: "claude-3-5-sonnet-20240620",
+});
 
 export async function GET() {
   return NextResponse.json({
@@ -14,31 +15,26 @@ export async function GET() {
   });
 }
 
-async function callOpenAI(
+async function callLLM(
   system_prompt: string,
   prompt: string,
-  chat_history: Array<{
-    role: "system" | "user" | "assistant";
-    content: string;
-  }>,
-  model: string
+  chat_history: Message[]
 ) {
   const messages = [
-    { role: "user" as const, content: system_prompt },
     ...chat_history,
     { role: "user" as const, content: prompt },
   ];
 
-  const completion = await openai.chat.completions.create({
-    model,
+  const response = await llm.generate<{ reply: string }>(
     messages,
-  });
+    system_prompt
+  );
 
-  console.log("completion: ", completion.choices[0].message.content);
+  console.log("debug llm response: ", response);
 
   return {
-    should_reply: parseLLMResponse(completion, "should_reply"),
-    reply: parseLLMResponse(completion, "reply"),
+    should_reply: true,
+    reply: response.content.reply,
   };
 }
 
@@ -46,27 +42,42 @@ export async function POST(request: Request) {
   try {
     const { error, response } = await rateLimitMiddleware(request, "chat");
     if (error) return response;
+
     const data = await request.json();
 
-    const tutorSystemPrompt = getTutorSystemPrompt();
-    const tutorUserPrompt = getTutorUserPrompt(
-      data["question"].content,
-      data["sourceCode"],
-      data["userAudioTranscript"]
-    );
+    try {
+      const tutorSystemPrompt = getTutorSystemPrompt(data["question"].content);
+      const tutorUserPrompt = getTutorUserPrompt(
+        data["sourceCode"],
+        data["userAudioTranscript"]
+      );
 
-    const promise_a = callOpenAI(
-      tutorSystemPrompt,
-      tutorUserPrompt,
-      data["chatHistory"],
-      "o3-mini"
-    );
+      const response_a = await callLLM(
+        tutorSystemPrompt,
+        tutorUserPrompt,
+        data["chatHistory"]
+      );
 
-    const response_a = await promise_a;
-    return NextResponse.json({ response: response_a.reply });
+      return NextResponse.json({ response: response_a.reply });
+    } catch (error) {
+      if (error instanceof LLMError) {
+        return NextResponse.json(
+          {
+            error: error.message,
+            type: error.type,
+            retryable: error.retryable,
+          },
+          { status: error.type === "RATE_LIMIT" ? 429 : 500 }
+        );
+      }
+      throw error;
+    }
   } catch (e: unknown) {
     const error = e as Error;
-    console.log("error: ", error);
-    return NextResponse.json({ error: error.message });
+    console.error("Error in llm-guide:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

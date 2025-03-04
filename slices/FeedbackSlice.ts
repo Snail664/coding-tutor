@@ -49,9 +49,8 @@ export const submitFeedbackThunk = createAsyncThunk<
         LLMOutput = state.assistant.assistantPopupText;
       } else if (feedbackType === "chat") {
         // Generate the two prompts using shared functions
-        systemPromptUsed = getTutorSystemPrompt();
+        systemPromptUsed = getTutorSystemPrompt(question.content);
         userPromptUsed = getTutorUserPrompt(
-          question.content,
           sourceCode,
           state.assistant.assistantPopupText
         );

@@ -2,16 +2,22 @@ import { QuestionT, TestResult } from "@/lib/types";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { rateLimitMiddleware } from "@/app/middleware/rateLimitMiddleware";
-import { parseLLMResponse } from "@/lib/utils";
 import { getHintSystemPrompt, getHintUserPrompt } from "@/lib/prompts";
+import { LLM } from "@/lib/llm";
+
 const OPEN_AI_API_KEY = process.env.OPEN_AI_API_KEY;
 const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
+
+const llm = new LLM({
+  provider: "anthropic",
+  model: "claude-3-5-sonnet-20240620",
+});
 
 // Handle GET requests
 export async function GET() {
   return NextResponse.json({
     message:
-      "Post to this endpoint to prompt the openai api to get guidance from the lLM",
+      "Post to this endpoint to prompt the openai api to get guidance from the LLM",
   });
 }
 
@@ -27,21 +33,33 @@ export async function POST(request: Request) {
   if (error) return response;
   const data: HintRequestData = await request.json();
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o",
-    messages: [
-      {
-        role: "system",
-        content: getHintSystemPrompt(data["question"]["content"]),
-      },
+  const completion = await llm.generate<{ hint: string }>(
+    [
       {
         role: "user",
-        content: getHintUserPrompt(data["sourceCode"], data["testCases"]),
+        content: getHintUserPrompt(data.sourceCode, data.testCases),
       },
     ],
-  });
+    getHintSystemPrompt(data.question.content)
+  );
 
-  const hintText = parseLLMResponse(completion, "hint");
+  const hintText = completion.content.hint;
+
+  // const completion = await openai.chat.completions.create({
+  //   model: "gpt-4o",
+  //   messages: [
+  //     {
+  //       role: "system",
+  //       content: getHintSystemPrompt(data["question"]["content"]),
+  //     },
+  //     {
+  //       role: "user",
+  //       content: getHintUserPrompt(data["sourceCode"], data["testCases"]),
+  //     },
+  //   ],
+  // });
+
+  // const hintText = parseLLMResponse(completion, "hint");
 
   // Convert the text hint into speech
   const speechResponse = await openai.audio.speech.create({

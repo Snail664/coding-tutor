@@ -17,6 +17,7 @@
     "db:seed:prod": "dotenv -e .env.production -- ts-node --files --project tsconfig.seed.json prisma/seed.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
     "@auth0/nextjs-auth0": "^3.5.0",
     "@monaco-editor/react": "^4.6.0",
     "@prisma/client": "^6.0.1",
