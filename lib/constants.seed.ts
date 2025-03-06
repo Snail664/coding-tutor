@@ -752,7 +752,7 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/SupplySquad.md"),
       "utf-8"
     ),
-    tags: [{ name: "Graph" }, { name: "Shortest Path" }, {name: "Backtracking"}, {name: "Dynamic Programming"}, {name: "Heap(Priority Queue)"}],
+    tags: [{ name: "Graph" }, { name: "Shortest Path" }, {name: "Backtracking"}, {name: "Dynamic Programming"}, {name: "Heap (Priority Queue)"}],
     testCases: [
       {
         input: [

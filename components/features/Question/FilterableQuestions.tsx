@@ -3,15 +3,15 @@
 import React, { useState } from "react";
 import DifficultyTag from "./QuestionDifficultyTag";
 import { QuestionDifficulty } from "@prisma/client";
-import { Search as SearchIcon, Filter as FilterIcon, Eye as EyeIcon, EyeOff as EyeOffIcon } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Search as SearchIcon, Filter as FilterIcon, Eye as EyeIcon, EyeOff as EyeOffIcon, ChevronDown } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuPortal } from "@/components/ui/dropdown-menu";
 import TopicTag from "./QuestionTopicTag";
-import { ChevronDown } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 interface Question {
   name: string;
   difficulty: string;
-  tags?: { name: string }[]; // Updated to match the Prisma query result
+  tags?: { name: string }[];
 }
 
 interface Props {
@@ -19,158 +19,77 @@ interface Props {
 }
 
 export default function FilterableQuestions({ questions }: Props) {
-  const allTopics = [
-    "Array",
-    "String",
-    "Hash Table",
-    "Dynamic Programming",
-    "Math",
-    "Sorting",
-    "Greedy",
-    "Depth-First Search",
-    "Binary Search",
-    "Database",
-    "Matrix",
-    "Tree",
-    "Breadth-First Search",
-    "Bit Manipulation",
-    "Two Pointers",
-    "Prefix Sum",
-    "Heap (Priority Queue)",
-    "Binary Tree",
-    "Stack",
-    "Graph",
-    "Design",
-    "Enumeration",
-    "Backtracking",
-    "Union Find",
-    "Linked List",
-    "Number Theory",
-    "Ordered Set",
-    "Monotonic Stack",
-    "Segment Tree",
-    "Trie",
-    "Combinatorics",
-    "Bitmask",
-    "Queue",
-    "Divide and Conquer",
-    "Recursion",
-    "Memoization",
-    "Binary Indexed Tree",
-    "Geometry",
-    "Binary Search Tree",
-    "Hash Function",
-    "Topological Sort",
-    "Shortest Path",
-    "Rolling Hash",
-    "Data Stream",
-    "Monotonic Queue",
-    "Randomized",
-    "Merge Sort",
-    "Doubly-Linked List",
-    "Counting Sort",
-    "Iterator",
-    "Concurrency",
-    "Probability and Statistics",
-    "Quickselect",
-    "Suffix Array",
-    "Bucket Sort",
-    "Line Sweep",
-    "Minimum Spanning Tree",
-    "Shell",
-    "Reservoir Sampling",
-    "Strongly Connected Component",
-    "Eulerian Circuit",
-    "Radix Sort",
-    "Rejection Sampling",
-    "Biconnected Component"
-  ];
-
-  // === State for Filters ===
-  const [showFilters, setShowFilters] = useState(false);
-  // Search bar (for question names)
   const [searchTerm, setSearchTerm] = useState("");
-
-  // Difficulty filters
-  const [difficultyCondition, setDifficultyCondition] = useState<"is" | "is not">("is");
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
-
-  // Topics filters (shown in UI, but not fully implemented)
-  const [topicsSearchTerm, setTopicsSearchTerm] = useState("");
-  const [topicsCondition, setTopicsCondition] = useState<"is" | "is not">("is");
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-
+  const [topicsCondition, setTopicsCondition] = useState<"is" | "is not">("is");
   const [showTags, setShowTags] = useState(true);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isTopicsOpen, setIsTopicsOpen] = useState(false);
+  const [topicsSearchTerm, setTopicsSearchTerm] = useState("");
 
-  const visibleTopics = allTopics.filter((topic) =>
+  // Get all unique topics
+  const allTopics = Array.from(new Set(
+    questions.flatMap(q => q.tags?.map(tag => tag.name) || [])
+  )).sort();
+
+  // Filter topics based on search term
+  const filteredTopics = allTopics.filter(topic => 
     topic.toLowerCase().includes(topicsSearchTerm.toLowerCase())
   );
 
-  // === Toggling a Topic Chip ===
-  function toggleTopic(topic: string) {
-    setSelectedTopics((prev) => 
-      prev.includes(topic) ? prev.filter((t) => t !== topic) // remove if selected
-      : [...prev, topic]               // add if not selected
-    );
-  }
-
-// === FILTERING LOGIC ===
+  // Filter questions based on search term, difficulty, and topics
   const filteredQuestions = questions.filter((question) => {
     const matchesSearch = question.name.toLowerCase().includes(searchTerm.toLowerCase());
-    // Difficulty filter
-    let matchesDifficulty = true;
-    if (selectedDifficulty) {
-      if (difficultyCondition === "is") {
-        matchesDifficulty = question.difficulty.toLowerCase() === selectedDifficulty.toLowerCase();
-      } else {
-        // "is not"
-        matchesDifficulty = question.difficulty.toLowerCase() !== selectedDifficulty.toLowerCase();
-      }
-  };
-
-  // Topics filter (currently not applied; feel free to implement later)
+    const matchesDifficulty = selectedDifficulty
+      ? question.difficulty.toLowerCase() === selectedDifficulty.toLowerCase()
+      : true;
+    
+    // Topics filter logic
     let matchesTopics = true;
     if (selectedTopics.length > 0 && question.tags) {
       if (topicsCondition === "is") {
-        matchesTopics = selectedTopics.some((topic) => question.tags?.some((t) => t.name === topic));
+        // At least one of the selected topics must match
+        matchesTopics = selectedTopics.some(topic => 
+          question.tags?.some(tag => tag.name === topic)
+        );
       } else {
-        matchesTopics = !selectedTopics.some((topic) => question.tags?.some((t) => t.name === topic));
+        // None of the selected topics should match
+        matchesTopics = !selectedTopics.some(topic => 
+          question.tags?.some(tag => tag.name === topic)
+        );
       }
     }
+    
+    return matchesSearch && matchesDifficulty && matchesTopics;
+  });
 
-  // Return the combined result of all filters
-  return matchesSearch && matchesDifficulty && matchesTopics;
-});
+  const handleReset = () => {
+    setSearchTerm("");
+    setSelectedDifficulty(null);
+    setSelectedTopics([]);
+    setTopicsCondition("is");
+    setTopicsSearchTerm("");
+  };
 
-
-
-// === RESET FUNCTION ===
-function handleReset() {
-  setSearchTerm("");
-  setDifficultyCondition("is");
-  setSelectedDifficulty(null);
-  setTopicsCondition("is");
-  setTopicsSearchTerm("");
-  setSelectedTopics([]);
-}
+  // Check if any filters are active
+  const hasActiveFilters = selectedDifficulty !== null || selectedTopics.length > 0;
 
   return (
     <div className="w-full max-w-md">
-      {/* Search Bar + Filter Button + Eye Button */}
+      {/* Search Bar + Filter Button */}
       <div className="flex items-center gap-2 mb-4">
-        {/* Search Input */}
         <div className="relative flex-1">
           <SearchIcon className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
-          <input
+          <Input
             type="text"
             placeholder="Search questions..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-8 pr-10 py-2 border border-gray-300 rounded focus:outline-none"
+            className="w-full pl-8"
           />
         </div>
 
-        {/* Eye Button */}
         <button
           title="Toggle tags visibility"
           onClick={() => setShowTags(!showTags)}
@@ -179,319 +98,264 @@ function handleReset() {
           {showTags ? <EyeIcon className="h-4 w-4" /> : <EyeOffIcon className="h-4 w-4" />}
         </button>
 
-        {/* Filter Button */}
-        <button
-          title="Filter"
-          onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center justify-center w-10 h-10 bg-background text-primary border border-gray-300 rounded hover:bg-primary hover:text-white transition"
-        >
-          <FilterIcon className="h-4 w-4" />
-        </button>
+        <DropdownMenu open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+          <DropdownMenuTrigger asChild>
+            <button
+              title="Filter"
+              className={`flex items-center justify-center w-10 h-10 border rounded transition ${
+                hasActiveFilters 
+                  ? "bg-primary text-white hover:bg-primary/90" 
+                  : "bg-background text-primary border-gray-300 hover:bg-primary hover:text-white"
+              }`}
+            >
+              <FilterIcon className="h-4 w-4" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuContent 
+              align="start" 
+              side="right"
+              sideOffset={5}
+              className="w-[300px] p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700"
+            >
+              {/* Difficulty Filter */}
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-1 text-sm font-medium">
+                  <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    data-prefix="far"
+                    data-icon="gauge-max"
+                    className="w-4 h-4"
+                    role="img"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M256 464a208 208 0 1 0 0-416 208 208 0 1 0 0 416zM256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zm32 112a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM256 408c-30.9 0-56-25.1-56-56s25.1-56 56-56c10.3 0 19.9 2.8 28.2 7.6l110.2-75.4c10.9-7.5 25.9-4.7 33.4 6.3s4.7 25.9-6.3 33.4L311.3 343.2c.4 2.9 .7 5.8 .7 8.8c0 30.9-25.1 56-56 56zM384 160a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM112 224a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm80-64a32 32 0 1 1 -64 0 32 32 0 1 1 64 0z"
+                    />
+                  </svg>
+                  <span>Difficulty</span>
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  <button
+                    onClick={() => setSelectedDifficulty(null)}
+                    className={`text-xs font-semibold px-2 py-1 rounded ${
+                      selectedDifficulty === null
+                        ? "bg-gray-200 text-gray-800 dark:bg-gray-200 dark:text-gray-800"
+                        : "bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-200 dark:hover:text-gray-800"
+                    }`}
+                  >
+                    All
+                  </button>
+                  <button
+                    onClick={() => setSelectedDifficulty("easy")}
+                    className={`text-xs font-semibold px-2 py-1 rounded ${
+                      selectedDifficulty === "easy"
+                        ? "bg-gray-200 text-green-600 dark:bg-gray-200 dark:text-green-600"
+                        : "bg-gray-100 text-green-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-green-400 dark:hover:bg-gray-200 dark:hover:text-green-600"
+                    }`}
+                  >
+                    Easy
+                  </button>
+                  <button
+                    onClick={() => setSelectedDifficulty("medium")}
+                    className={`text-xs font-semibold px-2 py-1 rounded ${
+                      selectedDifficulty === "medium"
+                        ? "bg-gray-200 text-yellow-600 dark:bg-gray-200 dark:text-yellow-600"
+                        : "bg-gray-100 text-yellow-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-yellow-400 dark:hover:bg-gray-200 dark:hover:text-yellow-600"
+                    }`}
+                  >
+                    Medium
+                  </button>
+                  <button
+                    onClick={() => setSelectedDifficulty("hard")}
+                    className={`text-xs font-semibold px-2 py-1 rounded ${
+                      selectedDifficulty === "hard"
+                        ? "bg-gray-200 text-red-600 dark:bg-gray-200 dark:text-red-600"
+                        : "bg-gray-100 text-red-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-red-400 dark:hover:bg-gray-200 dark:hover:text-red-600"
+                    }`}
+                  >
+                    Hard
+                  </button>
+                </div>
+              </div>
+
+              <DropdownMenuSeparator />
+
+              {/* Topics Filter - LeetCode Style */}
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-1 text-sm font-medium">
+                  <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    data-prefix="far"
+                    data-icon="tags"
+                    className="w-4 h-4"
+                    role="img"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M345 39.1c-9.3-9.4-24.5-9.5-33.9-.2s-9.5 24.5-.2 33.9L438.6 202.1c33.9 34.3 33.9 89.4 0 123.7L326.7 439.1c-9.3 9.4-9.2 24.6.2 33.9s24.6 9.2 33.9-.2L472.8 359.6c52.4-53 52.4-138.2 0-191.2L345 39.1zM242.7 50.7c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 0 80V229.5c0 17 6.7 33.3 18.7 45.3l168 168c25 25 65.5 25 90.5 0L410.7 309.3c25-25 25-65.5 0-90.5l-168-168c-3-3-4.7-7.1-4.7-11.3V80zm96 64a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
+                    />
+                  </svg>
+                  <span>Topics</span>
+                </div>
+                
+                {/* LeetCode-style condition and topics selectors */}
+                <div className="flex gap-2 mb-2">
+                  {/* Condition Dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="flex items-center justify-between px-3 py-1.5 text-xs border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-800 w-[80px]">
+                      <span>{topicsCondition}</span>
+                      <ChevronDown className="h-3 w-3 opacity-50 ml-1" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuContent 
+                        align="start" 
+                        className="w-[80px] p-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700"
+                      >
+                        <DropdownMenuItem 
+                          onClick={() => setTopicsCondition("is")}
+                          className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 text-xs"
+                        >
+                          is
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={() => setTopicsCondition("is not")}
+                          className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 text-xs"
+                        >
+                          is not
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenu>
+
+                  {/* Topics Dropdown */}
+                  <DropdownMenu open={isTopicsOpen} onOpenChange={setIsTopicsOpen}>
+                    <DropdownMenuTrigger className="flex items-center justify-between px-3 py-1.5 text-xs border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-800 flex-1">
+                      <span className="truncate max-w-[150px]">
+                        {selectedTopics.length > 0
+                          ? selectedTopics.length === 1
+                            ? selectedTopics[0]
+                            : `${selectedTopics[0]} +${selectedTopics.length - 1}`
+                          : "(any)"}
+                      </span>
+                      <ChevronDown className="h-3 w-3 opacity-50 ml-1 flex-shrink-0" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuContent 
+                        align="start" 
+                        side="bottom"
+                        sideOffset={5}
+                        className="w-[350px] p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700"
+                      >
+                        {/* Search input for topics */}
+                        <div className="mb-2 relative">
+                          <SearchIcon className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-zinc-400" />
+                          <Input
+                            type="text"
+                            placeholder="Search topics..."
+                            value={topicsSearchTerm}
+                            onChange={(e) => setTopicsSearchTerm(e.target.value)}
+                            className="w-full pl-7 py-1 h-7 text-xs"
+                          />
+                        </div>
+                        
+                        <div className="max-h-[200px] overflow-y-auto">
+                          <div className="grid grid-cols-2 gap-1">
+                            {filteredTopics.map((topic) => (
+                              <button
+                                key={topic}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedTopics(prev =>
+                                    prev.includes(topic)
+                                      ? prev.filter(t => t !== topic)
+                                      : [...prev, topic]
+                                  );
+                                }}
+                                className={`text-xs px-2 py-1 rounded flex items-center gap-1 ${
+                                  selectedTopics.includes(topic)
+                                    ? "bg-gray-200 text-gray-800 dark:bg-gray-200 dark:text-gray-800"
+                                    : "bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-200 dark:hover:text-gray-800"
+                                }`}
+                              >
+                                {selectedTopics.includes(topic) && (
+                                  <svg width="10" height="10" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M11.4669 3.72684C11.7558 3.91574 11.8369 4.30308 11.648 4.59198L7.39799 11.092C7.29783 11.2452 7.13556 11.3467 6.95402 11.3699C6.77247 11.3931 6.58989 11.3355 6.45446 11.2124L3.70446 8.71241C3.44905 8.48022 3.43023 8.08494 3.66242 7.82953C3.89461 7.57412 4.28989 7.55529 4.5453 7.78749L6.75292 9.79441L10.6018 3.90792C10.7907 3.61902 11.178 3.53795 11.4669 3.72684Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path>
+                                  </svg>
+                                )}
+                                <span className="truncate">{topic}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        {/* Reset button for topics only */}
+                        {selectedTopics.length > 0 && (
+                          <button
+                            onClick={() => setSelectedTopics([])}
+                            className="w-full flex items-center justify-center gap-1 py-1 px-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 rounded mt-2 text-xs transition-colors"
+                          >
+                            <svg 
+                              aria-hidden="true" 
+                              focusable="false" 
+                              data-prefix="far" 
+                              data-icon="arrow-rotate-left" 
+                              className="h-3 w-3" 
+                              role="img" 
+                              xmlns="http://www.w3.org/2000/svg" 
+                              viewBox="0 0 512 512"
+                            >
+                              <path 
+                                fill="currentColor" 
+                                d="M40 224c-13.3 0-24-10.7-24-24V56c0-13.3 10.7-24 24-24s24 10.7 24 24v80.1l20-23.5C125 63.4 186.9 32 256 32c123.7 0 224 100.3 224 224s-100.3 224-224 224c-50.4 0-97-16.7-134.4-44.8c-10.6-8-12.7-23-4.8-33.6s23-12.7 33.6-4.8C179.8 418.9 216.3 432 256 432c97.2 0 176-78.8 176-176s-78.8-176-176-176c-54.3 0-102.9 24.6-135.2 63.4l-.1 .2 0 0L93.1 176H184c13.3 0 24 10.7 24 24s-10.7 24-24 24H40z"
+                              ></path>
+                            </svg>
+                            Reset
+                          </button>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenu>
+                </div>
+              </div>
+
+              {/* Reset All Filters Button */}
+              {hasActiveFilters && (
+                <button
+                  onClick={handleReset}
+                  className="w-full flex items-center justify-center gap-1 py-2 px-4 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 rounded mt-2 text-sm transition-colors"
+                >
+                  <svg 
+                    aria-hidden="true" 
+                    focusable="false" 
+                    data-prefix="far" 
+                    data-icon="arrow-rotate-left" 
+                    className="h-4 w-4" 
+                    role="img" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    viewBox="0 0 512 512"
+                  >
+                    <path 
+                      fill="currentColor" 
+                      d="M40 224c-13.3 0-24-10.7-24-24V56c0-13.3 10.7-24 24-24s24 10.7 24 24v80.1l20-23.5C125 63.4 186.9 32 256 32c123.7 0 224 100.3 224 224s-100.3 224-224 224c-50.4 0-97-16.7-134.4-44.8c-10.6-8-12.7-23-4.8-33.6s23-12.7 33.6-4.8C179.8 418.9 216.3 432 256 432c97.2 0 176-78.8 176-176s-78.8-176-176-176c-54.3 0-102.9 24.6-135.2 63.4l-.1 .2 0 0L93.1 176H184c13.3 0 24 10.7 24 24s-10.7 24-24 24H40z"
+                    ></path>
+                  </svg>
+                  Reset
+                </button>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenuPortal>
+        </DropdownMenu>
       </div>
 
-      {/* === Filter Panel === */}
-      {showFilters && (
-        <div className="mb-4 p-4 border border-gray-600 rounded space-y-4">
-          {/* Difficulty Row */}
-          <div className="flex items-center gap-2">
-            <label className="w-24 text-primary font-medium flex items-center gap-1">
-            <svg
-              aria-hidden="true"
-              focusable="false"
-              data-prefix="far"
-              data-icon="gauge-max"
-              className="svg-inline--fa fa-gauge-max w-10 h-5"
-              role="img"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512"
-            >
-              <path
-                fill="currentColor"
-                d="M256 464a208 208 0 1 0 0-416 208 208 0 1 0 0 416zM256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zm32 112a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM256 408c-30.9 0-56-25.1-56-56s25.1-56 56-56c10.3 0 19.9 2.8 28.2 7.6l110.2-75.4c10.9-7.5 25.9-4.7 33.4 6.3s4.7 25.9-6.3 33.4L311.3 343.2c.4 2.9 .7 5.8 .7 8.8c0 30.9-25.1 56-56 56zM384 160a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM112 224a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm80-64a32 32 0 1 1 -64 0 32 32 0 1 1 64 0z"
-              />
-            </svg>
-                Difficulty
-              </label>
-            <div className="w-[84px]">
-              <DropdownMenu>
-                <DropdownMenuTrigger className="text-sd-foreground ring-offset-sd-background placeholder:text-sd-muted-foreground focus:ring-sd-ring flex items-center border bg-transparent text-sm disabled:cursor-not-allowed disabled:opacity-50 lc-dsw-md:justify-start border-sd-input h-[32px] w-[84px] justify-center rounded-lg p-0 px-3 focus:outline-none focus:ring-0 [&>svg]:hidden">
-                  <span style={{ pointerEvents: "none" }}>
-                    <div className="flex w-full items-center justify-between gap-2">
-                      <div className="text-sd-foreground flex w-[42px] text-sm font-normal">
-                        {difficultyCondition}
-                      </div>
-                      <div className="relative text-[12px] leading-[normal] p-[1px] before:block before:h-3 before:w-3 text-sd-muted-foreground">
-                        <svg
-                          aria-hidden="true"
-                          focusable="false"
-                          data-prefix="far"
-                          data-icon="chevron-down"
-                          className="svg-inline--fa fa-chevron-down absolute left-1/2 top-1/2 h-[1em] -translate-x-1/2 -translate-y-1/2 align-[-0.125em]"
-                          role="img"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 512 512"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M239 401c9.4 9.4 24.6 9.4 33.9 0L465 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-175 175L81 175c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9L239 401z"
-                          ></path>
-                        </svg>
-                      </div>
-                    </div>
-                  </span>
-                  <svg
-                    width="15"
-                    height="15"
-                    viewBox="0 0 15 15"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 opacity-50"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M4.93179 5.43179C4.75605 5.60753 4.75605 5.89245 4.93179 6.06819C5.10753 6.24392 5.39245 6.24392 5.56819 6.06819L7.49999 4.13638L9.43179 6.06819C9.60753 6.24392 9.89245 6.24392 10.0682 6.06819C10.2439 5.89245 10.2439 5.60753 10.0682 5.43179L7.81819 3.18179C7.73379 3.0974 7.61933 3.04999 7.49999 3.04999C7.38064 3.04999 7.26618 3.0974 7.18179 3.18179L4.93179 5.43179ZM10.0682 9.56819C10.2439 9.39245 10.2439 9.10753 10.0682 8.93179C9.89245 8.75606 9.60753 8.75606 9.43179 8.93179L7.49999 10.8636L5.56819 8.93179C5.39245 8.75606 5.10753 8.75606 4.93179 8.93179C4.75605 9.10753 4.75605 9.39245 4.93179 9.56819L7.18179 11.8182C7.35753 11.9939 7.64245 11.9939 7.81819 11.8182L10.0682 9.56819Z"
-                      fill="currentColor"
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                    ></path>
-                  </svg>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-md">
-                  <DropdownMenuItem 
-                    onClick={() => setDifficultyCondition("is")}
-                    className="hover:bg-gray-100 dark:hover:bg-gray-800 hover:bg-opacity-90 cursor-pointer"
-                  >
-                    is
-                  </DropdownMenuItem>
-                  <DropdownMenuItem 
-                    onClick={() => setDifficultyCondition("is not")}
-                    className="hover:bg-gray-100 dark:hover:bg-gray-800 hover:bg-opacity-90 cursor-pointer"
-                  >
-                    is not
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="border-sd-input flex h-8 flex-1 cursor-pointer items-center justify-between rounded-xl border px-2 py-1.5 overflow-hidden bg-sd-accent text-sd-muted-foreground" aria-haspopup="menu" data-state="closed">
-                  <div className="flex h-[18px] items-center text-sm leading-[18px] overflow-hidden text-ellipsis whitespace-nowrap max-w-[160px]">
-                    {selectedDifficulty ? selectedDifficulty : "(any)"}
-                  </div>
-                  <div className="relative text-[12px] leading-[normal] p-[1px] before:block before:h-3 before:w-3 text-sd-muted-foreground flex-shrink-0 ml-1">
-                    <svg 
-                      aria-hidden="true" 
-                      focusable="false" 
-                      data-prefix="far" 
-                      data-icon="chevron-down" 
-                      className="svg-inline--fa fa-chevron-down absolute left-1/2 top-1/2 h-[1em] -translate-x-1/2 -translate-y-1/2 align-[-0.125em]" 
-                      role="img" 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      viewBox="0 0 512 512"
-                    >
-                      <path 
-                        fill="currentColor" 
-                        d="M239 401c9.4 9.4 24.6 9.4 33.9 0L465 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-175 175L81 175c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9L239 401z"
-                      ></path>
-                    </svg>
-                  </div>
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="p-2 w-40 bg-white dark:bg-black border border-gray-200 dark:border-gray-700">
-                <DropdownMenuItem 
-                  onClick={() => setSelectedDifficulty(null)}
-                  className="hover:bg-gray-100 dark:hover:bg-gray-800 hover:bg-opacity-90 cursor-pointer"
-                >
-                  (any)
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => setSelectedDifficulty("easy")}
-                  className="cursor-pointer bg-[#a7f3d0] text-black dark:bg-[#29AB87] dark:text-white hover:opacity-80"
-                >
-                  easy
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => setSelectedDifficulty("medium")}
-                  className="cursor-pointer bg-[#fef9c3] text-black dark:bg-[#F4C430] dark:text-white hover:opacity-80"
-                >
-                  medium
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => setSelectedDifficulty("hard")}
-                  className="cursor-pointer bg-[#fecaca] text-black dark:bg-[#F88379] dark:text-white hover:opacity-80"
-                >
-                  hard
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          {/* Topics Row */}
-          <div className="flex items-center gap-2">
-            <label className="w-24 text-primary font-medium flex items-center gap-1">
-              <svg
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="far"
-                data-icon="tags"
-                className="svg-inline--fa fa-tags w-9 h-5"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M345 39.1c-9.3-9.4-24.5-9.5-33.9-.2s-9.5 24.5-.2 33.9L438.6 202.1c33.9 34.3 33.9 89.4 0 123.7L326.7 439.1c-9.3 9.4-9.2 24.6.2 33.9s24.6 9.2 33.9-.2L472.8 359.6c52.4-53 52.4-138.2 0-191.2L345 39.1zM242.7 50.7c-12-12-28.3-18.7-45.3-18.7H48C21.5 32 0 53.5 0 80V229.5c0 17 6.7 33.3 18.7 45.3l168 168c25 25 65.5 25 90.5 0L410.7 309.3c25-25 25-65.5 0-90.5l-168-168zM48 80H197.5c4.2 0 8.3 1.7 11.3 4.7l168 168c6.2 6.2 6.2 16.4 0 22.6L243.3 408.8c-6.2 6.2-16.4 6.2-22.6 0l-168-168c-3-3-4.7-7.1-4.7-11.3V80zm96 64a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
-                />
-              </svg>
-              Topics
-            </label>
-            <div className="w-[84px]">
-              <DropdownMenu>
-                <DropdownMenuTrigger className="text-sd-foreground ring-offset-sd-background placeholder:text-sd-muted-foreground focus:ring-sd-ring flex items-center border bg-transparent text-sm disabled:cursor-not-allowed disabled:opacity-50 lc-dsw-md:justify-start border-sd-input h-[32px] w-[84px] justify-center rounded-lg p-0 px-3 focus:outline-none focus:ring-0 [&>svg]:hidden">
-                  <span style={{ pointerEvents: "none" }}>
-                    <div className="flex w-full items-center justify-between gap-2">
-                      <div className="text-sd-foreground flex w-[42px] text-sm font-normal">
-                        {topicsCondition}
-                      </div>
-                      <div className="relative text-[12px] leading-[normal] p-[1px] before:block before:h-3 before:w-3 text-sd-muted-foreground">
-                        <svg
-                          aria-hidden="true"
-                          focusable="false"
-                          data-prefix="far"
-                          data-icon="chevron-down"
-                          className="svg-inline--fa fa-chevron-down absolute left-1/2 top-1/2 h-[1em] -translate-x-1/2 -translate-y-1/2 align-[-0.125em]"
-                          role="img"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 512 512"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M239 401c9.4 9.4 24.6 9.4 33.9 0L465 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-175 175L81 175c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9L239 401z"
-                          ></path>
-                        </svg>
-                      </div>
-                    </div>
-                  </span>
-                  <svg
-                    width="15"
-                    height="15"
-                    viewBox="0 0 15 15"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 opacity-50"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M4.93179 5.43179C4.75605 5.60753 4.75605 5.89245 4.93179 6.06819C5.10753 6.24392 5.39245 6.24392 5.56819 6.06819L7.49999 4.13638L9.43179 6.06819C9.60753 6.24392 9.89245 6.24392 10.0682 6.06819C10.2439 5.89245 10.2439 5.60753 10.0682 5.43179L7.81819 3.18179C7.73379 3.0974 7.61933 3.04999 7.49999 3.04999C7.38064 3.04999 7.26618 3.0974 7.18179 3.18179L4.93179 5.43179ZM10.0682 9.56819C10.2439 9.39245 10.2439 9.10753 10.0682 8.93179C9.89245 8.75606 9.60753 8.75606 9.43179 8.93179L7.49999 10.8636L5.56819 8.93179C5.39245 8.75606 5.10753 8.75606 4.93179 8.93179C4.75605 9.10753 4.75605 9.39245 4.93179 9.56819L7.18179 11.8182C7.35753 11.9939 7.64245 11.9939 7.81819 11.8182L10.0682 9.56819Z"
-                      fill="currentColor"
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                    ></path>
-                  </svg>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-white dark:bg-black border border-gray-200 dark:border-gray-700 shadow-md">
-                  <DropdownMenuItem 
-                    onClick={() => setTopicsCondition("is")}
-                    className="hover:bg-gray-100 dark:hover:bg-gray-800 hover:bg-opacity-90 cursor-pointer"
-                  >
-                    is
-                  </DropdownMenuItem>
-                  <DropdownMenuItem 
-                    onClick={() => setTopicsCondition("is not")}
-                    className="hover:bg-gray-100 dark:hover:bg-gray-800 hover:bg-opacity-90 cursor-pointer"
-                  >
-                    is not
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            {/* Topics Dropdown Menu */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="border-sd-input flex h-8 flex-1 cursor-pointer items-center justify-between rounded-xl border px-2 py-1.5 overflow-hidden bg-sd-accent text-sd-muted-foreground" aria-haspopup="menu" data-state="closed">
-                  <div className="flex h-[18px] items-center text-sm leading-[18px] overflow-hidden text-ellipsis whitespace-nowrap max-w-[160px]">
-                    {selectedTopics.length > 0
-                      ? selectedTopics.length === 1
-                        ? selectedTopics[0]
-                        : `${selectedTopics[0]} +${selectedTopics.length - 1}`
-                      : "(any)"}
-                  </div>
-                  <div className="relative text-[12px] leading-[normal] p-[1px] before:block before:h-3 before:w-3 text-sd-muted-foreground flex-shrink-0 ml-1">
-                    <svg 
-                      aria-hidden="true" 
-                      focusable="false" 
-                      data-prefix="far" 
-                      data-icon="chevron-down" 
-                      className="svg-inline--fa fa-chevron-down absolute left-1/2 top-1/2 h-[1em] -translate-x-1/2 -translate-y-1/2 align-[-0.125em]" 
-                      role="img" 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      viewBox="0 0 512 512"
-                    >
-                      <path 
-                        fill="currentColor" 
-                        d="M239 401c9.4 9.4 24.6 9.4 33.9 0L465 209c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-175 175L81 175c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9L239 401z"
-                      ></path>
-                    </svg>
-                  </div>
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent 
-                side="bottom"
-                align="start"
-                sideOffset={4}
-                alignOffset={0}
-                className="p-4 space-y-4 w-80 bg-white dark:bg-black border border-gray-200 dark:border-gray-700 max-h-[300px] overflow-y-auto">
-                {/* Topics Search Input */}
-                <div className="relative">
-                  <SearchIcon className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
-                  <input
-                    type="text"
-                    placeholder="search topics..."
-                    value={topicsSearchTerm}
-                    onChange={(e) => setTopicsSearchTerm(e.target.value)}
-                    className="pl-8 pr-2 py-1 border border-gray-300 dark:border-gray-700 rounded w-full bg-white dark:bg-black"
-                  />
-                </div>
-                {/* Topic Chips */}
-                <div className="flex flex-wrap gap-2 max-h-[300px] overflow-y-auto">
-                  {visibleTopics.map((topic) => {
-                    const isSelected = selectedTopics.includes(topic);
-                    return (
-                      <button
-                        key={topic}
-                        onClick={() => toggleTopic(topic)}
-                        className={`px-3 py-1 rounded-full text-sm transition ${
-                          isSelected
-                            ? "bg-gray-500 text-white"
-                            : "bg-gray-200 dark:bg-gray-700 text-black dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600"
-                        }`}
-                      >
-                        {topic}
-                      </button>
-                    );
-                  })}
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-
-          {/* Reset Button */}
-          <div className="flex justify-center">
-          <button
-            onClick={handleReset}
-            className="flex items-center gap-2 border border-gray-300 bg-background text-primary px-4 py-2 rounded hover:bg-primary hover:text-white transition"
-          >
-            <span role="img" aria-label="Reset">↻</span>
-            Reset
-          </button>
-          </div>
-        </div>
-      )}
-
-      {/* Render the filtered question list */}
-      <div className="bg-menuBackground w-full max-w-md rounded-xl shadow-lg overflow-hidden mt-5">
+      {/* Questions List */}
+      <div className="bg-menuBackground w-full max-w-md rounded-xl shadow-lg overflow-hidden">
         <div className="max-h-96 overflow-y-auto">
           <ul className="divide-y divide-gray-300">
             {filteredQuestions.map((question) => (
@@ -505,7 +369,7 @@ function handleReset() {
                     <DifficultyTag difficulty={question.difficulty as QuestionDifficulty} />
                   </div>
                   {question.tags && question.tags.length > 0 && showTags && (
-                    <div className="mt-2 flex flex-wrap">
+                    <div className="mt-2 flex flex-wrap gap-1">
                       {question.tags.map((tag) => (
                         <TopicTag key={tag.name} topic={tag.name} />
                       ))}
