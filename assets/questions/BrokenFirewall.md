@@ -1,40 +1,30 @@
 # Broken Firewall
 
-**Topics:** String, Bit Manipulation, Math
+## Topics
 
-### Difficulty: Easy
+`Bit Manipulation` `Math` `String` 
 
 During a critical security audit, you discover that a network firewall misconfiguration has disrupted packet filtering. As a network security analyst, you need to classify traffic based on the source and destination IP addresses.
 
 The firewall operates under **Internet Protocol version 4 (IPv4)** and has captured **1000 packets** for analysis. Each packet's header is recorded as a **40-character hexadecimal string, which includes its length, source IP address, and destination IP address**.
 
-### Firewall Rules: 
-
-Internal Systems: `192.168.0.0` → `192.168.254.254` \
-WiFi: `10.0.0.0` → `10.0.254.254` \
-External Traffic: Any other IP addresses (e.g., internet browsing, external command centers)
-
-#### Classification:
+#### Firewall Rules:
 For each packet:
 
-* If either the source or destination IP address falls within the Internal Ship Systems range, its length contributes to the internal traffic total.
-* If either the source or destination IP address falls within the Passenger WiFi range, its length contributes to the passenger traffic total.
+* Internal Traffic: Source or destination IP address falls within `192.168.0.0` → `192.168.254.254`. \
+* Passenger WiFi Traffic: Source or destination IP address falls within `10.0.0.0` → `10.0.254.254`. \
+* External Traffic: Any other IP addresses (e.g., internet browsing, external command centers)
 * If a packet belongs to both categories, count it for both.
 
-Your task is to calculate the total bytes of internal traffic and passenger traffic, and return the result as a ratio in the format `internal/passenger`.
+Each packet header follows the **IPv4** format.\
+* **Bytes 3-4** represent the packet length as a 16-bit integer.\
+* **Bytes 13-16** represent the source IP address.\
+* **Bytes 17-20** represent the destination IP address.
 
-### Input Format:
-Each test case is represented as a list of packet headers, where each packet is a 40-character hexadecimal string.
-
-Each test case ends with an empty string ("").
-
-Each packet header follows the IPv4 format.\
-Bytes 3 and 4 represent the packet length as a 16-bit integer.\
-Bytes 13-16 represent the source IP address.\
-Bytes 17-20 represent the destination IP address.
-
-
-
+### Output Format:
+A string in the format `internal/passenger`, where:
+* internal = Total bytes of internal traffic.
+* passenger = Total bytes of passenger WiFi traffic.
 
 ## Example
 
@@ -93,10 +83,11 @@ With that information, you determine the total bytes of network traffic for the 
 
 
 ## Constraints
-- 1 ≤ len(packet_headers) ≤ 1000
-- Each packet_headers[i] is a valid 40-character hexadecimal string.
+- Each test case is represented as a list of N `(1 ≤ N ≤ 1000)` packet headers
+- Each test case ends with an ** empty string `("")`**
+- Each packet_headers[i] is a valid **40-character hexadecimal string**.
 - All IP addresses are well-formed IPv4 addresses.
 
 
 ## Your Task
-Determine the total bytes of network traffic that either originates from or is destined for the ship’s internal systems, as well as the total bytes of network traffic for the passenger wifi. You must return the result as a **ratio of the two traffic amounts**.
+Determine the total bytes of network traffic that either originates from or is destined for the ship's internal systems, as well as the total bytes of network traffic for the passenger wifi. You must return the result as a **ratio of the two traffic amounts**.

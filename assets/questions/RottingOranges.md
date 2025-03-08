@@ -1,6 +1,8 @@
 # Rotting Oranges
 
-**Topics:** Graph, Breadth-First Search, Matrix, Queue
+## Topics:
+
+`Breadth-First Search` `Graph` `Matrix` `Queue`
 
 ### Difficulty: Medium
 

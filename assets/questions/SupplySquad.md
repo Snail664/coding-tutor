@@ -1,6 +1,8 @@
 # Supply Squad
 
-**Topics:** Graph, Shortest Path, Backtracking, Dynamic Programming, Heap (Priority Queue)
+## Topics:
+
+`Backtracking` `Dynamic Programming` `Graph` `Heap (Priority Queue)` `Shortest Path` 
 
 ### Difficulty: Medium
 

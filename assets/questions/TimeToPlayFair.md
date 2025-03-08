@@ -1,6 +1,8 @@
 # Time to Play Fair
 
-**Topics:** String, Matrix, Graph
+## Topics:
+
+`Graph` `String` `Matrix` 
 
 ### Difficulty : Easy 
 

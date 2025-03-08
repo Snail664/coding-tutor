@@ -111,7 +111,7 @@ export default async function QuestionPage({
       {chat && (
         <AssistantStateInitializer chatid={chat.id} messages={messages} />
       )}
-      <Walkthrough />
+      {session?.user?.isWalkthroughEnabled !== false && <Walkthrough />}
       <Navbar auth0User={session?.user} />
       <QuestionLayout />
     </div>

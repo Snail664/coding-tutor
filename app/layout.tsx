@@ -4,7 +4,6 @@ import "./globals.css";
 import "./markdown.css";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/toaster";
-import ChatBar from "@/components/features/ChatBar";
 
 const geistSans = localFont({
   src: "../assets/fonts/GeistVF.woff",
@@ -34,7 +33,6 @@ export default function RootLayout({
       >
         <Providers>
           {children}
-          <ChatBar />
           <Toaster />
         </Providers>
       </body>

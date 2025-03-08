@@ -1,6 +1,8 @@
 # Codey's Tutor Challenge
 
-**Topics:** Heap (Priority Queue), Greedy, Sorting
+## Topics: 
+
+`Greedy` `Heap (Priority Queue)` `Sorting`
 
 Codey the Tutor is now swamped with student inquiries. Each student query comes with a question consumption value Q and a monetary reward R credited from the student's subscription. However, due to the rising number of requests and his limited daily question quota, Codey has adopted an efficient strategy to manage his tutoring sessions.
 

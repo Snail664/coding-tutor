@@ -3,20 +3,38 @@
 import { Settings } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { disableWalkthroughThunk, enableWalkthroughThunk } from "@/slices/AuthSlice";
+import { disableWalkthroughThunk, enableWalkthroughThunk, fetchUserDataThunk } from "@/slices/AuthSlice";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { useEffect } from "react";
 
 export default function SettingsButton() {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, isAuthenticated, isLoading } = useAppSelector((state) => state.auth);
 
-  const handleWalkthroughToggle = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation(); // Prevent event from bubbling up
-    const checked = e.target.checked;
+  // Fetch user data when component mounts if user is authenticated but data isn't loaded
+  useEffect(() => {
+    if (isAuthenticated && !user && !isLoading) {
+      dispatch(fetchUserDataThunk());
+    }
+  }, [dispatch, isAuthenticated, user, isLoading]);
+
+  const handleWalkthroughToggle = async (checked: boolean) => {
     try {
+      if (!isAuthenticated) {
+        // If not authenticated, redirect to login
+        window.location.href = "/api/auth/login";
+        return;
+      }
+
       if (checked) {
-        await dispatch(disableWalkthroughThunk()).unwrap();
-      } else {
+        // When switch is turned ON, enable walkthrough
         await dispatch(enableWalkthroughThunk()).unwrap();
+        sessionStorage.removeItem('walkthroughDisabled');
+      } else {
+        // When switch is turned OFF, disable walkthrough
+        await dispatch(disableWalkthroughThunk()).unwrap();
+        sessionStorage.setItem('walkthroughDisabled', 'true');
       }
     } catch (error) {
       console.error('Error toggling walkthrough:', error);
@@ -30,20 +48,28 @@ export default function SettingsButton() {
           <Settings className="h-5 w-5" />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent 
+        align="end" 
+        className="w-56 bg-white dark:bg-gray-800 shadow-lg"
+      >
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <div className="flex items-center justify-between w-full" onClick={(e) => e.stopPropagation()}>
-            <span>Skip Walkthrough</span>
-            <input 
-              type="checkbox" 
-              checked={user?.isWalkthroughEnabled}
-              onChange={handleWalkthroughToggle}
-              className="ml-2"
+          <div className="flex items-center space-x-2 w-full" onClick={(e) => e.stopPropagation()}>
+            <Switch 
+              id="walkthrough-mode"
+              checked={user?.isWalkthroughEnabled ?? true}
+              onCheckedChange={handleWalkthroughToggle}
               onClick={(e) => e.stopPropagation()}
+              disabled={isLoading}
             />
+            <Label 
+              htmlFor="walkthrough-mode" 
+              className={`cursor-pointer ${isLoading ? 'opacity-50' : ''}`}
+            >
+              Walkthrough Mode
+            </Label>
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
-} 
+}

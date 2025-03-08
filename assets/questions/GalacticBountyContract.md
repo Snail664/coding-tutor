@@ -1,6 +1,8 @@
 # Galactic Bounty Contract
 
-**Topics:** Hash Table, String Parsing
+## Topics: 
+
+`Hash Table` `String Parsing`
 
 ### Difficulty: Easy
 

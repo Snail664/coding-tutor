@@ -1,6 +1,8 @@
 # The Purge
 
-**Topics:** Graph, Depth-First Search, Hash Table
+## Topics:
+ 
+`Depth-First Search` `Graph` `Hash Table`
 
 Your company's database is running critically low on storage, and the boss has tasked the team with clearing out unnecessary files to free up space. Upon inspection, you notice that the database is cluttered with outdated files and folders left over from past projects. Many of these files are stored in directories labeled with names like `TEMPORARY` or `DELETE LATER`.
 

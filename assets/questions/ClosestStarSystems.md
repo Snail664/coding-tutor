@@ -1,6 +1,8 @@
 # Closest Star Systems
 
-**Topics:** Sorting, Divide and Conquer, Math
+## Topics:
+
+`Divide and Conquer` `Math` `Sorting` 
 
 ### Difficulty : Easy
 

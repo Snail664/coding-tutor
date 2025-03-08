@@ -1,10 +1,8 @@
 import { getSession } from "@auth0/nextjs-auth0";
-// import DifficultyTag from "@/components/features/Question/QuestionDifficultyTag";
 import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/Navbar";
 import FilterableQuestions from "@/components/features/Question/FilterableQuestions";
-// import { Search as SearchIcon, Filter as FilterIcon } from "lucide-react";
-
+import CodeySearch from "@/components/features/Search/CodeySearch";
 
 export default async function Page() {
   const session = await getSession();
@@ -26,55 +24,56 @@ export default async function Page() {
   }));
 
   return (
-    <div className="px-5">
-      <Navbar auth0User={session?.user} hideMiddle={true} />
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6">
-        <div className="inline-block text-center mb-10">
-          <h1 className="text-6xl font-extrabold text-primary drop-shadow-lg">
+    <div className="min-h-screen bg-background">
+      {/* Fixed Navbar */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <Navbar auth0User={session?.user} hideMiddle={true} />
+      </div>
+      
+      {/* Hero Section with Search - Full Screen */}
+      <section className="h-screen pt-16 flex items-center justify-center relative bg-gradient-to-b from-primary/5 to-transparent">
+        <div className="w-full max-w-4xl mx-auto px-6 text-center">
+          <h1 className="text-6xl font-extrabold text-primary drop-shadow-lg mb-6">
             Coding Tutor
           </h1>
-          <p className="text-lg text-primary mt-2">
-            Powered by Codey, the AI. Codey will help you when you&apos;re stuck
-            with a bug or don&apos;t know how to continue.
+          <p className="text-xl text-muted-foreground mb-12">
+            Get unstuck instantly with Codey, your AI programming companion.
+            Master algorithms, debug code, and learn best practices.
           </p>
-        </div>
-        {!session ? null : (
-          <a
-            href="/api/auth/login"
-            className="inline-block relative -top-5 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105"
-          >
-            Get Started
-          </a>
-        )}
+          
+          {/* Codey Search Integration */}
+          <CodeySearch />
+          
+          {!session && (
+            <a
+              href="/api/auth/login"
+              className="inline-block mt-8 bg-primary dark:bg-gray-800 text-white font-bold py-3 px-8 rounded-full shadow-xl hover:bg-primary/90 dark:hover:bg-gray-700 transition-all transform hover:scale-105"
+            >
+              Get Started
+            </a>
+          )}
 
-        {/* Render the FilterableQuestions client component */}
-        <FilterableQuestions questions={transformedQuestions} />
-
-
-        {/* <div className="bg-menuBackground w-full max-w-md rounded-xl shadow-lg overflow-hidden mt-5">
-          <div className="max-h-96 overflow-y-auto">
-            <ul className="divide-y divide-gray-300">
-              {questions.map((question) => (
-                <li
-                  key={question.name}
-                  className="hover:bg-background transition"
-                >
-                  <a
-                    href={`/questions/${question.name}`}
-                    className="p-4 flex justify-between items-center"
-                  >
-                    <span className="text-primary font-medium">
-                      {question.name}
-                    </span>
-                    <DifficultyTag difficulty={question.difficulty} />
-                  </a>
-                </li>
-              ))}
-            </ul>
+          {/* Scroll Indicator */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <div className="w-8 h-8 border-b-2 border-r-2 border-primary transform rotate-45 opacity-75"></div>
           </div>
-        </div> */}
+        </div>
+      </section>
 
-      </div>
+      {/* Questions Section - Full Screen */}
+      <section className="min-h-screen flex items-start justify-center py-24">
+        <div className="w-full max-w-5xl mx-auto px-6">
+          <div className="grid grid-cols-12 gap-6">
+            {/* Left Sidebar Space */}
+            <div className="col-span-3"></div>
+            
+            {/* Questions List */}
+            <div className="col-span-8">
+              <FilterableQuestions questions={transformedQuestions} />
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

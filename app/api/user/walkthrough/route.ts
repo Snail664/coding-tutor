@@ -1,4 +1,4 @@
-import { getSession } from "@auth0/nextjs-auth0";
+import { getSession, updateSession } from "@auth0/nextjs-auth0";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
     const data: WalkthroughRequestData = await req.json();
     console.log("req got: ", data);
 
+    // Update the database
     const user = await prisma.user.update({
       where: {
         auth0_sub: session.user.sub,
@@ -29,26 +30,18 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Update the session with the new walkthrough status
-    session.user.isWalkthroughEnabled = user.isWalkthroughEnabled;
-    
-    // Create a new response with the updated session
-    const response = new NextResponse(
-      JSON.stringify({ isWalkthroughEnabled: user.isWalkthroughEnabled }), 
-      { 
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        }
-      }
-    );
+    // Create a new response
+    const response = NextResponse.json({ 
+      isWalkthroughEnabled: user.isWalkthroughEnabled 
+    });
 
-    // Set the session cookie
-    response.cookies.set("appSession", JSON.stringify(session), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
+    // Update the session
+    await updateSession(req, response, {
+      ...session,
+      user: {
+        ...session.user,
+        isWalkthroughEnabled: user.isWalkthroughEnabled
+      }
     });
 
     return response;
