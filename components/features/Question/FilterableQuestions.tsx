@@ -62,6 +62,17 @@ export default function FilterableQuestions({ questions }: Props) {
     }
     
     return matchesSearch && matchesDifficulty && matchesTopics;
+  }).sort((a, b) => {
+    // First sort by difficulty (easy -> medium -> hard)
+    const difficultyOrder = { easy: 1, medium: 2, hard: 3 };
+    const diffCompare = difficultyOrder[a.difficulty.toLowerCase() as keyof typeof difficultyOrder] - 
+                       difficultyOrder[b.difficulty.toLowerCase() as keyof typeof difficultyOrder];
+    
+    // If same difficulty, sort alphabetically by name
+    if (diffCompare === 0) {
+      return a.name.localeCompare(b.name);
+    }
+    return diffCompare;
   });
 
   const handleReset = () => {
@@ -76,7 +87,7 @@ export default function FilterableQuestions({ questions }: Props) {
   const hasActiveFilters = selectedDifficulty !== null || selectedTopics.length > 0;
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full max-w-md ml-[28px]">
       {/* Search Bar + Filter Button */}
       <div className="flex items-center gap-2 mb-4">
         <div className="relative flex-1">

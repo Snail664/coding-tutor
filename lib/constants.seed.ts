@@ -11,7 +11,7 @@ export const QUESTIONS: QuestionT[] = [
       join(__dirname, "../assets/questions/BrokenFirewall.md"),
       "utf-8"
     ),
-    tags: [{ name: "String" }, { name: "Bit Manipulation" }, {name: "Math"}],
+    tags: [{ name: "Bit Manipulation" }, {name: "Math"},{ name: "String" }],
     testCases: [
       {
         input: [
@@ -144,7 +144,7 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/ClosestStarSystems.md"),
       "utf-8"
     ),
-    tags: [{ name: "Sorting" }, { name: "Divide and Conquer" }, {name: "Math"}],
+    tags: [{ name: "Divide and Conquer" }, {name: "Math"},{ name: "Sorting" }, ],
     testCases: [
       {
         input: [
@@ -201,7 +201,7 @@ double solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/ConnectingTrainStations.md"),
       "utf-8"
     ),
-    tags: [{ name: "Dynamic Programming" }, { name: "Combinatorics "}, {name: "Recursion"}],
+    tags: [{ name: "Combinatorics "}, { name: "Dynamic Programming" }, {name: "Recursion"}],
     testCases: [
       {
         input:["856,40,12,1"],
@@ -330,7 +330,7 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/MiningTunnels.md"),
       "utf-8"
     ),
-    tags: [{ name: "Graph" }, { name: "Shortest Path" }, {name: "Breadth-First Search"}],
+    tags: [ {name: "Breadth-First Search"}, { name: "Graph" }, { name: "Shortest Path" }],
     testCases: [
       {
         input: [
@@ -451,7 +451,7 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/ThePurge.md"),
       "utf-8"
     ),
-    tags: [{ name: "Graph" }, {name: "Depth-First Search"}, {name: "Hash Table"}],
+    tags: [{name: "Depth-First Search"}, { name: "Graph" }, {name: "Hash Table"}],
     testCases: [
       {
         input: [
@@ -563,7 +563,7 @@ double solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/TimeToPlayFair.md"),
       "utf-8"
     ),
-    tags: [{ name: "String" }, {name: "Matrix"}, {name: "Graph"}],
+    tags: [{name: "Graph"}, {name: "Matrix"}, { name: "String" }],
     templateCodes: [
       {
         code: `def solution(data):
@@ -685,7 +685,7 @@ vector<int> solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/RottingOranges.md"),
       "utf-8"
     ),
-    tags: [{ name: "Graph" }, { name: "Breadth-First Search" }, {name: "Matrix"}, {name: "Queue"}],
+    tags: [{ name: "Breadth-First Search" }, { name: "Graph" }, {name: "Matrix"}, {name: "Queue"}],
     testCases: [
       {
         input: [
@@ -754,7 +754,7 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/SupplySquad.md"),
       "utf-8"
     ),
-    tags: [{ name: "Graph" }, { name: "Shortest Path" }, {name: "Backtracking"}, {name: "Dynamic Programming"}, {name: "Heap (Priority Queue)"}],
+    tags: [{name: "Backtracking"}, {name: "Dynamic Programming"}, { name: "Graph" }, {name: "Heap (Priority Queue)"}, { name: "Shortest Path" }],
     testCases: [
       {
         input: [
@@ -825,7 +825,7 @@ double solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/CosmicCandyCrush.md"),
       "utf8"
     ),
-    tags: [{ name: "Dynamic Programming" }, { name: "Memoization" }, {name: "Divide and Conquer"}],
+    tags: [{name: "Divide and Conquer"},{ name: "Dynamic Programming" }, { name: "Memoization" }],
     testCases: [
       {
         input: [3, 1, 5, 8],

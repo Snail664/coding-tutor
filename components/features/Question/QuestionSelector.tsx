@@ -42,6 +42,17 @@ export default function QuestionSelector() {
     const matchesTopics = selectedTopics.length === 0 || 
       selectedTopics.every(topic => item.tags?.some(tag => tag.name === topic));
     return matchesSearch && matchesDifficulty && matchesTopics;
+  }).sort((a, b) => {
+    // First sort by difficulty (easy -> medium -> hard)
+    const difficultyOrder = { easy: 1, medium: 2, hard: 3 };
+    const diffCompare = difficultyOrder[a.difficulty.toLowerCase() as keyof typeof difficultyOrder] - 
+                       difficultyOrder[b.difficulty.toLowerCase() as keyof typeof difficultyOrder];
+    
+    // If same difficulty, sort alphabetically by name
+    if (diffCompare === 0) {
+      return a.name.localeCompare(b.name);
+    }
+    return diffCompare;
   });
 
   if (!question) {
