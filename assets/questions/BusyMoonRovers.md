@@ -4,22 +4,26 @@
 
 `Graph` `Matrix` `String Parsing`
 
-You make the short trip from the Space Station over to the Moon base, Luna city, for a few days. You bump into an old friend of yours who runs a logistics and delivery business there, running automated rovers to deliver supplies to the various outposts around the moon.
+## Problem Statement: 
 
-Your friend expresses to you that they are curious how far their rovers travel per day, and you offer to help out.
+You make the short trip from the Space Station over to the Moon base, Luna city, for a few days. You bump into an old friend of yours who runs a logistics and delivery business there, running automated rovers to deliver supplies to the various outposts around the moon. 
+Each rover starts and ends the day at the main base so they can recharge overnight.
 
-Your friend supplies you a spreadsheet detailing the distances between the respective outposts, and a record of the stops made by the automated rovers throughout the day (your input data). Each rover starts and ends the day at the main base so they can recharge overnight.
+Your friend expresses to you that they are curious how far their rovers travel per day, and you offer to help out. Your friend supplies you a spreadsheet detailing the distances between the respective outposts, and a record of the stops made by the automated rovers throughout the day (your input data). 
+
+Given a distance matrix and a list of rover routes, your task is to compute the total distance traveled by all rovers.
 
 ### Example
 
 Consider the following simplified example with the distances between base camp and 3 outposts:
 
-|        | base  | ta00  | cx22  | xj84  |
-|--------|-------|-------|-------|-------|
-| base   | 0     | 55457 | 63529 | 61302 |
-| ta00   | 55457 | 0     | 111890| 35768 |
-| cx22   | 63529 | 111890| 0     | 98977 |
-| xj84   | 61302 | 35768 | 98977 | 0     |
+
+| Location | base | ta00 | cx22 | xj84 |
+|----------|------|------|------|------|
+| base | 0 | 55457 | 63529 | 61302 |
+| ta00 | 55457 | 0 | 111890 | 35768 |
+| cx22 | 63529 | 111890 | 0 | 98977 |
+| xj84 | 61302 | 35768 | 98977 | 0 |
 
 And the following example rover journey log:
 
@@ -56,6 +60,6 @@ data = {
 
 
 
-### Your Task
+## Your Task
 
 Process the journey distances of all 10 rovers to calculate the total distance traveled. That is your answer value.

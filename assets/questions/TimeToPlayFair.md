@@ -2,7 +2,7 @@
 
 ## Topics:
 
-`Graph` `String` `Matrix` 
+`Graph` `Matrix` `String`
 
 ### Difficulty : Easy 
 

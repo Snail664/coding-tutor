@@ -21,7 +21,7 @@ Each packet header follows the **IPv4** format.\
 * **Bytes 13-16** represent the source IP address.\
 * **Bytes 17-20** represent the destination IP address.
 
-### Output Format:
+## Output Format:
 A string in the format `internal/passenger`, where:
 * internal = Total bytes of internal traffic.
 * passenger = Total bytes of passenger WiFi traffic.

@@ -34,10 +34,10 @@ export default async function Page() {
       <section className="h-screen pt-16 flex items-center justify-center relative bg-gradient-to-b from-primary/5 to-transparent">
         <div className="w-full max-w-4xl mx-auto px-6 text-center">
           <h1 className="text-6xl font-extrabold text-primary drop-shadow-lg mb-6">
-            Coding Tutor
+            CodeyAI
           </h1>
           <p className="text-xl text-muted-foreground mb-12">
-            Get unstuck instantly with Codey, your AI programming companion.
+            Get unstuck instantly with Codey, your AI programming tutor.
             Master algorithms, debug code, and learn best practices.
           </p>
           

@@ -38,7 +38,7 @@ const Logo = () => (
   <div className="absolute left-2 top-1/2 transform -translate-y-1/2">
 
     <Link href="/" className="text-xl font-bold text-primary">
-      Codey
+      CodeyAI
     </Link>
   </div>
 );

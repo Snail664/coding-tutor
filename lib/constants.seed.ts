@@ -144,7 +144,7 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/ClosestStarSystems.md"),
       "utf-8"
     ),
-    tags: [{ name: "Divide and Conquer" }, {name: "Math"},{ name: "Sorting" }, ],
+    tags: [{ name: "Divide and Conquer" }, {name: "Math"}, { name: "Sorting" }],
     testCases: [
       {
         input: [
@@ -621,7 +621,7 @@ string solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/CodeyTutorChallenge.md"),
       "utf8"
     ),
-    tags: [{ name: "Heap (Priority Queue)" }, { name: "Greedy" }, {name: "Sorting"}],
+    tags: [{ name: "Greedy" }, { name: "Heap (Priority Queue)" }, {name: "Sorting"}],
     testCases: [
       {
         input: ["9",
