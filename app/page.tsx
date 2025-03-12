@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import FilterableQuestions from "@/components/features/Question/FilterableQuestions";
 // import { Search as SearchIcon, Filter as FilterIcon } from "lucide-react";
 
-
 export default async function Page() {
   const session = await getSession();
   const questions = await prisma.question.findMany({
@@ -22,11 +21,13 @@ export default async function Page() {
       <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6">
         <div className="inline-block text-center mb-10">
           <h1 className="text-6xl font-extrabold text-primary drop-shadow-lg">
-            Coding Tutor
+            Ask Codey
           </h1>
           <p className="text-lg text-primary mt-2">
-            Powered by Codey, the AI. Codey will help you when you&apos;re stuck
-            with a bug or don&apos;t know how to continue.
+            Improve your coding skills efficiently. No more wasting time on
+            stackoverflow forums or cookie-cutter chatbots. Codey, the AI tutor
+            will guide you through problems step by step, giving you enough
+            space to think and learn.
           </p>
         </div>
         {!session ? null : (
@@ -40,7 +41,6 @@ export default async function Page() {
 
         {/* Render the FilterableQuestions client component */}
         <FilterableQuestions questions={questions} />
-
 
         {/* <div className="bg-menuBackground w-full max-w-md rounded-xl shadow-lg overflow-hidden mt-5">
           <div className="max-h-96 overflow-y-auto">
@@ -64,7 +64,6 @@ export default async function Page() {
             </ul>
           </div>
         </div> */}
-
       </div>
     </div>
   );
