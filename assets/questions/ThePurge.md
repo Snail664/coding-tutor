@@ -12,7 +12,7 @@ The boss has made it clear: any file or folder containing the words **delete** o
 
 The root directory of the company's database is referred to as Folder 0. All other folders and files are organized within it. Let's look at a small example:
 
-#### Folder: 0
+### Folder: 0
 
 - `taskmgr.exe` (5065932 bytes)
 - `Customer_Feedback_Compilation_2024.xlsx` (2646384 bytes)
@@ -23,7 +23,7 @@ The root directory of the company's database is referred to as Folder 0. All oth
 - `temporary_023` [FOLDER 1]
 
 
-#### Folder: 1
+### Folder: 1
 
 - `Conference_Break_Music.mp3` (5179931 bytes)
 - `SlackSetup-x64-4.3.2.exe` (2384929 bytes)
@@ -34,7 +34,7 @@ The root directory of the company's database is referred to as Folder 0. All oth
 - `Office_Christmas_Party_2023.jpeg` (687062 bytes)
 
 
-#### Folder: 2
+### Folder: 2
 
 - `Product_Video_Soundtrack.aiff` (813896 bytes)
 - `Operations_Manuals` [FOLDER 3]
@@ -45,7 +45,7 @@ The root directory of the company's database is referred to as Folder 0. All oth
 - `Marketing_Brochure_Image1.PSD` (5913782 bytes)
 
 
-#### Folder: 3
+### Folder: 3
 
 - `ProductLaunch2024.png` (4396529 bytes)
 - `Motivational_Morning_Playlist.m3u` (5619626 bytes)
@@ -56,7 +56,7 @@ The root directory of the company's database is referred to as Folder 0. All oth
 - `delete_530` (7150742 bytes)
 
 
-#### Folder: 4
+### Folder: 4
 
 - `temporary_751` (1051994 bytes)
 - `delete_208` (6042521 bytes)
@@ -80,7 +80,7 @@ For example:
 
 Once you traverse the entire file structure, the total number of deletable bytes is **103,879,262**.
 
-### Your Task
+## Your Task
 
 Traverse through the files and folders in your input data, totaling the sizes of all files that should be deleted because either the filename or one of its containing folders includes the phrase **delete** or **temporary**. The total number of deletable bytes is your answer value.
 

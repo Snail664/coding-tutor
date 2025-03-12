@@ -10,13 +10,13 @@ One important issue with the tunnels is that there are tunnels on two different 
 
 Process the map to determine the shortest route out of the tunnel system.
 
-### Example
+## Example
 
 The following is a small example input data for the tunnels. You start at the entrance at the **top-left** and need to make your way to the **exit at the bottom-right**. Each `$` symbol represents an elevator that you can optionally take to the alternate level. 
 
 Note: You can also pass through an elevator; you do not have to use it to change levels.
 
-#### Map Level 1:
+### Map Level 1:
 ```
 #####################
 ................#...#
@@ -41,7 +41,7 @@ Note: You can also pass through an elevator; you do not have to use it to change
 #####################
 ```
 
-#### Map Level 2:
+### Map Level 2:
 ```
 #####################
 #.........#.........#
@@ -76,4 +76,4 @@ Michael McLeod from Pakuranga College has created an interactive version of the 
 
 ### Your Task
 
-For the map in the input data, what is the number of steps for the shortest path out of the maze?
+For the map in the input data, find the number of steps for the shortest path out of the maze?
