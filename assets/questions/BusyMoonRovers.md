@@ -15,11 +15,11 @@ The distance matrix represents the direct distances between locations, and each 
 
 You are given a dictionary **`data`** containing:
 
-* **`locations`** (List[str]): A list of location names.
+* **`locations`** `(List[str])`: A list of location names.
 
-* **`distances`** (List[List[int]]): A square matrix where distances[i][j] represents the travel distance between locations[i] and locations[j].
+* **`distances`** `(List[List[int]])`: A square matrix where distances[i][j] represents the travel distance between locations[i] and locations[j].
 
-* **`routes`** (List[str]): A list of rover journey logs in the format:
+* **`routes`** `(List[str])`: A list of rover journey logs in the format:
 
     `"Rover X route: location_1 -> location_2 -> ... -> location_N"` \
     Each rover always starts and ends at "base".
@@ -29,12 +29,7 @@ You are given a dictionary **`data`** containing:
 Consider the following simplified example with the distances between base camp and 3 outposts:
 
 
-| Location | base  |  ta00  |  cx22  |  xj84 |
-|----------|-------|--------|--------|-------|
-|   base   |   0   |  55457 |  63529 | 61302 |
-|   ta00   | 55457 |    0   | 111890 | 35768 |
-|   cx22   | 63529 | 111890 |    0   | 98977 |
-|   xj84   | 61302 |  35768 |  98977 |   0   |
+![Alt Text](../images/rovers_table.png)
 
 And the following example rover journey log:
 
