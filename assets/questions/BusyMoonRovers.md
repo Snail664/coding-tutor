@@ -11,7 +11,7 @@ You runs a logistics and delivery business at a moon base with various outposts.
 Your task is to calculate the total distance traveled by all rovers based on a given **distance matrix** and **rover routes**.
 The distance matrix represents the direct distances between locations, and each rover's journey is provided as a sequence of waypoints.
 
-### Input:
+## Input:
 
 You are given a dictionary **`data`** containing:
 
@@ -23,11 +23,6 @@ You are given a dictionary **`data`** containing:
 
     `"Rover X route: location_1 -> location_2 -> ... -> location_N"` \
     Each rover always starts and ends at "base".
-
-### Output
-
-Return a single integer representing the total distance traveled by all rovers.
-
 
 ## Example
 
@@ -77,12 +72,11 @@ data = {
 ## Constraints:
 * 1 ≤ `len(locations)` ≤ 100
 * 1 ≤ `len(routes)` ≤ 10
-* 0 ≤ `distances[i][j]` ≤ 10^6
-* Each location appears only once in locations
+* 0 ≤ `distances[i][j]` ≤ 10<sup>6</sup>
+* Each location appears only once in `locations` and are strings.
 * The matrix is symmetric: `distances[i][j]` == `distances[j][i]`
-* Each route starts and ends at "base" and only contains valid location names
 
 
 ## Your Task
 
-Process the journey distances of all 10 rovers to calculate the total distance traveled. That is your answer value.
+Return a single integer representing the total distance travelled by all rovers. 
