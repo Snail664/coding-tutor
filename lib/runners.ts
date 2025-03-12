@@ -217,7 +217,7 @@ export class CPPRunner implements LanguageRunner {
 
     int main() {
       string functionName = "${functionName}";
-      cerr << "Function Name: " << functionName << endl;    //Debugging line to print function name injected 
+      // cerr << "Function Name: " << functionName << endl;    //Debugging line to print function name injected 
 
       vector<TestCase> testCases = {
         ${testCases.map((tc) => `{

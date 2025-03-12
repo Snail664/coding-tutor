@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/Navbar";
 import FilterableQuestions from "@/components/features/Question/FilterableQuestions";
 import CodeySearch from "@/components/features/Search/CodeySearch";
+import DynamicText from "@/app/dynamictext";
 
 export default async function Page() {
   const session = await getSession();
@@ -34,12 +35,16 @@ export default async function Page() {
       <section className="h-screen pt-16 flex items-center justify-center relative bg-gradient-to-b from-primary/5 to-transparent">
         <div className="w-full max-w-4xl mx-auto px-6 text-center">
           <h1 className="text-6xl font-extrabold text-primary drop-shadow-lg mb-6">
-            CodeyAI
+            Ask Codey
           </h1>
-          <p className="text-xl text-muted-foreground mb-12">
-            Get unstuck instantly with Codey, your AI programming tutor.
-            Master algorithms, debug code, and learn best practices.
-          </p>
+
+          <DynamicText />
+
+          {/* <p className="text-xl text-muted-foreground mb-12">
+            Level up your coding skills with Codey the AI Tutor! 🚀  <br></br>
+            No more sifting through StackOverflow forums or cookie-cutter chatbots!  <br></br>
+            Get step-by-step guidance through problems while making you think and learn independently!
+          </p> */}
           
           {/* Codey Search Integration */}
           <CodeySearch />

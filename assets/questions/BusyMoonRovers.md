@@ -6,24 +6,40 @@
 
 ## Problem Statement: 
 
-You make the short trip from the Space Station over to the Moon base, Luna city, for a few days. You bump into an old friend of yours who runs a logistics and delivery business there, running automated rovers to deliver supplies to the various outposts around the moon. 
-Each rover starts and ends the day at the main base so they can recharge overnight.
+You runs a logistics and delivery business at a moon base with various outposts. Automated rovers deliver supplies to these outposts and **always return** to the **main base** at the end of the day. 
 
-Your friend expresses to you that they are curious how far their rovers travel per day, and you offer to help out. Your friend supplies you a spreadsheet detailing the distances between the respective outposts, and a record of the stops made by the automated rovers throughout the day (your input data). 
+Your task is to calculate the total distance traveled by all rovers based on a given **distance matrix** and **rover routes**.
+The distance matrix represents the direct distances between locations, and each rover's journey is provided as a sequence of waypoints.
 
-Given a distance matrix and a list of rover routes, your task is to compute the total distance traveled by all rovers.
+### Input:
 
-### Example
+You are given a dictionary **`data`** containing:
+
+* **`locations`** (List[str]): A list of location names.
+
+* **`distances`** (List[List[int]]): A square matrix where distances[i][j] represents the travel distance between locations[i] and locations[j].
+
+* **`routes`** (List[str]): A list of rover journey logs in the format:
+
+    `"Rover X route: location_1 -> location_2 -> ... -> location_N"` \
+    Each rover always starts and ends at "base".
+
+### Output
+
+Return a single integer representing the total distance traveled by all rovers.
+
+
+## Example
 
 Consider the following simplified example with the distances between base camp and 3 outposts:
 
 
-| Location | base | ta00 | cx22 | xj84 |
-|----------|------|------|------|------|
-| base | 0 | 55457 | 63529 | 61302 |
-| ta00 | 55457 | 0 | 111890 | 35768 |
-| cx22 | 63529 | 111890 | 0 | 98977 |
-| xj84 | 61302 | 35768 | 98977 | 0 |
+| Location | base  |  ta00  |  cx22  |  xj84 |
+|----------|-------|--------|--------|-------|
+|   base   |   0   |  55457 |  63529 | 61302 |
+|   ta00   | 55457 |    0   | 111890 | 35768 |
+|   cx22   | 63529 | 111890 |    0   | 98977 |
+|   xj84   | 61302 |  35768 |  98977 |   0   |
 
 And the following example rover journey log:
 
@@ -58,6 +74,13 @@ data = {
 }
 ```
 
+## Constraints:
+* 1 ≤ `len(locations)` ≤ 100
+* 1 ≤ `len(routes)` ≤ 10
+* 0 ≤ `distances[i][j]` ≤ 10^6
+* Each location appears only once in locations
+* The matrix is symmetric: `distances[i][j]` == `distances[j][i]`
+* Each route starts and ends at "base" and only contains valid location names
 
 
 ## Your Task
