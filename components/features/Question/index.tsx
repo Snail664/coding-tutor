@@ -3,6 +3,7 @@ import { FileQuestion } from "lucide-react";
 import CollapsiblePanel from "../../layout/CollapsiblePanel";
 import QuestionSelector from "./QuestionSelector";
 import Markdown from "react-markdown";
+import rehypeRaw from 'rehype-raw';
 import { useAppSelector } from "@/store";
 import TopicTag from "./QuestionTopicTag";
 
@@ -22,7 +23,7 @@ export default function QuestionWindow() {
             ))}
           </div>
         )}
-        <Markdown>{question?.content}</Markdown>
+        <Markdown rehypePlugins={[rehypeRaw]}>{question?.content}</Markdown>
       </div>
     </CollapsiblePanel>
   );
