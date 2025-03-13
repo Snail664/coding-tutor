@@ -49,46 +49,51 @@
 /* Table styles */
 .markdown-container table {
   width: 100%;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
   border-collapse: collapse;
   font-size: 0.875rem;
-  table-layout: fixed;
-  overflow-x: auto;
-  display: block;
+}
+
+.markdown-container th,
+.markdown-container td {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border, #e5e7eb);
+  text-align: left;
 }
 
 .markdown-container th {
-  background-color: var(--menuBackground);
-  font-weight: 600;
-  text-align: center;
-  padding: 0.75rem;
-  border: 1px solid var(--border, #e5e7eb);
-  white-space: nowrap;
+  font-weight: 500;
+  background-color: var(--background);
 }
 
 .markdown-container td {
-  padding: 0.75rem;
-  border: 1px solid var(--border, #e5e7eb);
-  text-align: center;
   background-color: var(--contentBackground);
 }
 
-.markdown-container tr {
-  background-color: transparent;
+/* Table wrapper for horizontal scrolling */
+.markdown-container div > table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
-.markdown-container tr:nth-child(even) td {
-  background-color: var(--menuBackground);
+/* Preserve whitespace in table cells */
+.markdown-container td,
+.markdown-container th {
+  white-space: pre;
 }
 
-/* Add horizontal scrolling for code blocks and tables */
-.markdown-container pre,
+/* Container for horizontal scrolling if needed */
 .markdown-container table {
+  display: block;
   max-width: 100%;
   overflow-x: auto;
-  white-space: pre;
-  -webkit-overflow-scrolling: touch;
+  white-space: nowrap;
+}
+
+/* Remove alternating row colors */
+.markdown-container tr:nth-child(even) td {
+  background-color: var(--contentBackground);
 }
 
 /* Preserve whitespace in code blocks */
