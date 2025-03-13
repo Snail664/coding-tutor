@@ -11,7 +11,7 @@ export const QUESTIONS: QuestionT[] = [
       join(__dirname, "../assets/questions/BrokenFirewall.md"),
       "utf-8"
     ),
-    tags: [{ name: "Bit Manipulation" }, {name: "Math"},{ name: "String" }],
+    tags: [{ name: "Bit Manipulation" }, { name: "Math" }, { name: "String" }],
     testCases: [
       {
         input: [
@@ -84,7 +84,7 @@ char* solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/BusyMoonRovers.md"),
       "utf8"
     ),
-    tags: [{ name: "Graph" }, { name: "Matrix" }, {name: "String Parsing"}],
+    tags: [{ name: "Graph" }, { name: "Matrix" }, { name: "String Parsing" }],
     testCases: [
       {
         input: {
@@ -120,8 +120,7 @@ char* solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -133,7 +132,7 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -144,7 +143,11 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/ClosestStarSystems.md"),
       "utf-8"
     ),
-    tags: [{ name: "Divide and Conquer" }, {name: "Math"}, { name: "Sorting" }],
+    tags: [
+      { name: "Divide and Conquer" },
+      { name: "Math" },
+      { name: "Sorting" },
+    ],
     testCases: [
       {
         input: [
@@ -177,8 +180,7 @@ int solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -190,7 +192,7 @@ double solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -201,10 +203,14 @@ double solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/ConnectingTrainStations.md"),
       "utf-8"
     ),
-    tags: [{ name: "Combinatorics "}, { name: "Dynamic Programming" }, {name: "Recursion"}],
+    tags: [
+      { name: "Combinatorics " },
+      { name: "Dynamic Programming" },
+      { name: "Recursion" },
+    ],
     testCases: [
       {
-        input:["856,40,12,1"],
+        input: ["856,40,12,1"],
         expectedOutput: 12,
         description: "",
       },
@@ -227,8 +233,7 @@ double solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -240,7 +245,7 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -251,28 +256,28 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/GalacticBountyContract.md"),
       "utf8"
     ),
-    tags: [{ name: "Hash Table" },{name: "String Parsing"}],
+    tags: [{ name: "Hash Table" }, { name: "String Parsing" }],
     testCases: [
       {
         input: [
-          "AAA: Seat 9997",
+          "AAA: Pilot 9997",
           "BBB: Discount 2886",
-          "DDD: Luggage 3500",
-          "CCC: Fee 9468",
-          "BBB: Fee 9378",
-          "AAA: Discount 3103",
+          "DDD: Fuel 3500",
+          "CCC: Docking 9468",
+          "BBB: Tax 9378",
+          "AAA: Rebate 3103",
         ],
         expectedOutput: 3500,
         description: "Basic test",
       },
       {
         input: [
-          "SuperSpace: Seat 9997",
+          "SuperSpace: Pilot 9997",
           "OrionTravles: Discount 2886",
-          "Galactica: Luggage 3500",
+          "Galactica: Pilot 3500",
           "SuperSpace: Tax 156",
-          "EarthExpress: Fee 9468",
-          "OrionTravles: Fee 9378",
+          "EarthExpress: Pilot 9468",
+          "OrionTravles: Pilot 9378",
           "SuperSpace: Discount 3103",
           "Galactica: Rebate 967",
         ],
@@ -281,18 +286,18 @@ int solution(const vector<string>& input) {
       },
       {
         input: [
-          "AAA: Seat 3000",
-          "AAA: Meals 1000",
-          "AAA: Luggage 2000",
-          "AAA: Fee 1000",
+          "AAA: Pilot 3000",
+          "AAA: Fuel 1000",
+          "AAA: Maintenance 2000",
+          "AAA: Docking 1000",
           "AAA: Tax 1000",
           "AAA: Rebate 500",
           "AAA: Discount 200",
-          "BBB: Seat 5000",
-          "BBB: Meals 1000",
+          "BBB: Pilot 5000",
+          "BBB: Fuel 1000",
           "BBB: Discount 200",
           "CCC: Discount 300",
-          "CCC: Fee 1000",
+          "CCC: Maintenance 1000",
         ],
         expectedOutput: 700,
         description: "check if all cost types are accounted for",
@@ -306,8 +311,7 @@ int solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -319,7 +323,7 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -330,7 +334,11 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/MiningTunnels.md"),
       "utf-8"
     ),
-    tags: [ {name: "Breadth-First Search"}, { name: "Graph" }, { name: "Shortest Path" }],
+    tags: [
+      { name: "Breadth-First Search" },
+      { name: "Graph" },
+      { name: "Shortest Path" },
+    ],
     testCases: [
       {
         input: [
@@ -427,8 +435,7 @@ int solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -440,7 +447,7 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -451,7 +458,11 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/ThePurge.md"),
       "utf-8"
     ),
-    tags: [{name: "Depth-First Search"}, { name: "Graph" }, {name: "Hash Table"}],
+    tags: [
+      { name: "Depth-First Search" },
+      { name: "Graph" },
+      { name: "Hash Table" },
+    ],
     testCases: [
       {
         input: [
@@ -539,8 +550,7 @@ int solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -552,7 +562,7 @@ double solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -563,7 +573,7 @@ double solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/TimeToPlayFair.md"),
       "utf-8"
     ),
-    tags: [{name: "Graph"}, {name: "Matrix"}, { name: "String" }],
+    tags: [{ name: "Graph" }, { name: "Matrix" }, { name: "String" }],
     templateCodes: [
       {
         code: `def solution(data):
@@ -572,8 +582,7 @@ double solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -585,7 +594,7 @@ string solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
     testCases: [
@@ -612,8 +621,7 @@ string solution(const vector<string>& input) {
       },
     ],
   },
-  
-  
+
   {
     name: "Codey's Tutor Challenge",
     difficulty: QuestionDifficulty.medium,
@@ -621,10 +629,15 @@ string solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/CodeyTutorChallenge.md"),
       "utf8"
     ),
-    tags: [{ name: "Greedy" }, { name: "Heap (Priority Queue)" }, {name: "Sorting"}],
+    tags: [
+      { name: "Greedy" },
+      { name: "Heap (Priority Queue)" },
+      { name: "Sorting" },
+    ],
     testCases: [
       {
-        input: ["9",
+        input: [
+          "9",
           "add 8 10",
           "add 3 25",
           "add 5 6",
@@ -633,7 +646,8 @@ string solution(const vector<string>& input) {
           "add 1 9",
           "add 2 13",
           "tutor 20",
-          "tutor 1"],
+          "tutor 1",
+        ],
         expectedOutput: [6, 25, 32, 0],
         description: "",
       },
@@ -645,11 +659,9 @@ string solution(const vector<string>& input) {
           "add 1 100000",
           "tutor 100000",
           "add 50000 1",
-          "tutor 100000"
-        ]
-          ,
-        expectedOutput: [0, 100000, 100001]
-        ,
+          "tutor 100000",
+        ],
+        expectedOutput: [0, 100000, 100001],
         description: "",
       },
     ],
@@ -661,8 +673,7 @@ string solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -674,7 +685,7 @@ vector<int> solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -685,14 +696,19 @@ vector<int> solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/RottingOranges.md"),
       "utf-8"
     ),
-    tags: [{ name: "Breadth-First Search" }, { name: "Graph" }, {name: "Matrix"}, {name: "Queue"}],
+    tags: [
+      { name: "Breadth-First Search" },
+      { name: "Graph" },
+      { name: "Matrix" },
+      { name: "Queue" },
+    ],
     testCases: [
       {
         input: [
-          /** Simple test: small matrix, clear path */ 
+          /** Simple test: small matrix, clear path */
           "[[2,1,1]",
           "[1,1,0]",
-          "[0,1,1]]"
+          "[0,1,1]]",
         ],
         expectedOutput: 4,
         description: "",
@@ -704,7 +720,7 @@ vector<int> solution(const vector<string>& input) {
           "[1,1,0,1,1]",
           "[0,0,0,2,1]",
           "[1,1,1,1,1]",
-          "[1,1,1,1,1]]"
+          "[1,1,1,1,1]]",
         ],
         expectedOutput: 1150,
         description: "",
@@ -716,7 +732,7 @@ vector<int> solution(const vector<string>& input) {
           "[1,1,0,1,1]",
           "[0,0,0,0,1]",
           "[1,0,0,0,1]",
-          "[1,1,1,1,1]]"
+          "[1,1,1,1,1]]",
         ],
         expectedOutput: -1,
         description: "",
@@ -730,8 +746,7 @@ vector<int> solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -743,7 +758,7 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -754,7 +769,13 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/SupplySquad.md"),
       "utf-8"
     ),
-    tags: [{name: "Backtracking"}, {name: "Dynamic Programming"}, { name: "Graph" }, {name: "Heap (Priority Queue)"}, { name: "Shortest Path" }],
+    tags: [
+      { name: "Backtracking" },
+      { name: "Dynamic Programming" },
+      { name: "Graph" },
+      { name: "Heap (Priority Queue)" },
+      { name: "Shortest Path" },
+    ],
     testCases: [
       {
         input: [
@@ -801,8 +822,7 @@ int solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -814,7 +834,7 @@ double solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -825,7 +845,11 @@ double solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/CosmicCandyCrush.md"),
       "utf8"
     ),
-    tags: [{name: "Divide and Conquer"},{ name: "Dynamic Programming" }, { name: "Memoization" }],
+    tags: [
+      { name: "Divide and Conquer" },
+      { name: "Dynamic Programming" },
+      { name: "Memoization" },
+    ],
     testCases: [
       {
         input: [3, 1, 5, 8],
@@ -846,8 +870,7 @@ double solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -859,7 +882,7 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
   },
@@ -870,7 +893,12 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/MagicalMedianChallenge.md"),
       "utf8"
     ),
-    tags: [{ name: "Binary Search" }, { name: "Divide and Conquer" }, {name: "Math"}, {name: "Sorting"}],
+    tags: [
+      { name: "Binary Search" },
+      { name: "Divide and Conquer" },
+      { name: "Math" },
+      { name: "Sorting" },
+    ],
     testCases: [
       {
         input: [[1, 3], [2]],
@@ -894,8 +922,7 @@ int solution(const vector<string>& input) {
         language: LanguageName.python,
       },
       {
-        code:
-        `#include <iostream>
+        code: `#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -907,8 +934,8 @@ int solution(const vector<string>& input) {
     
     } 
         `,
-          language: LanguageName.cpp,
+        language: LanguageName.cpp,
       },
     ],
-  }
+  },
 ];
