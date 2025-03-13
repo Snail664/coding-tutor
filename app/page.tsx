@@ -25,9 +25,9 @@ export default async function Page() {
           </h1>
           <p className="text-lg text-primary mt-2">
             Improve your coding skills efficiently. No more wasting time on
-            stackoverflow forums or cookie-cutter chatbots. Codey, the AI tutor
-            will guide you through problems step by step, giving you enough
-            space to think and learn.
+            stackoverflow forums or cookie-cutter chatbots. <br />
+            Codey, the AI tutor will guide you through problems step by step,
+            giving you enough space to think and learn.
           </p>
         </div>
         {!session ? null : (
