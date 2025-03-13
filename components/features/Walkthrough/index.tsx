@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Joyride, { Step, CallBackProps, ACTIONS, EVENTS, STATUS } from "react-joyride";
+import Joyride, { Step, CallBackProps, ACTIONS, EVENTS } from "react-joyride";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { disableWalkthroughThunk } from "@/slices/AuthSlice";
 
@@ -20,7 +20,7 @@ export default function Walkthrough() {
       });
       setRun(user.isWalkthroughEnabled);
     }
-  }, [isLoading, user]);
+  }, [isLoading, user, run]);
 
   const steps: Step[] = [
     {

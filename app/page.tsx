@@ -6,6 +6,12 @@ import CodeySearch from "@/components/features/Search/CodeySearch";
 import DynamicText from "@/app/dynamictext";
 import ScrollButton from "@/app/components/ScrollButton";
 
+interface Question {
+  name: string;
+  difficulty: string;
+  tags?: { name: string }[];
+}
+
 export default async function Page() {
   const session = await getSession();
   const questions = await prisma.question.findMany({
@@ -22,7 +28,7 @@ export default async function Page() {
   const transformedQuestions = questions.map(q => ({
     name: q.name,
     difficulty: q.difficulty,
-    tags: (q as any).tags?.map((tag: { name: string }) => ({ name: tag.name })) || []
+    tags: (q as Question).tags?.map((tag: { name: string }) => ({ name: tag.name })) || []
   }));
 
   return (

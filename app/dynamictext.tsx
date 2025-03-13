@@ -20,7 +20,7 @@ const DynamicText = () => {
 
       return () => clearTimeout(timeout);
     }
-  }, [currentIndex]);
+  }, [currentIndex, lines]);
 
   return (
     <p className="text-xl text-muted-foreground mb-12">
