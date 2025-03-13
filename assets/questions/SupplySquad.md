@@ -47,7 +47,7 @@ Sum these distances to calculate the total distance traveled by this drone as **
 
 ## Constraints
 * 2 ≤ N ≤ 100 (Number of locations including the hub)
-* 0 ≤ Distance between locations ≤ 10<sup>6</sup>
+* 0 ≤ Distance between locations ≤ 10⁵
 * All paths between locations are symmetric (`distance[i][j] == distance[j][i]`).
 
 ## Your Task

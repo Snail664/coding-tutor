@@ -11,14 +11,14 @@ The firewall operates under **Internet Protocol version 4 (IPv4)** and has captu
 #### Firewall Rules:
 For each packet:
 
-* Internal Traffic: Source or destination IP address falls within `192.168.0.0` → `192.168.254.254`. \
-* Passenger WiFi Traffic: Source or destination IP address falls within `10.0.0.0` → `10.0.254.254`. \
+* Internal Traffic: Source or destination IP address falls within `192.168.0.0` → `192.168.254.254`. 
+* Passenger WiFi Traffic: Source or destination IP address falls within `10.0.0.0` → `10.0.254.254`. 
 * External Traffic: Any other IP addresses (e.g., internet browsing, external command centers)
 * If a packet belongs to both categories, count it for both.
 
-Each packet header follows the **IPv4** format.\
-* **Bytes 3-4** represent the packet length as a 16-bit integer.\
-* **Bytes 13-16** represent the source IP address.\
+Each packet header follows the **IPv4** format.
+* **Bytes 3-4** represent the packet length as a 16-bit integer.
+* **Bytes 13-16** represent the source IP address.
 * **Bytes 17-20** represent the destination IP address.
 
 ## Output:

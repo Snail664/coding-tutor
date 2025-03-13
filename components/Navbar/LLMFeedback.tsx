@@ -1,6 +1,5 @@
 import { BotMessageSquare, User } from "lucide-react";
 import Markdown from "react-markdown";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 // LLMFeedback.tsx
