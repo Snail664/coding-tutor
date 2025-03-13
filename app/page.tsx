@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import FilterableQuestions from "@/components/features/Question/FilterableQuestions";
 import CodeySearch from "@/components/features/Search/CodeySearch";
 import DynamicText from "@/app/dynamictext";
+import ScrollButton from "@/app/components/ScrollButton";
 
 export default async function Page() {
   const session = await getSession();
@@ -59,14 +60,12 @@ export default async function Page() {
           )}
 
           {/* Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-            <div className="w-8 h-8 border-b-2 border-r-2 border-primary transform rotate-45 opacity-75"></div>
-          </div>
+          <ScrollButton />
         </div>
       </section>
 
       {/* Questions Section - Full Screen */}
-      <section className="min-h-screen flex items-start justify-center py-24">
+      <section id="questions-section" className="min-h-screen flex items-start justify-center py-24">
         <div className="w-full max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-12 gap-6">
             {/* Left Sidebar Space */}

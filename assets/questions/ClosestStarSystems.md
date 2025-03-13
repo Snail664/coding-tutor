@@ -17,7 +17,7 @@ X, Y and Z are axis positions of the star from the galactic center in light year
 * Your task is to find the **closest two star systems**, using the 3D Euclidean distance formula.
 
 ## Distance Calculation
-The distance between two stars A and B with coordinates (𝑋1,𝑌1,𝑍1) and(X2,Y2,Z2) is given by the Pythagoras Theorem formula: 
+The distance between two stars A and B with coordinates (𝑋1,𝑌1,𝑍1) and (𝑋2,𝑌2,𝑍2) is given by the Pythagoras Theorem formula: 
 ```
 distance = sqrt((X1 - X2)^2 + (Y1 - Y2)^2 + (Z1 - Z2)^2)
 ```
@@ -32,7 +32,7 @@ System_Name: Distance_from_Earth, X, Y, Z
 `X, Y, Z`: Floating-point numbers representing the star's galactic coordinates.
 
 ## Constraints
-* 2≤𝑁≤10<sup>4</sup> (Number of star systems)
+* 2 ≤ 𝑁 ≤ 10<sup>4</sup> (Number of star systems)
 * Coordinates X,Y,Z are floating-point numbers in the range [−10<sup>5</sup> ,10<sup>5</sup>].
 * The distance between two distinct star systems is always non-zero.
 

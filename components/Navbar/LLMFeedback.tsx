@@ -1,6 +1,6 @@
 import { BotMessageSquare, User } from "lucide-react";
 import Markdown from "react-markdown";
-import Link from "next/link";
+import rehypeRaw from 'rehype-raw';
 import { useRouter } from "next/navigation";
 
 // LLMFeedback.tsx
@@ -38,7 +38,7 @@ export default function LLMFeedback({ userQuestion, LLMResponse }: LLMFeedbackPr
         <div className="flex gap-2">
           <BotMessageSquare className="w-5 h-5 mt-1 text-primary" />
           <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
-            <Markdown components={components}>{processedResponse}</Markdown>
+            <Markdown rehypePlugins={[rehypeRaw]} components={components}>{processedResponse}</Markdown>
           </div>
         </div>
       )}

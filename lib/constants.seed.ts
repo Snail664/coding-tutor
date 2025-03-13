@@ -78,65 +78,6 @@ char* solution(const vector<string>& input) {
     ],
   },
   {
-    name: "Busy Moon Rovers",
-    difficulty: QuestionDifficulty.easy,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/BusyMoonRovers.md"),
-      "utf8"
-    ),
-    tags: [{ name: "Graph" }, { name: "Matrix" }, { name: "String Parsing" }],
-    testCases: [
-      {
-        input: {
-          locations: ["base", "ta00", "cx22", "xj84"],
-          distances: [
-            [0, 55457, 63529, 61302],
-            [55457, 0, 111890, 35768],
-            [63529, 111890, 0, 98977],
-            [61302, 35768, 98977, 0],
-          ],
-          routes: [
-            "Rover 1 route: base -> cx22 -> ta00 -> base -> xj84 -> base",
-            "Rover 2 route: base -> ta00 -> cx22 -> base -> xj84 -> base",
-            "Rover 3 route: base -> xj84 -> base",
-            "Rover 4 route: base -> ta00 -> base",
-            "Rover 5 route: base -> cx22 -> base",
-            "Rover 6 route: base -> xj84 -> cx22 -> base",
-            "Rover 7 route: base -> ta00 -> xj84 -> base",
-            "Rover 8 route: base -> cx22 -> ta00 -> xj84 -> base",
-            "Rover 9 route: base -> ta00 -> cx22 -> xj84 -> base",
-            "Rover 10 route: base -> cx22 -> base",
-          ],
-        },
-        expectedOutput: 2171044,
-        description: "simple test",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code below as soon as possible
-`,
-        language: LanguageName.python,
-      },
-      {
-        code: `#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
-
-using namespace std;
-
-int solution(const vector<string>& input) {
-    // Insert your code below here
-    
-    } 
-        `,
-        language: LanguageName.cpp,
-      },
-    ],
-  },
-  {
     name: "Closest Star Systems",
     difficulty: QuestionDifficulty.easy,
     content: readFileSync(
@@ -210,17 +151,17 @@ double solution(const vector<string>& input) {
     ],
     testCases: [
       {
-        input: ["856,40,12,1"],
+        input: "856,40,12,1",
         expectedOutput: 12,
         description: "",
       },
       {
-        input: /** middddd*/ ["100,20,5,1"],
+        input: /** middddd*/ "100,20,5,1",
         expectedOutput: 3127,
         description: "",
       },
       {
-        input: /** to test stac overflow limit  */ ["999999,40000,2000,1"],
+        input: /** to test stac overflow limit  */ "999999,40000,2000,1",
         expectedOutput: 7852401,
         description: "",
       },
@@ -240,7 +181,7 @@ double solution(const vector<string>& input) {
 
 using namespace std;
 
-int solution(const vector<string>& input) {
+int solution(const string input) {
     // Insert your code below here
     
     } 
@@ -706,9 +647,9 @@ vector<int> solution(const vector<string>& input) {
       {
         input: [
           /** Simple test: small matrix, clear path */
-          "[[2,1,1]",
-          "[1,1,0]",
-          "[0,1,1]]",
+          [[2,1,1],
+          [1,1,0],
+          [0,1,1]],
         ],
         expectedOutput: 4,
         description: "",
@@ -716,11 +657,11 @@ vector<int> solution(const vector<string>& input) {
       {
         input: [
           /** Medium test: larger matrix, negative impact of wrong implementation */
-          "[[2,1,1,1,1]",
-          "[1,1,0,1,1]",
-          "[0,0,0,2,1]",
-          "[1,1,1,1,1]",
-          "[1,1,1,1,1]]",
+          [[2,1,1,1,1],
+          [1,1,0,1,1],
+          [0,0,0,2,1],
+          [1,1,1,1,1],
+          [1,1,1,1,1]],
         ],
         expectedOutput: 1150,
         description: "",
@@ -728,11 +669,11 @@ vector<int> solution(const vector<string>& input) {
       {
         input: [
           /** Hard test: edge cases with large numbers and precision */
-          "[[2,1,1,1,1]",
-          "[1,1,0,1,1]",
-          "[0,0,0,0,1]",
-          "[1,0,0,0,1]",
-          "[1,1,1,1,1]]",
+          [[2,1,1,1,1],
+          [1,1,0,1,1],
+          [0,0,0,0,1],
+          [1,0,0,0,1],
+          [1,1,1,1,1]],
         ],
         expectedOutput: -1,
         description: "",

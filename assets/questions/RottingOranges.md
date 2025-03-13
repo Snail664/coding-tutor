@@ -43,7 +43,7 @@ The orange in the bottom left corner (row 2, column 0) is never rotten because r
 
 ### Sample Input 3:
 ```
-grid = [[0,2]]
+[[0,2]]
 ```
 
 ### Sample Output 3
