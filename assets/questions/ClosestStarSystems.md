@@ -32,7 +32,7 @@ System_Name: Distance_from_Earth, X, Y, Z
 `X, Y, Z`: Floating-point numbers representing the star's galactic coordinates.
 
 ## Constraints
-* 2≤𝑁≤10<sup>4</sup> (Number of star systems)
+* 2 ≤ 𝑁 ≤ 10<sup>4</sup> (Number of star systems)
 * Coordinates X,Y,Z are floating-point numbers in the range [−10<sup>5</sup> ,10<sup>5</sup>].
 * The distance between two distinct star systems is always non-zero.
 
