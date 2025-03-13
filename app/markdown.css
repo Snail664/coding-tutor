@@ -45,3 +45,29 @@
   padding: 0;
   background: none;
 }
+
+/* Table styles */
+.markdown-container table {
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.markdown-container th {
+  background-color: var(--menuBackground);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem;
+  border: 1px solid var(--menuBackground);
+}
+
+.markdown-container td {
+  padding: 0.75rem;
+  border: 1px solid var(--menuBackground);
+}
+
+.markdown-container tr:nth-child(even) {
+  background-color: var(--contentBackground);
+}
