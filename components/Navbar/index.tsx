@@ -16,7 +16,7 @@ interface NavbarProps {
 
 export default function Navbar({ auth0User, hideMiddle }: NavbarProps) {
   return (
-    <div className="w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-0 sm:px-2 lg:px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Left - Logo */}
@@ -36,7 +36,6 @@ export default function Navbar({ auth0User, hideMiddle }: NavbarProps) {
 // Left Logo Component
 const Logo = () => (
   <div className="absolute left-2 top-1/2 transform -translate-y-1/2">
-
     <Link href="/" className="text-xl font-bold text-primary">
       CodeyAI
     </Link>
