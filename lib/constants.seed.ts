@@ -210,17 +210,17 @@ double solution(const vector<string>& input) {
     ],
     testCases: [
       {
-        input: ["856,40,12,1"],
+        input: "856,40,12,1",
         expectedOutput: 12,
         description: "",
       },
       {
-        input: /** middddd*/ ["100,20,5,1"],
+        input: /** middddd*/ "100,20,5,1",
         expectedOutput: 3127,
         description: "",
       },
       {
-        input: /** to test stac overflow limit  */ ["999999,40000,2000,1"],
+        input: /** to test stac overflow limit  */ "999999,40000,2000,1",
         expectedOutput: 7852401,
         description: "",
       },
@@ -240,7 +240,7 @@ double solution(const vector<string>& input) {
 
 using namespace std;
 
-int solution(const vector<string>& input) {
+int solution(const string input) {
     // Insert your code below here
     
     } 
@@ -706,9 +706,9 @@ vector<int> solution(const vector<string>& input) {
       {
         input: [
           /** Simple test: small matrix, clear path */
-          "[[2,1,1]",
-          "[1,1,0]",
-          "[0,1,1]]",
+          [[2,1,1],
+          [1,1,0],
+          [0,1,1]],
         ],
         expectedOutput: 4,
         description: "",
@@ -716,11 +716,11 @@ vector<int> solution(const vector<string>& input) {
       {
         input: [
           /** Medium test: larger matrix, negative impact of wrong implementation */
-          "[[2,1,1,1,1]",
-          "[1,1,0,1,1]",
-          "[0,0,0,2,1]",
-          "[1,1,1,1,1]",
-          "[1,1,1,1,1]]",
+          [[2,1,1,1,1],
+          [1,1,0,1,1],
+          [0,0,0,2,1],
+          [1,1,1,1,1],
+          [1,1,1,1,1]],
         ],
         expectedOutput: 1150,
         description: "",
@@ -728,11 +728,11 @@ vector<int> solution(const vector<string>& input) {
       {
         input: [
           /** Hard test: edge cases with large numbers and precision */
-          "[[2,1,1,1,1]",
-          "[1,1,0,1,1]",
-          "[0,0,0,0,1]",
-          "[1,0,0,0,1]",
-          "[1,1,1,1,1]]",
+          [[2,1,1,1,1],
+          [1,1,0,1,1],
+          [0,0,0,0,1],
+          [1,0,0,0,1],
+          [1,1,1,1,1]],
         ],
         expectedOutput: -1,
         description: "",
