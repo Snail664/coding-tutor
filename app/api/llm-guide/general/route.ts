@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 
     const data: GeneralRequestData = await request.json();
     console.log("Received question:", data.userQuestion);
-    
+
     if (!data.userQuestion) {
       console.log("Missing user question");
       return new Response("Missing user question", { status: 400 });
@@ -59,36 +59,38 @@ export async function POST(request: Request) {
         difficulty: true,
         tags: {
           select: {
-            name: true
-          }
-        }
+            name: true,
+          },
+        },
       },
       cacheStrategy: { ttl: 3600, swr: 30 },
     });
 
     // Format questions for the LLM
-    const formattedQuestions = questions.map(q => ({
+    const formattedQuestions = questions.map((q) => ({
       name: q.name,
       difficulty: q.difficulty,
-      tags: q.tags.map(t => t.name)
+      tags: q.tags.map((t) => t.name),
     }));
 
     // Prepare messages for the chat completion
     const messages = [
-      { 
-        role: "system", 
-        content: SYSTEM_PROMPT + "\n\nAvailable questions:\n" + 
-          JSON.stringify(formattedQuestions, null, 2)
+      {
+        role: "system",
+        content:
+          SYSTEM_PROMPT +
+          "\n\nAvailable questions:\n" +
+          JSON.stringify(formattedQuestions, null, 2),
       },
       ...(data.chatHistory || []),
-      { role: "user", content: data.userQuestion }
+      { role: "user", content: data.userQuestion },
     ];
 
     console.log("Sending request to OpenAI with messages:", messages);
 
     // Get completion from OpenAI using the configured instance
     const completion = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o",
       messages: messages as OpenAI.Chat.ChatCompletionMessageParam[],
       temperature: 0.7,
       max_tokens: 1500,
@@ -105,25 +107,34 @@ export async function POST(request: Request) {
     return NextResponse.json({
       response: response,
     });
-
   } catch (error: unknown) {
     console.error("Error in general chat endpoint:", error);
     console.error("Error details:", {
-      message: error instanceof Error ? error.message : 'Unknown error',
-      response: error instanceof Error ? (error as { response?: { status?: number } }).response : undefined,
-      stack: error instanceof Error ? error.stack : undefined
+      message: error instanceof Error ? error.message : "Unknown error",
+      response:
+        error instanceof Error
+          ? (error as { response?: { status?: number } }).response
+          : undefined,
+      stack: error instanceof Error ? error.stack : undefined,
     });
-    
+
     // Handle rate limiting
     if (error instanceof Error && error.message.includes("429")) {
       return new Response("Rate limit exceeded. Please try again later.", {
-        status: 429
+        status: 429,
       });
     }
 
     // Handle other errors
-    return new Response(error instanceof Error ? error.message : "An error occurred", {
-      status: error instanceof Error ? (error as { response?: { status?: number } }).response?.status || 500 : 500
-    });
+    return new Response(
+      error instanceof Error ? error.message : "An error occurred",
+      {
+        status:
+          error instanceof Error
+            ? (error as { response?: { status?: number } }).response?.status ||
+              500
+            : 500,
+      }
+    );
   }
-} 
+}
