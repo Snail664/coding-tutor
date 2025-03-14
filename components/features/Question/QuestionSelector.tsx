@@ -10,7 +10,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { truncateText } from "@/lib/utils";
 import QuestionDifficultyTag from "./QuestionDifficultyTag";
-import TopicTag from "./QuestionTopicTag";
 import { useAppSelector } from "@/store";
 
 export default function QuestionSelector() {

@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 
 const generatePastelColor = () => {
   // Predefined hues that work well for avatars
@@ -54,7 +53,7 @@ export default function NavbarUserModal({
   email,
   sub,
 }: NavbarUserModalProps) {
-  const [avatarColor, setAvatarColor] = useState(generatePastelColor());
+  const avatarColor = generatePastelColor();
   const initials = name
     .split(" ")
     .map((n) => n[0])

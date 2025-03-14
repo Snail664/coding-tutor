@@ -1,7 +1,6 @@
 import { BotMessageSquare, User } from "lucide-react";
-import Markdown from "react-markdown";
+import Markdown, { Components } from "react-markdown";
 import rehypeRaw from 'rehype-raw';
-import { useRouter } from "next/navigation";
 
 // LLMFeedback.tsx
 interface LLMFeedbackProps {
@@ -10,18 +9,17 @@ interface LLMFeedbackProps {
 }
 
 export default function LLMFeedback({ userQuestion, LLMResponse }: LLMFeedbackProps) {
-  const router = useRouter();
-
   const processedResponse = LLMResponse?.replace(
     /\[([^\]]+)\]\(QUESTION_LINK:([^)]+)\)/g, 
     (_, text, questionName) => `[${text}](/questions/${questionName})`
   );
 
-  const components = {
-    a: ({ node, ...props }: any) => {
-      const href = props.href;
-      return <a {...props} className="text-primary hover:text-primary/80 underline" />;
-    }
+  const components: Components = {
+    a: ({ children, ...props }) => (
+      <a {...props} className="text-primary hover:text-primary/80 underline">
+        {children}
+      </a>
+    )
   };
 
   return (
