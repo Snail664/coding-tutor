@@ -54,7 +54,7 @@ export default async function Page() {
             No more sifting through StackOverflow forums or cookie-cutter
             chatbots! 🔍
             <br />
-            Get step-by-step guidance through problems while making you think
+            Get step-by-step guidance through problems while letting you think
             and learn independently!
           </p>
 
@@ -74,8 +74,18 @@ export default async function Page() {
         id="questions-section"
         className="flex items-start justify-center py-5"
       >
-        <FilterableQuestions questions={transformedQuestions} />
+        <FilterableQuestions questions={transformedQuestions} />{" "}
       </section>
+      <p className="text-center text-sm text-gray-500">
+        Some Questions adapted from{" "}
+        <a
+          className="underline text-blue-500"
+          href="https://codingquest.io"
+          target="_blank"
+        >
+          Coding Quest
+        </a>
+      </p>
     </div>
   );
 }
