@@ -1,25 +1,23 @@
 "use client";
 import { useEffect } from "react";
 import { useAppDispatch } from "@/store";
-import { setUser } from "@/slices/AuthSlice";
-import { Auth0User } from "@/lib/types";
+import { fetchUserDataThunk } from "@/slices/AuthSlice";
 
-export default function AuthStateInitializer({ user }: { user: Auth0User }) {
+export default function AuthStateInitializer() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (user) {
-      const user_state = {
-        sid: user.auth0_sid,
-        sub: user.auth0_sub,
-        name: user.auth0_name ?? "",
-        email: user.auth0_email ?? "",
-        picture: user.auth0_picture ?? "",
-        isWalkthroughEnabled: user.isWalkthroughEnabled,
-      };
-      dispatch(setUser(user_state));
-    }
-  }, [dispatch, user]);
+    // Initial fetch
+    dispatch(fetchUserDataThunk());
+
+    // Set up periodic fetch every 5 seconds
+    const interval = setInterval(() => {
+      dispatch(fetchUserDataThunk());
+    }, 5000);
+
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
+  }, [dispatch]);
 
   return null;
 }

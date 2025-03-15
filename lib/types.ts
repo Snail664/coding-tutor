@@ -1,4 +1,4 @@
-import { LanguageName, QuestionDifficulty, Tag } from "@prisma/client";
+import { LanguageName, QuestionDifficulty } from "@prisma/client";
 
 export interface MessageT {
   role: "user" | "assistant";
@@ -6,7 +6,7 @@ export interface MessageT {
 }
 
 export interface TestCase {
-  input: string[] | number[] | number[][] | object;
+  input: string | string[] | number[] | number[][] | object;
   expectedOutput: string | number | boolean | number[];
   description: string;
 }
@@ -49,7 +49,7 @@ export type QuestionT = {
   content: string;
   templateCodes: TemplateCodeT[];
   testCases: TestCase[];
-  tags: Tag[];
+  tags?: { name: string }[];
 };
 
 export enum CodeExecuteResponseCategory {

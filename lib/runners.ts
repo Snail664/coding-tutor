@@ -186,6 +186,24 @@ export class CPPRunner implements LanguageRunner {
         return os << "}";
     }
 
+    // Overload operator<< for vectors for debugging purposes.
+    template<typename T>
+    ostream& operator<<(ostream& os, const vector<T>& vec) {
+      // For vectors of primitive types or types with their own << operators
+      if (vec.empty()) {
+          return os << "[]";
+      }
+      
+      os << "[";
+      for (size_t i = 0; i < vec.size(); ++i) {
+          os << vec[i];
+          if (i < vec.size() - 1) {
+              os << ",";
+          }
+      }
+      return os << "]";
+    }
+
     struct TestCase {
       vector<string> input;
       string expectedOutput;
@@ -217,7 +235,7 @@ export class CPPRunner implements LanguageRunner {
 
     int main() {
       string functionName = "${functionName}";
-      cerr << "Function Name: " << functionName << endl;    //Debugging line to print function name injected 
+      // cerr << "Function Name: " << functionName << endl;    //Debugging line to print function name injected 
 
       vector<TestCase> testCases = {
         ${testCases.map((tc) => `{

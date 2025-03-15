@@ -1,6 +1,8 @@
 # Time to Play Fair
 
-### Difficulty : Easy 
+## Topics:
+
+`Graph` `Matrix` `String`
 
 Your sister is a puzzle enthusiast, and for years, the two of you have shared a private cipher system to communicate hidden messages. Recently, she challenged you to decode her latest message using a **Playfair cipher**.
 
@@ -10,9 +12,9 @@ Since there are multiple implementations of the Playfair, the two of you agreed 
 - For words of odd length, append an `x` at the end (unless the last letter is already `x`, in which case use a `q`).
 
 
-### Example
+## Example
 
-Consider this example Playfair grid, created using the encryption key `helloworld` and the phrase to decode of `wp nehslv ewgw`.
+Consider this example Playfair grid, created using the encryption key `helloworld` and the phrase to decode: `wp nehslv ewgw`.
 
 ```
 h e l o w
@@ -21,6 +23,7 @@ f g i k m
 n p q s t
 u v x y z
 ```
+### Explanation
 
 Notice that repeat occurrences of letters have been ignored when creating the grid (only the first `l` and `o` appear).  
 The rest of the alphabet has been added, ignoring letters used by the cipher key and the letter `j`.
@@ -41,8 +44,6 @@ The above phrase decodes to `et phonex home`. The `x` in `phonex` appears becaus
 * `key` and `cipher_text` consist of lowercase English letters and spaces only.
 * `cipher_text` does not contain j (as it has already been replaced by i).
 * The decoded message contains only lowercase English letters and spaces.
-
-
 
 ## Your Task
 

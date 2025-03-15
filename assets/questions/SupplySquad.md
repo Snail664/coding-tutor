@@ -1,6 +1,8 @@
 # Supply Squad
 
-### Difficulty: Medium
+## Topics:
+
+`Backtracking` `Dynamic Programming` `Graph` `Heap (Priority Queue)` `Shortest Path` 
 
 You are part of a mountain rescue team, responsible for delivering critical supplies between camps, peaks, and valleys in a vast mountain range.
 
@@ -9,8 +11,7 @@ Each day, supply teams must navigate between various checkpoints based on the sh
 Your goal is to find the shortest round-trip path that visits all checkpoints exactly once and returns to the starting point (Base Camp).
 
 
-## Input Format
-
+## Input
 1. Distance Matrix: A list of `N` lists, where `matrix[i][j]` represents the distance from location `i` to location `j`.
 * `matrix[i][i] == 0` (no travel needed if staying in the same place).
 
@@ -45,8 +46,8 @@ Sum these distances to calculate the total distance traveled by this drone as **
 
 
 ## Constraints
-* 2≤N≤100 (Number of locations including the hub)
-* 0≤ Distance between locations ≤10<sup>6</sup>
+* 2 ≤ N ≤ 100 (Number of locations including the hub)
+* 0 ≤ Distance between locations ≤ 10⁵
 * All paths between locations are symmetric (`distance[i][j] == distance[j][i]`).
 
 ## Your Task

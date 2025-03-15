@@ -247,6 +247,76 @@ export const getAssistantFeedbackThunk = createAsyncThunk<
   }
 );
 
+export const getGeneralAssistantFeedbackThunk = createAsyncThunk<
+  { assistantMsg: string; userMsg: string },
+  void,
+  { state: RootState }
+>(
+  "assistant/getGeneralAssistantFeedback",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const {
+        assistant: { userAudioTranscriptInput, chatHistory },
+      } = state;
+
+      const recentChatHistory = chatHistory.slice(-10);
+      const updatedChatHistory = [
+        ...recentChatHistory,
+        { role: "user", content: userAudioTranscriptInput },
+      ];
+
+      const response = await apiClient.post("/llm-guide/general", {
+        userQuestion: userAudioTranscriptInput,
+        chatHistory: updatedChatHistory,
+      });
+
+      if (response.status !== 200) {
+        return rejectWithValue(
+          response.data.error || "An unexpected error occurred"
+        );
+      }
+
+      const assistantMsg = response.data.response;
+
+      // Only save to DB if we have valid content
+      if (assistantMsg) {
+        try {
+          await apiClient.post("/chat/add-message", {
+            chatId: state.assistant.chatId,
+            messages: [
+              { role: "user", content: userAudioTranscriptInput },
+              { role: "assistant", content: assistantMsg },
+            ],
+          });
+        } catch (error) {
+          console.error("Error saving to chat:", error);
+          // Don't throw here, just log the error
+        }
+      }
+
+      return {
+        assistantMsg,
+        userMsg: userAudioTranscriptInput,
+      };
+    } catch (error: any) {
+      // Handle specific error types
+      if (error.response?.data?.type === "RATE_LIMIT") {
+        return rejectWithValue("Please wait a moment before trying again");
+      }
+      if (error.response?.data?.type === "JSON_PARSE") {
+        return rejectWithValue(
+          "Failed to process the response. Please try again"
+        );
+      }
+
+      return rejectWithValue(
+        error.response?.data?.error || error.message || "An error occurred"
+      );
+    }
+  }
+);
+
 const initialState: AssistantState = {
   LLMResponse: "",
   LLMResponseError: "",
@@ -378,6 +448,29 @@ const AssistantSlice = createSlice({
           // Stop polling once we get feedback
           state.isPolling = false;
         }
+      })
+      .addCase(getGeneralAssistantFeedbackThunk.pending, (state) => {
+        state.LLMFeedbackLoading = true;
+        state.LLMResponseError = ""; // Clear any previous errors
+      })
+      .addCase(getGeneralAssistantFeedbackThunk.fulfilled, (state, action) => {
+        state.LLMResponse = action.payload.assistantMsg;
+        state.chatHistory.push({
+          role: "user",
+          content: action.payload.userMsg,
+        });
+        state.chatHistory.push({
+          role: "assistant",
+          content: action.payload.assistantMsg,
+        });
+        state.userAudioTranscriptInput = "";
+        state.LLMFeedbackLoading = false;
+        state.LLMResponseError = ""; // Clear any errors on success
+      })
+      .addCase(getGeneralAssistantFeedbackThunk.rejected, (state, action) => {
+        state.LLMFeedbackLoading = false;
+        state.LLMResponseError =
+          (action.payload as string) || "Error in getting assistant feedback";
       });
   },
 });

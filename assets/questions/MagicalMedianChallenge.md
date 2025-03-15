@@ -1,5 +1,9 @@
 # Magical Median Challenge
 
+## Topics:  
+
+`Binary Search` `Divide and Conquer` `Math` `Sorting`
+
 In this enchanted coding challenge, you'll be presented with two magical scrolls, each containing a list of numbers in perfect order. Your mission, should you choose to accept it, is to find the elusive median that lies hidden within these scrolls! 
 
 Scroll One (**nums1**): A sorted array of 'm' mysterious numbers
@@ -9,17 +13,34 @@ Combine the wisdom of both scrolls and reveal the median - the number that stand
 
 ## Example
 
-- **Input:** [[1,3], [2]], where nums1 = [1,3] and nums2 = [2]
+### Sample Input 1
+```
+[[1,3], [2]]
+```
+where nums1 = [1,3] and nums2 = [2]
 
-   **Output:** 2 
 
-   **Explanation:** merged scroll = [1,2,3] and the median is 2
+### Sample Output 1
+```
+2
+```
 
-- **Input:** [[1,2], [3,4]], where nums1 = [1,2] and nums2 = [3,4]
+### Explanation
+merged scroll = [1,2,3] and the median is 2
 
-   **Output:** 2 
+### Sample Input 2
+```
+[[1,2], [3,4]]
+```
+where nums1 = [1,2] and nums2 = [3,4]
 
-   **Explanation:** merged scroll = [1,2,3,4] and the median is (2 + 3) / 2 = 2.5. But remember with decimals, the mystical median materializes as 2 (the integer value of 2.5)
+### Sample Output 2
+```
+2 
+```
+
+### Explanation
+merged scroll = [1,2,3,4] and the median is (2 + 3) / 2 = 2.5. But remember with decimals, the mystical median materializes as 2 (the integer value of 2.5)
 
 ## Constraints:
 The length of Scroll One (m) and Scroll Two (n) must be between 0 and 1000.

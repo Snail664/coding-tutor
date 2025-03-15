@@ -5,72 +5,13 @@ import { join } from "path";
 
 export const QUESTIONS: QuestionT[] = [
   {
-    name: "Busy Moon Rovers",
-    difficulty: QuestionDifficulty.easy,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/BusyMoonRovers.md"),
-      "utf8"
-    ),
-    tags: [{ name: "graph" }],
-    testCases: [
-      {
-        input: {
-          locations: ["base", "ta00", "cx22", "xj84"],
-          distances: [
-            [0, 55457, 63529, 61302],
-            [55457, 0, 111890, 35768],
-            [63529, 111890, 0, 98977],
-            [61302, 35768, 98977, 0],
-          ],
-          routes: [
-            "Rover 1 route: base -> cx22 -> ta00 -> base -> xj84 -> base",
-            "Rover 2 route: base -> ta00 -> cx22 -> base -> xj84 -> base",
-            "Rover 3 route: base -> xj84 -> base",
-            "Rover 4 route: base -> ta00 -> base",
-            "Rover 5 route: base -> cx22 -> base",
-            "Rover 6 route: base -> xj84 -> cx22 -> base",
-            "Rover 7 route: base -> ta00 -> xj84 -> base",
-            "Rover 8 route: base -> cx22 -> ta00 -> xj84 -> base",
-            "Rover 9 route: base -> ta00 -> cx22 -> xj84 -> base",
-            "Rover 10 route: base -> cx22 -> base",
-          ],
-        },
-        expectedOutput: 2171044,
-        description: "simple test",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code below as soon as possible
-`,
-        language: LanguageName.python,
-      },
-      {
-        code: `#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
-
-using namespace std;
-
-int solution(const vector<string>& input) {
-    // Insert your code below here
-    
-    } 
-        `,
-        language: LanguageName.cpp,
-      },
-    ],
-  },
-  {
     name: "Broken Firewall",
     difficulty: QuestionDifficulty.easy,
     content: readFileSync(
       join(__dirname, "../assets/questions/BrokenFirewall.md"),
       "utf-8"
     ),
-    tags: [{ name: "string" }],
+    tags: [{ name: "Bit Manipulation" }, { name: "Math" }, { name: "String" }],
     testCases: [
       {
         input: [
@@ -143,7 +84,11 @@ char* solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/ClosestStarSystems.md"),
       "utf-8"
     ),
-    tags: [{ name: "math" }],
+    tags: [
+      { name: "Divide and Conquer" },
+      { name: "Math" },
+      { name: "Sorting" },
+    ],
     testCases: [
       {
         input: [
@@ -193,34 +138,87 @@ double solution(const vector<string>& input) {
     ],
   },
   {
+    name: "Connecting Train Stations",
+    difficulty: QuestionDifficulty.easy,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/ConnectingTrainStations.md"),
+      "utf-8"
+    ),
+    tags: [
+      { name: "Combinatorics " },
+      { name: "Dynamic Programming" },
+      { name: "Recursion" },
+    ],
+    testCases: [
+      {
+        input: "856,40,12,1",
+        expectedOutput: 12,
+        description: "",
+      },
+      {
+        input: /** middddd*/ "100,20,5,1",
+        expectedOutput: 3127,
+        description: "",
+      },
+      {
+        input: /** to test stac overflow limit  */ "999999,40000,2000,1",
+        expectedOutput: 7852401,
+        description: "",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `def solution(data):
+    # insert your code below
+`,
+        language: LanguageName.python,
+      },
+      {
+        code: `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+int solution(const string input) {
+    // Insert your code below here
+    
+    } 
+        `,
+        language: LanguageName.cpp,
+      },
+    ],
+  },
+  {
     name: "Galactic Bounty Contract",
     difficulty: QuestionDifficulty.easy,
     content: readFileSync(
       join(__dirname, "../assets/questions/GalacticBountyContract.md"),
       "utf8"
     ),
-    tags: [{ name: "math" }],
+    tags: [{ name: "Hash Table" }, { name: "String Parsing" }],
     testCases: [
       {
         input: [
-          "AAA: Seat 9997",
+          "AAA: Pilot 9997",
           "BBB: Discount 2886",
-          "DDD: Luggage 3500",
-          "CCC: Fee 9468",
-          "BBB: Fee 9378",
-          "AAA: Discount 3103",
+          "DDD: Fuel 3500",
+          "CCC: Docking 9468",
+          "BBB: Tax 9378",
+          "AAA: Rebate 3103",
         ],
         expectedOutput: 3500,
         description: "Basic test",
       },
       {
         input: [
-          "SuperSpace: Seat 9997",
+          "SuperSpace: Pilot 9997",
           "OrionTravles: Discount 2886",
-          "Galactica: Luggage 3500",
+          "Galactica: Pilot 3500",
           "SuperSpace: Tax 156",
-          "EarthExpress: Fee 9468",
-          "OrionTravles: Fee 9378",
+          "EarthExpress: Pilot 9468",
+          "OrionTravles: Pilot 9378",
           "SuperSpace: Discount 3103",
           "Galactica: Rebate 967",
         ],
@@ -229,18 +227,18 @@ double solution(const vector<string>& input) {
       },
       {
         input: [
-          "AAA: Seat 3000",
-          "AAA: Meals 1000",
-          "AAA: Luggage 2000",
-          "AAA: Fee 1000",
+          "AAA: Pilot 3000",
+          "AAA: Fuel 1000",
+          "AAA: Maintenance 2000",
+          "AAA: Docking 1000",
           "AAA: Tax 1000",
           "AAA: Rebate 500",
           "AAA: Discount 200",
-          "BBB: Seat 5000",
-          "BBB: Meals 1000",
+          "BBB: Pilot 5000",
+          "BBB: Fuel 1000",
           "BBB: Discount 200",
           "CCC: Discount 300",
-          "CCC: Fee 1000",
+          "CCC: Maintenance 1000",
         ],
         expectedOutput: 700,
         description: "check if all cost types are accounted for",
@@ -271,228 +269,17 @@ int solution(const vector<string>& input) {
     ],
   },
   {
-    name: "Time To Play Fair",
-    difficulty: QuestionDifficulty.easy,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/TimeToPlayFair.md"),
-      "utf-8"
-    ),
-    tags: [{ name: "string" }],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code here
-`,
-        language: LanguageName.python,
-      },
-      {
-        code: `#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
-
-using namespace std;
-
-string solution(const vector<string>& input) {
-    // Insert your code below here
-    
-    } 
-        `,
-        language: LanguageName.cpp,
-      },
-    ],
-    testCases: [
-      {
-        input: [/** simple test */ "moonbase", "ht tphs rx"],
-        expectedOutput: "hi there x",
-        description: "Basic test with simple key and short message",
-      },
-      {
-        input: [
-          /** Mmid test */ "jupiter station",
-          "br gh kt xc ui mp kl ej sx nv ah",
-        ],
-        expectedOutput: "message from jupiter basex",
-        description: "Tests j->i conversion and odd length word handling",
-      },
-      {
-        input: [
-          /** edge cases test*/ "zzzz",
-          "ax bx cx dx ex fx gx hx ix kx lx mx nx px qx rx sx tx ux vx wx yx zx",
-        ],
-        expectedOutput: "the quick brown fox jumps over the lazy dogx",
-        description: "",
-      },
-    ],
-  },
-  {
-    name: "The Purge",
-    difficulty: QuestionDifficulty.easy,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/ThePurge.md"),
-      "utf-8"
-    ),
-    tags: [{ name: "string" }],
-    testCases: [
-      {
-        input: [
-          /**simple test */ "Folder: 0",
-          "- system32.dll 1048576",
-          "- delete_me.tmp 2097152",
-          "- temp_folder [FOLDER 1]",
-          "- important.doc 512000",
-          "Folder: 1",
-          "- cache.tmp 3145728",
-          "- log.txt 262144",
-        ],
-        expectedOutput: 6553600,
-        description: "Basic folder structure test",
-      },
-      {
-        input: [
-          /** medium complexity test */ "Folder: 0",
-          "- system.log 524288",
-          "- temporary_files [FOLDER 1]",
-          "- documents [FOLDER 2]",
-          "- delete_old.txt 1048576",
-          "Folder: 1",
-          "- cache.dat 2097152",
-          "- backup [FOLDER 3]",
-          "- temp.log 1048576",
-          "Folder: 2",
-          "- important.doc 786432",
-          "- delete_drafts [FOLDER 4]",
-          "- final.pdf 2359296",
-          "Folder: 3",
-          "- temp_data.bin 4194304",
-          "- logs [FOLDER 5]",
-          "Folder: 4",
-          "- draft1.doc 1572864",
-          "- draft2.doc 2097152",
-          "Folder: 5",
-          "- debug.log 3145728",
-          "- error.log 262144",
-        ],
-        expectedOutput: 16766848,
-        description: "Nested folders with mixed content",
-      },
-      {
-        input: [
-          /** edge cases test */ "Folder: 0",
-          "- TEMPORARY.dat 1024",
-          "- not_temporary.txt 2048",
-          "- backup [FOLDER 1]",
-          "- delete [FOLDER 2]",
-          "Folder: 1",
-          "- temp_delete [FOLDER 3]",
-          "- important.sys 4096",
-          "- temporary [FOLDER 4]",
-          "Folder: 2",
-          "- file1.txt 8192",
-          "- subfolder [FOLDER 5]",
-          "- temporary_delete [FOLDER 6]",
-          "Folder: 3",
-          "- delete.tmp 16384",
-          "- data.bin 32768",
-          "Folder: 4",
-          "- cache.tmp 65536",
-          "- DELETE.log 131072",
-          "Folder: 5",
-          "- temp.dat 262144",
-          "- backup.sys 524288",
-          "Folder: 6",
-          "- temporary.log 1048576",
-          "- delete.dat 2097152",
-          "- nested [FOLDER 7]",
-          "Folder: 7",
-          "- final_delete.txt 4194304",
-          "- TEMPORARY_FINAL.dat 8388608",
-        ],
-        expectedOutput: 16776192,
-        description: "",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code below
-`,
-        language: LanguageName.python,
-      },
-      {
-        code: `#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
-
-using namespace std;
-
-double solution(const vector<string>& input) {
-    // Insert your code below here
-    
-    } 
-        `,
-        language: LanguageName.cpp,
-      },
-    ],
-  },
-  {
-    name: "Connecting Train Stations",
-    difficulty: QuestionDifficulty.easy,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/ConnectingTrainStations.md"),
-      "utf-8"
-    ),
-    tags: [{ name: "math" }],
-    testCases: [
-      {
-        input: ["856,40,12,1"],
-        expectedOutput: 12,
-        description: "",
-      },
-      {
-        input: /** middddd*/ ["100,20,5,1"],
-        expectedOutput: 3127,
-        description: "",
-      },
-      {
-        input: /** to test stac overflow limit  */ ["999999,40000,2000,1"],
-        expectedOutput: 7852401,
-        description: "",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code below
-`,
-        language: LanguageName.python,
-      },
-      {
-        code: `#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
-
-using namespace std;
-
-int solution(const vector<string>& input) {
-    // Insert your code below here
-    
-    } 
-        `,
-        language: LanguageName.cpp,
-      },
-    ],
-  },
-  {
     name: "Mining Tunnels",
     difficulty: QuestionDifficulty.easy,
     content: readFileSync(
       join(__dirname, "../assets/questions/MiningTunnels.md"),
       "utf-8"
     ),
-    tags: [],
+    tags: [
+      { name: "Breadth-First Search" },
+      { name: "Graph" },
+      { name: "Shortest Path" },
+    ],
     testCases: [
       {
         input: [
@@ -606,13 +393,188 @@ int solution(const vector<string>& input) {
     ],
   },
   {
+    name: "The Purge",
+    difficulty: QuestionDifficulty.easy,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/ThePurge.md"),
+      "utf-8"
+    ),
+    tags: [
+      { name: "Depth-First Search" },
+      { name: "Graph" },
+      { name: "Hash Table" },
+    ],
+    testCases: [
+      {
+        input: [
+          /**simple test */ "Folder: 0",
+          "- system32.dll 1048576",
+          "- delete_me.tmp 2097152",
+          "- temp_folder [FOLDER 1]",
+          "- important.doc 512000",
+          "Folder: 1",
+          "- cache.tmp 3145728",
+          "- log.txt 262144",
+        ],
+        expectedOutput: 6553600,
+        description: "Basic folder structure test",
+      },
+      {
+        input: [
+          /** medium complexity test */ "Folder: 0",
+          "- system.log 524288",
+          "- temporary_files [FOLDER 1]",
+          "- documents [FOLDER 2]",
+          "- delete_old.txt 1048576",
+          "Folder: 1",
+          "- cache.dat 2097152",
+          "- backup [FOLDER 3]",
+          "- temp.log 1048576",
+          "Folder: 2",
+          "- important.doc 786432",
+          "- delete_drafts [FOLDER 4]",
+          "- final.pdf 2359296",
+          "Folder: 3",
+          "- temp_data.bin 4194304",
+          "- logs [FOLDER 5]",
+          "Folder: 4",
+          "- draft1.doc 1572864",
+          "- draft2.doc 2097152",
+          "Folder: 5",
+          "- debug.log 3145728",
+          "- error.log 262144",
+        ],
+        expectedOutput: 16766848,
+        description: "Nested folders with mixed content",
+      },
+      {
+        input: [
+          /** edge cases test */ "Folder: 0",
+          "- TEMPORARY.dat 1024",
+          "- not_temporary.txt 2048",
+          "- backup [FOLDER 1]",
+          "- delete [FOLDER 2]",
+          "Folder: 1",
+          "- temp_delete [FOLDER 3]",
+          "- important.sys 4096",
+          "- temporary [FOLDER 4]",
+          "Folder: 2",
+          "- file1.txt 8192",
+          "- subfolder [FOLDER 5]",
+          "- temporary_delete [FOLDER 6]",
+          "Folder: 3",
+          "- delete.tmp 16384",
+          "- data.bin 32768",
+          "Folder: 4",
+          "- cache.tmp 65536",
+          "- DELETE.log 131072",
+          "Folder: 5",
+          "- temp.dat 262144",
+          "- backup.sys 524288",
+          "Folder: 6",
+          "- temporary.log 1048576",
+          "- delete.dat 2097152",
+          "- nested [FOLDER 7]",
+          "Folder: 7",
+          "- final_delete.txt 4194304",
+          "- TEMPORARY_FINAL.dat 8388608",
+        ],
+        expectedOutput: 16776192,
+        description: "",
+      },
+    ],
+    templateCodes: [
+      {
+        code: `def solution(data):
+    # insert your code below
+`,
+        language: LanguageName.python,
+      },
+      {
+        code: `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+double solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+        language: LanguageName.cpp,
+      },
+    ],
+  },
+  {
+    name: "Time To Play Fair",
+    difficulty: QuestionDifficulty.easy,
+    content: readFileSync(
+      join(__dirname, "../assets/questions/TimeToPlayFair.md"),
+      "utf-8"
+    ),
+    tags: [{ name: "Graph" }, { name: "Matrix" }, { name: "String" }],
+    templateCodes: [
+      {
+        code: `def solution(data):
+    # insert your code here
+`,
+        language: LanguageName.python,
+      },
+      {
+        code: `#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+using namespace std;
+
+string solution(const vector<string>& input) {
+    // Insert your code below here
+    
+    } 
+        `,
+        language: LanguageName.cpp,
+      },
+    ],
+    testCases: [
+      {
+        input: [/** simple test */ "moonbase", "ht tphs rx"],
+        expectedOutput: "hi there x",
+        description: "Basic test with simple key and short message",
+      },
+      {
+        input: [
+          /** Mmid test */ "jupiter station",
+          "br gh kt xc ui mp kl ej sx nv ah",
+        ],
+        expectedOutput: "message from jupiter basex",
+        description: "Tests j->i conversion and odd length word handling",
+      },
+      {
+        input: [
+          /** edge cases test*/ "zzzz",
+          "ax bx cx dx ex fx gx hx ix kx lx mx nx px qx rx sx tx ux vx wx yx zx",
+        ],
+        expectedOutput: "the quick brown fox jumps over the lazy dogx",
+        description: "",
+      },
+    ],
+  },
+
+  {
     name: "Codey's Tutor Challenge",
     difficulty: QuestionDifficulty.medium,
     content: readFileSync(
       join(__dirname, "../assets/questions/CodeyTutorChallenge.md"),
       "utf8"
     ),
-    tags: [{ name: "math" }],
+    tags: [
+      { name: "Greedy" },
+      { name: "Heap (Priority Queue)" },
+      { name: "Sorting" },
+    ],
     testCases: [
       {
         input: [
@@ -675,14 +637,19 @@ vector<int> solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/RottingOranges.md"),
       "utf-8"
     ),
-    tags: [{ name: "graph" }],
+    tags: [
+      { name: "Breadth-First Search" },
+      { name: "Graph" },
+      { name: "Matrix" },
+      { name: "Queue" },
+    ],
     testCases: [
       {
         input: [
           /** Simple test: small matrix, clear path */
-          "[[2,1,1]",
-          "[1,1,0]",
-          "[0,1,1]]",
+          [[2,1,1],
+          [1,1,0],
+          [0,1,1]],
         ],
         expectedOutput: 4,
         description: "",
@@ -690,11 +657,11 @@ vector<int> solution(const vector<string>& input) {
       {
         input: [
           /** Medium test: larger matrix, negative impact of wrong implementation */
-          "[[2,1,1,1,1]",
-          "[1,1,0,1,1]",
-          "[0,0,0,2,1]",
-          "[1,1,1,1,1]",
-          "[1,1,1,1,1]]",
+          [[2,1,1,1,1],
+          [1,1,0,1,1],
+          [0,0,0,2,1],
+          [1,1,1,1,1],
+          [1,1,1,1,1]],
         ],
         expectedOutput: 1150,
         description: "",
@@ -702,11 +669,11 @@ vector<int> solution(const vector<string>& input) {
       {
         input: [
           /** Hard test: edge cases with large numbers and precision */
-          "[[2,1,1,1,1]",
-          "[1,1,0,1,1]",
-          "[0,0,0,0,1]",
-          "[1,0,0,0,1]",
-          "[1,1,1,1,1]]",
+          [[2,1,1,1,1],
+          [1,1,0,1,1],
+          [0,0,0,0,1],
+          [1,0,0,0,1],
+          [1,1,1,1,1]],
         ],
         expectedOutput: -1,
         description: "",
@@ -743,7 +710,13 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/SupplySquad.md"),
       "utf-8"
     ),
-    tags: [],
+    tags: [
+      { name: "Backtracking" },
+      { name: "Dynamic Programming" },
+      { name: "Graph" },
+      { name: "Heap (Priority Queue)" },
+      { name: "Shortest Path" },
+    ],
     testCases: [
       {
         input: [
@@ -813,7 +786,11 @@ double solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/CosmicCandyCrush.md"),
       "utf8"
     ),
-    tags: [{ name: "array" }],
+    tags: [
+      { name: "Divide and Conquer" },
+      { name: "Dynamic Programming" },
+      { name: "Memoization" },
+    ],
     testCases: [
       {
         input: [3, 1, 5, 8],
@@ -857,7 +834,12 @@ int solution(const vector<string>& input) {
       join(__dirname, "../assets/questions/MagicalMedianChallenge.md"),
       "utf8"
     ),
-    tags: [{ name: "array" }],
+    tags: [
+      { name: "Binary Search" },
+      { name: "Divide and Conquer" },
+      { name: "Math" },
+      { name: "Sorting" },
+    ],
     testCases: [
       {
         input: [[1, 3], [2]],

@@ -1,70 +1,86 @@
 import { getSession } from "@auth0/nextjs-auth0";
-// import DifficultyTag from "@/components/features/Question/QuestionDifficultyTag";
 import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/Navbar";
 import FilterableQuestions from "@/components/features/Question/FilterableQuestions";
-// import { Search as SearchIcon, Filter as FilterIcon } from "lucide-react";
+// import CodeySearch from "@/components/features/Search/CodeySearch";
+import DynamicText from "@/app/dynamictext";
+// import ScrollButton from "@/app/components/ScrollButton";
+
+interface Question {
+  name: string;
+  difficulty: string;
+  tags?: { name: string }[];
+}
 
 export default async function Page() {
   const session = await getSession();
   const questions = await prisma.question.findMany({
-    select: {
-      name: true,
-      difficulty: true,
+    include: {
+      tags: {
+        select: {
+          name: true,
+        },
+      },
     },
     cacheStrategy: { ttl: 3600, swr: 30 },
   });
 
+  const transformedQuestions = questions.map((q) => ({
+    name: q.name,
+    difficulty: q.difficulty,
+    tags:
+      (q as Question).tags?.map((tag: { name: string }) => ({
+        name: tag.name,
+      })) || [],
+  }));
+
   return (
-    <div className="px-5">
-      <Navbar auth0User={session?.user} hideMiddle={true} />
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6">
-        <div className="inline-block text-center mb-10">
-          <h1 className="text-6xl font-extrabold text-primary drop-shadow-lg">
+    <div className="min-h-screen bg-background">
+      {/* Fixed Navbar */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <Navbar auth0User={session?.user} hideMiddle={true} />
+      </div>
+
+      {/* Hero Section with Search - Reduced Height */}
+      <section className="h-[40vh] min-h-[400px] pt-72 flex items-center justify-center relative bg-gradient-to-b from-primary/5 to-transparent">
+        <div className="w-full max-w-4xl mx-auto px-6 text-center">
+          <h1 className="text-5xl font-extrabold text-primary drop-shadow-lg mb-4">
             Ask Codey
           </h1>
-          <p className="text-lg text-primary mt-2">
-            Improve your coding skills efficiently. No more wasting time on
-            stackoverflow forums or cookie-cutter chatbots. <br />
-            Codey, the AI tutor will guide you through problems step by step,
-            giving you enough space to think and learn.
-          </p>
+
+          <DynamicText />
+
+          {!session && (
+            <a
+              href="/api/auth/login"
+              className="inline-block mt-6 bg-primary dark:bg-gray-800 text-white font-bold py-3 px-8 rounded-full shadow-xl hover:bg-primary/90 dark:hover:bg-gray-700 transition-all transform hover:scale-105"
+            >
+              Get Started
+            </a>
+          )}
         </div>
-        {!session ? null : (
-          <a
-            href="/api/auth/login"
-            className="inline-block relative -top-5 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105"
-          >
-            Get Started
-          </a>
-        )}
+      </section>
 
-        {/* Render the FilterableQuestions client component */}
-        <FilterableQuestions questions={questions} />
+      {/* Questions Section - Adjusted to follow hero section */}
+      <section
+        id="questions-section"
+        className="flex items-start justify-center py-5"
+      >
+        <div className="w-full max-w-5xl mx-auto px-6">
+          <div className="grid grid-cols-12 gap-6">
+            {/* Left Sidebar Space */}
+            <div className="col-span-0 md:col-span-3"></div>
 
-        {/* <div className="bg-menuBackground w-full max-w-md rounded-xl shadow-lg overflow-hidden mt-5">
-          <div className="max-h-96 overflow-y-auto">
-            <ul className="divide-y divide-gray-300">
-              {questions.map((question) => (
-                <li
-                  key={question.name}
-                  className="hover:bg-background transition"
-                >
-                  <a
-                    href={`/questions/${question.name}`}
-                    className="p-4 flex justify-between items-center"
-                  >
-                    <span className="text-primary font-medium">
-                      {question.name}
-                    </span>
-                    <DifficultyTag difficulty={question.difficulty} />
-                  </a>
-                </li>
-              ))}
-            </ul>
+            {/* Questions List */}
+            <div className="col-span-12 md:col-span-7 md:ml-1">
+              <FilterableQuestions questions={transformedQuestions} />
+            </div>
+
+            {/* Right Sidebar Space */}
+            <div className="col-span-0 md:col-span-2"></div>
           </div>
-        </div> */}
-      </div>
+        </div>
+      </section>
     </div>
   );
 }

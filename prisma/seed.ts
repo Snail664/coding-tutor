@@ -12,7 +12,6 @@ async function main() {
   await prisma.templateCode.deleteMany({});
   await prisma.testCase.deleteMany({});
   await prisma.feedback.deleteMany({}); // delete feedback before questions
-  await prisma.tag.deleteMany({});
   await prisma.question.deleteMany({});
 
   // seed the database
@@ -20,36 +19,36 @@ async function main() {
     const existingQuestion = await prisma.question.findUnique({
       where: { name: questionData.name },
     });
-
+  
     if (existingQuestion) {
       console.log(`Updating existing record for ${questionData.name}`);
     } else {
       console.log(`Creating new record for ${questionData.name}`);
     }
-
+    
     const questionDetails = {
       name: questionData.name,
       difficulty: questionData.difficulty,
       content: questionData.content.replace(/\\n/g, "\n"),
       templateCodes: {
-        create: questionData.templateCodes.map((tc) => ({
-          code: tc.code,
-          language: tc.language as LanguageName,
+        create: questionData.templateCodes.map((templateCode) => ({
+          code: templateCode.code,
+          language: templateCode.language,
         })),
       },
       testCases: {
-        create: questionData.testCases.map((tc) => ({
-          input: JSON.stringify(tc.input),
-          expectedOutput: JSON.stringify(tc.expectedOutput),
-          description: tc.description,
+        create: questionData.testCases.map((testCase) => ({
+          input: JSON.stringify(testCase.input),
+          expectedOutput: JSON.stringify(testCase.expectedOutput),
+          description: testCase.description,
         })),
       },
-      tags: {
+      tags: questionData.tags ? {
         connectOrCreate: questionData.tags.map((tag) => ({
           where: { name: tag.name },
-          create: { name: tag.name },
-        })),
-      },
+          create: { name: tag.name }
+        }))
+      } : undefined
     };
 
     await prisma.question.upsert({

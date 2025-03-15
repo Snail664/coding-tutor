@@ -26,6 +26,7 @@ import { QuestionDifficulty } from "@prisma/client";
 export type QuestionListItemT = {
   name: string;
   difficulty: QuestionDifficulty;
+  tags?: { name: string }[];
 };
 
 const initialState = {

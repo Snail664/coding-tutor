@@ -9,6 +9,7 @@ import AssistantStateInitializer from "@/components/AssistantStateInitializer";
 import { MessageT } from "@/lib/types";
 import CodeStateInitializer from "@/components/CodeStateInitializer";
 import { notFound } from "next/navigation";
+
 export default async function QuestionPage({
   params,
 }: {
@@ -23,35 +24,17 @@ export default async function QuestionPage({
         testCases: true,
         tags: true,
       },
-      cacheStrategy: { ttl: 30, swr: 5 },
+      cacheStrategy: { ttl: 3600, swr: 30 },
     }),
     prisma.question.findMany({
       select: {
         name: true,
         difficulty: true,
+        tags: true,
       },
-      cacheStrategy: { ttl: 30, swr: 5 },
+      cacheStrategy: { ttl: 3600, swr: 30 },
     }),
   ]);
-
-  // fetch user data if logged in
-  // Fetch latest user data if user is logged in
-  const latestUserData = session?.user
-    ? await prisma.user.findUnique({
-        where: { auth0_sub: session.user.sub },
-        select: {
-          auth0_sid: true,
-          auth0_sub: true,
-          auth0_given_name: true,
-          auth0_family_name: true,
-          auth0_name: true,
-          auth0_picture: true,
-          auth0_email: true,
-          auth0_email_verified: true,
-          isWalkthroughEnabled: true,
-        },
-      })
-    : null;
 
   // question not found
   if (!question) {
@@ -59,19 +42,17 @@ export default async function QuestionPage({
   }
 
   // user data
-  const userData = latestUserData
-    ? {
-        auth0_sid: session?.user?.sid, // Keep session ID from Auth0
-        auth0_sub: latestUserData.auth0_sub,
-        auth0_given_name: latestUserData.auth0_given_name,
-        auth0_family_name: latestUserData.auth0_family_name,
-        auth0_name: latestUserData.auth0_name,
-        auth0_picture: latestUserData.auth0_picture,
-        auth0_email: latestUserData.auth0_email,
-        auth0_email_verified: latestUserData.auth0_email_verified,
-        isWalkthroughEnabled: latestUserData.isWalkthroughEnabled, // Use DB value
-      }
-    : null;
+  const userData = {
+    auth0_sid: session?.user?.sid,
+    auth0_sub: session?.user?.sub,
+    auth0_given_name: session?.user?.given_name,
+    auth0_family_name: session?.user?.family_name,
+    auth0_name: session?.user?.name,
+    auth0_picture: session?.user?.picture,
+    auth0_email: session?.user?.email,
+    auth0_email_verified: session?.user?.email_verified,
+    isWalkthroughEnabled: session?.user?.isWalkthroughEnabled,
+  };
 
   // create a chat for the user if logged in.
   let chat = null;
@@ -101,7 +82,7 @@ export default async function QuestionPage({
         width: "100vw",
       }}
     >
-      {userData && <AuthStateInitializer user={userData} />}
+      {userData && <AuthStateInitializer />}
       {question && (
         <>
           <QuestionStateInitializer
@@ -130,7 +111,7 @@ export default async function QuestionPage({
       {chat && (
         <AssistantStateInitializer chatid={chat.id} messages={messages} />
       )}
-      <Walkthrough />
+      {session?.user?.isWalkthroughEnabled !== false && <Walkthrough />}
       <Navbar auth0User={session?.user} />
       <QuestionLayout />
     </div>

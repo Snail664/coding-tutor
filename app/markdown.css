@@ -45,3 +45,58 @@
   padding: 0;
   background: none;
 }
+
+/* Table styles */
+.markdown-container table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.markdown-container th,
+.markdown-container td {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border, #e5e7eb);
+  text-align: left;
+}
+
+.markdown-container th {
+  font-weight: 500;
+  background-color: var(--background);
+}
+
+.markdown-container td {
+  background-color: var(--contentBackground);
+}
+
+/* Table wrapper for horizontal scrolling */
+.markdown-container div > table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Preserve whitespace in table cells */
+.markdown-container td,
+.markdown-container th {
+  white-space: pre;
+}
+
+/* Container for horizontal scrolling if needed */
+.markdown-container table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* Remove alternating row colors */
+.markdown-container tr:nth-child(even) td {
+  background-color: var(--contentBackground);
+}
+
+/* Preserve whitespace in code blocks */
+.markdown-container pre code {
+  white-space: pre;
+}

@@ -3,7 +3,6 @@
 
 # python
 .venv/
-/report-experiments/
 
 # dependencies
 /node_modules

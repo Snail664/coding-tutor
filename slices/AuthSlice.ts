@@ -26,12 +26,13 @@ export const disableWalkthroughThunk = createAsyncThunk<
   { isWalkthroughEnabled: boolean },
   void,
   { state: RootState }
->("auth/disableWalkthrough", async (_, { rejectWithValue }) => {
+>("auth/disableWalkthrough", async (_, { rejectWithValue, dispatch }) => {
   try {
-    await apiClient.post("/user/walkthrough", {
+    const response = await apiClient.post("/user/walkthrough", {
       isWalkthroughEnabled: false,
     });
-    return { isWalkthroughEnabled: false };
+    // Update the state immediately with the response data
+    return response.data;
   } catch (error: any) {
     console.error("Error in disableWalkthroughThunk:", error);
     return rejectWithValue(error.message || "Unknown error occurred");
@@ -56,6 +57,23 @@ export const fetchUserDataThunk = createAsyncThunk<
     };
   } catch (error: any) {
     console.error("Error in fetchUserDataThunk:", error);
+    return rejectWithValue(error.message || "Unknown error occurred");
+  }
+});
+
+export const enableWalkthroughThunk = createAsyncThunk<
+  { isWalkthroughEnabled: boolean },
+  void,
+  { state: RootState }
+>("auth/enableWalkthrough", async (_, { rejectWithValue, dispatch }) => {
+  try {
+    const response = await apiClient.post("/user/walkthrough", {
+      isWalkthroughEnabled: true,
+    });
+    // Update the state immediately with the response data
+    return response.data;
+  } catch (error: any) {
+    console.error("Error in enableWalkthroughThunk:", error);
     return rejectWithValue(error.message || "Unknown error occurred");
   }
 });
@@ -91,6 +109,11 @@ const AuthSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(disableWalkthroughThunk.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user.isWalkthroughEnabled = action.payload.isWalkthroughEnabled;
+        }
+      })
+      .addCase(enableWalkthroughThunk.fulfilled, (state, action) => {
         if (state.user) {
           state.user.isWalkthroughEnabled = action.payload.isWalkthroughEnabled;
         }

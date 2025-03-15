@@ -1,6 +1,8 @@
 # Galactic Bounty Contract
 
-### Difficulty: Easy
+## Topics: 
+
+`Hash Table` `String Parsing`
 
 The year is 2224. You are a renowned bounty hunter, traveling across the galaxy far far away in search of your next high-stakes mission. The Galactic Bounty Guild has tasked you with capturing an elusive space fugitive, but to begin your hunt, you must first hire a starship crew.
 
@@ -13,7 +15,7 @@ For each crew:
 After determining the final cost for each crew, what is the final cost of the cheapest option\?
 
 
-## Input Format:
+## Input
 
 Each test case is represented as a list of strings where each string follows the format:
 ```
@@ -27,8 +29,7 @@ where:
 
 ## Example
 
-Input:
-
+### Sample Input 1
 ```
 Orion: Pilot 9997,
 Nebula: Discount 2886,
@@ -41,14 +42,12 @@ Titan: Rebate 967,
         
 ```
 
-Output:
-
+### Sample Output 1
 ```
 2533
 ```
 
-Explanation:
-
+### Explanation:
 Orion:
 ```
 9997 + 156 - 3103 = 7050
@@ -69,10 +68,7 @@ Titan:
 3500 - 967 = 2533
 ``` 
 
-Based on the small example, spaceliner DDD would be the cheapest, so the answer would be **2533**.
-
-
-
+Based on the small example, Titan would be the cheapest, so the answer would be **2533**.
 
 ## Constraints:
 * 1 <= T <= 100 (Number of entries on each test case)
