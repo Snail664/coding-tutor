@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/Navbar";
 import FilterableQuestions from "@/components/features/Question/FilterableQuestions";
 // import CodeySearch from "@/components/features/Search/CodeySearch";
-import DynamicText from "@/app/dynamictext";
+// import DynamicText from "@/app/dynamictext";
 // import ScrollButton from "@/app/components/ScrollButton";
 
 interface Question {
@@ -42,13 +42,21 @@ export default async function Page() {
       </div>
 
       {/* Hero Section with Search - Reduced Height */}
-      <section className="h-[40vh] min-h-[400px] pt-72 flex items-center justify-center relative bg-gradient-to-b from-primary/5 to-transparent">
+      <section className="min-h-[400px] pt-72 flex items-center justify-center relative bg-gradient-to-b from-primary/5 to-transparent">
         <div className="w-full max-w-4xl mx-auto px-6 text-center">
           <h1 className="text-5xl font-extrabold text-primary drop-shadow-lg mb-4">
             Ask Codey
           </h1>
 
-          <DynamicText />
+          <p>
+            Level up your coding skills with Codey the AI Tutor! 🚀
+            <br />
+            No more sifting through StackOverflow forums or cookie-cutter
+            chatbots! 🔍
+            <br />
+            Get step-by-step guidance through problems while making you think
+            and learn independently!
+          </p>
 
           {!session && (
             <a
