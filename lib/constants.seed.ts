@@ -137,59 +137,59 @@ double solution(const vector<string>& input) {
       },
     ],
   },
-  {
-    name: "Connecting Train Stations",
-    difficulty: QuestionDifficulty.easy,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/ConnectingTrainStations.md"),
-      "utf-8"
-    ),
-    tags: [
-      { name: "Combinatorics " },
-      { name: "Dynamic Programming" },
-      { name: "Recursion" },
-    ],
-    testCases: [
-      {
-        input: "856,40,12,1",
-        expectedOutput: 12,
-        description: "",
-      },
-      {
-        input: /** middddd*/ "100,20,5,1",
-        expectedOutput: 3127,
-        description: "",
-      },
-      {
-        input: /** to test stac overflow limit  */ "999999,40000,2000,1",
-        expectedOutput: 7852401,
-        description: "",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code below
-`,
-        language: LanguageName.python,
-      },
-      {
-        code: `#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
+  //   {
+  //     name: "Connecting Train Stations",
+  //     difficulty: QuestionDifficulty.easy,
+  //     content: readFileSync(
+  //       join(__dirname, "../assets/questions/ConnectingTrainStations.md"),
+  //       "utf-8"
+  //     ),
+  //     tags: [
+  //       { name: "Combinatorics " },
+  //       { name: "Dynamic Programming" },
+  //       { name: "Recursion" },
+  //     ],
+  //     testCases: [
+  //       {
+  //         input: "856,40,12,1",
+  //         expectedOutput: 12,
+  //         description: "",
+  //       },
+  //       {
+  //         input: /** middddd*/ "100,20,5,1",
+  //         expectedOutput: 3127,
+  //         description: "",
+  //       },
+  //       {
+  //         input: /** to test stac overflow limit  */ "999999,40000,2000,1",
+  //         expectedOutput: 7852401,
+  //         description: "",
+  //       },
+  //     ],
+  //     templateCodes: [
+  //       {
+  //         code: `def solution(data):
+  //     # insert your code below
+  // `,
+  //         language: LanguageName.python,
+  //       },
+  //       {
+  //         code: `#include <iostream>
+  // #include <string>
+  // #include <unordered_map>
+  // #include <vector>
 
-using namespace std;
+  // using namespace std;
 
-int solution(const string input) {
-    // Insert your code below here
-    
-    } 
-        `,
-        language: LanguageName.cpp,
-      },
-    ],
-  },
+  // int solution(const string input) {
+  //     // Insert your code below here
+
+  //     }
+  //         `,
+  //         language: LanguageName.cpp,
+  //       },
+  //     ],
+  //   },
   {
     name: "Galactic Bounty Contract",
     difficulty: QuestionDifficulty.easy,
@@ -268,245 +268,245 @@ int solution(const vector<string>& input) {
       },
     ],
   },
-  {
-    name: "Mining Tunnels",
-    difficulty: QuestionDifficulty.easy,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/MiningTunnels.md"),
-      "utf-8"
-    ),
-    tags: [
-      { name: "Breadth-First Search" },
-      { name: "Graph" },
-      { name: "Shortest Path" },
-    ],
-    testCases: [
-      {
-        input: [
-          /**simple test */ "1",
-          "###########",
-          "#.......$.#",
-          "#.#######.#",
-          "#.#.....#.#",
-          "#.#.###.#.#",
-          "#...#$#...#",
-          "###########",
-          "2",
-          "###########",
-          "#.#.....#.#",
-          "#.#.###.#.#",
-          "#.#.#.#.#.#",
-          "#...#.#...#",
-          "#.###.###.#",
-          "###########",
-        ],
-        expectedOutput: 12,
-        description: "",
-      },
-      {
-        input: [
-          /** multiple routes mid case */ "1",
-          "#################",
-          "#.....#...#....#",
-          "#.###.#.#.#.##.#",
-          "#.#$#...#...#$.#",
-          "#.#.#########..#",
-          "#...#.....#.#.#",
-          "###.#.###.#.#.#",
-          "#$..#.#$#.....#",
-          "#.###.#.#######",
-          "#.....#........#",
-          "#################",
-          "2",
-          "#################",
-          "#.###.#.#.#.#..#",
-          "#.#.#.#.#.#.#.#",
-          "#...#...#...#.#",
-          "#.###########.#",
-          "#.....#.......#",
-          "#####.#.#######",
-          "#.....#.......#",
-          "#.#########.#.#",
-          "#.............#",
-          "#################",
-        ],
-        expectedOutput: 18,
-        description: "",
-      },
-      {
-        input: [
-          /** to test edge cases */ "1",
-          "#########################",
-          "#.....#.......#...#....#",
-          "#.###.#######.#.#.####.#",
-          "#.#$#.....#...#.#....#.#",
-          "#.#.#####.#.###.####.#.#",
-          "#...#...#.#.#$....$#...#",
-          "###.#.#.#.#.#########.##",
-          "#$..#.#.#.#.........#..#",
-          "#.###.#.#.###########..#",
-          "#.....#.#.............##",
-          "#.#####.###############.#",
-          "#.......#.....#........#",
-          "#########################",
-          "2",
-          "#########################",
-          "#.###.#.#.#.#.#.#.#.#..#",
-          "#.#.#.#.#.#.#.#.#.#.#.#",
-          "#...#...#...#...#...#.#",
-          "#.###################.#",
-          "#.....#.......#.......#",
-          "#####.#.#####.#.#######",
-          "#.....#.#.....#.......#",
-          "#.#####.#.#########.#.#",
-          "#.......#.............#",
-          "#.###################.#",
-          "#.....#...............#",
-          "#########################",
-        ],
-        expectedOutput: 42,
-        description: "",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code below
-`,
-        language: LanguageName.python,
-      },
-      {
-        code: `#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
+  //   {
+  //     name: "Mining Tunnels",
+  //     difficulty: QuestionDifficulty.easy,
+  //     content: readFileSync(
+  //       join(__dirname, "../assets/questions/MiningTunnels.md"),
+  //       "utf-8"
+  //     ),
+  //     tags: [
+  //       { name: "Breadth-First Search" },
+  //       { name: "Graph" },
+  //       { name: "Shortest Path" },
+  //     ],
+  //     testCases: [
+  //       {
+  //         input: [
+  //           /**simple test */ "1",
+  //           "###########",
+  //           "#.......$.#",
+  //           "#.#######.#",
+  //           "#.#.....#.#",
+  //           "#.#.###.#.#",
+  //           "#...#$#...#",
+  //           "###########",
+  //           "2",
+  //           "###########",
+  //           "#.#.....#.#",
+  //           "#.#.###.#.#",
+  //           "#.#.#.#.#.#",
+  //           "#...#.#...#",
+  //           "#.###.###.#",
+  //           "###########",
+  //         ],
+  //         expectedOutput: 12,
+  //         description: "",
+  //       },
+  //       {
+  //         input: [
+  //           /** multiple routes mid case */ "1",
+  //           "#################",
+  //           "#.....#...#....#",
+  //           "#.###.#.#.#.##.#",
+  //           "#.#$#...#...#$.#",
+  //           "#.#.#########..#",
+  //           "#...#.....#.#.#",
+  //           "###.#.###.#.#.#",
+  //           "#$..#.#$#.....#",
+  //           "#.###.#.#######",
+  //           "#.....#........#",
+  //           "#################",
+  //           "2",
+  //           "#################",
+  //           "#.###.#.#.#.#..#",
+  //           "#.#.#.#.#.#.#.#",
+  //           "#...#...#...#.#",
+  //           "#.###########.#",
+  //           "#.....#.......#",
+  //           "#####.#.#######",
+  //           "#.....#.......#",
+  //           "#.#########.#.#",
+  //           "#.............#",
+  //           "#################",
+  //         ],
+  //         expectedOutput: 18,
+  //         description: "",
+  //       },
+  //       {
+  //         input: [
+  //           /** to test edge cases */ "1",
+  //           "#########################",
+  //           "#.....#.......#...#....#",
+  //           "#.###.#######.#.#.####.#",
+  //           "#.#$#.....#...#.#....#.#",
+  //           "#.#.#####.#.###.####.#.#",
+  //           "#...#...#.#.#$....$#...#",
+  //           "###.#.#.#.#.#########.##",
+  //           "#$..#.#.#.#.........#..#",
+  //           "#.###.#.#.###########..#",
+  //           "#.....#.#.............##",
+  //           "#.#####.###############.#",
+  //           "#.......#.....#........#",
+  //           "#########################",
+  //           "2",
+  //           "#########################",
+  //           "#.###.#.#.#.#.#.#.#.#..#",
+  //           "#.#.#.#.#.#.#.#.#.#.#.#",
+  //           "#...#...#...#...#...#.#",
+  //           "#.###################.#",
+  //           "#.....#.......#.......#",
+  //           "#####.#.#####.#.#######",
+  //           "#.....#.#.....#.......#",
+  //           "#.#####.#.#########.#.#",
+  //           "#.......#.............#",
+  //           "#.###################.#",
+  //           "#.....#...............#",
+  //           "#########################",
+  //         ],
+  //         expectedOutput: 42,
+  //         description: "",
+  //       },
+  //     ],
+  //     templateCodes: [
+  //       {
+  //         code: `def solution(data):
+  //     # insert your code below
+  // `,
+  //         language: LanguageName.python,
+  //       },
+  //       {
+  //         code: `#include <iostream>
+  // #include <string>
+  // #include <unordered_map>
+  // #include <vector>
 
-using namespace std;
+  // using namespace std;
 
-int solution(const vector<string>& input) {
-    // Insert your code below here
-    
-    } 
-        `,
-        language: LanguageName.cpp,
-      },
-    ],
-  },
-  {
-    name: "The Purge",
-    difficulty: QuestionDifficulty.easy,
-    content: readFileSync(
-      join(__dirname, "../assets/questions/ThePurge.md"),
-      "utf-8"
-    ),
-    tags: [
-      { name: "Depth-First Search" },
-      { name: "Graph" },
-      { name: "Hash Table" },
-    ],
-    testCases: [
-      {
-        input: [
-          /**simple test */ "Folder: 0",
-          "- system32.dll 1048576",
-          "- delete_me.tmp 2097152",
-          "- temp_folder [FOLDER 1]",
-          "- important.doc 512000",
-          "Folder: 1",
-          "- cache.tmp 3145728",
-          "- log.txt 262144",
-        ],
-        expectedOutput: 6553600,
-        description: "Basic folder structure test",
-      },
-      {
-        input: [
-          /** medium complexity test */ "Folder: 0",
-          "- system.log 524288",
-          "- temporary_files [FOLDER 1]",
-          "- documents [FOLDER 2]",
-          "- delete_old.txt 1048576",
-          "Folder: 1",
-          "- cache.dat 2097152",
-          "- backup [FOLDER 3]",
-          "- temp.log 1048576",
-          "Folder: 2",
-          "- important.doc 786432",
-          "- delete_drafts [FOLDER 4]",
-          "- final.pdf 2359296",
-          "Folder: 3",
-          "- temp_data.bin 4194304",
-          "- logs [FOLDER 5]",
-          "Folder: 4",
-          "- draft1.doc 1572864",
-          "- draft2.doc 2097152",
-          "Folder: 5",
-          "- debug.log 3145728",
-          "- error.log 262144",
-        ],
-        expectedOutput: 16766848,
-        description: "Nested folders with mixed content",
-      },
-      {
-        input: [
-          /** edge cases test */ "Folder: 0",
-          "- TEMPORARY.dat 1024",
-          "- not_temporary.txt 2048",
-          "- backup [FOLDER 1]",
-          "- delete [FOLDER 2]",
-          "Folder: 1",
-          "- temp_delete [FOLDER 3]",
-          "- important.sys 4096",
-          "- temporary [FOLDER 4]",
-          "Folder: 2",
-          "- file1.txt 8192",
-          "- subfolder [FOLDER 5]",
-          "- temporary_delete [FOLDER 6]",
-          "Folder: 3",
-          "- delete.tmp 16384",
-          "- data.bin 32768",
-          "Folder: 4",
-          "- cache.tmp 65536",
-          "- DELETE.log 131072",
-          "Folder: 5",
-          "- temp.dat 262144",
-          "- backup.sys 524288",
-          "Folder: 6",
-          "- temporary.log 1048576",
-          "- delete.dat 2097152",
-          "- nested [FOLDER 7]",
-          "Folder: 7",
-          "- final_delete.txt 4194304",
-          "- TEMPORARY_FINAL.dat 8388608",
-        ],
-        expectedOutput: 16776192,
-        description: "",
-      },
-    ],
-    templateCodes: [
-      {
-        code: `def solution(data):
-    # insert your code below
-`,
-        language: LanguageName.python,
-      },
-      {
-        code: `#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
+  // int solution(const vector<string>& input) {
+  //     // Insert your code below here
 
-using namespace std;
+  //     }
+  //         `,
+  //         language: LanguageName.cpp,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     name: "The Purge",
+  //     difficulty: QuestionDifficulty.easy,
+  //     content: readFileSync(
+  //       join(__dirname, "../assets/questions/ThePurge.md"),
+  //       "utf-8"
+  //     ),
+  //     tags: [
+  //       { name: "Depth-First Search" },
+  //       { name: "Graph" },
+  //       { name: "Hash Table" },
+  //     ],
+  //     testCases: [
+  //       {
+  //         input: [
+  //           /**simple test */ "Folder: 0",
+  //           "- system32.dll 1048576",
+  //           "- delete_me.tmp 2097152",
+  //           "- temp_folder [FOLDER 1]",
+  //           "- important.doc 512000",
+  //           "Folder: 1",
+  //           "- cache.tmp 3145728",
+  //           "- log.txt 262144",
+  //         ],
+  //         expectedOutput: 6553600,
+  //         description: "Basic folder structure test",
+  //       },
+  //       {
+  //         input: [
+  //           /** medium complexity test */ "Folder: 0",
+  //           "- system.log 524288",
+  //           "- temporary_files [FOLDER 1]",
+  //           "- documents [FOLDER 2]",
+  //           "- delete_old.txt 1048576",
+  //           "Folder: 1",
+  //           "- cache.dat 2097152",
+  //           "- backup [FOLDER 3]",
+  //           "- temp.log 1048576",
+  //           "Folder: 2",
+  //           "- important.doc 786432",
+  //           "- delete_drafts [FOLDER 4]",
+  //           "- final.pdf 2359296",
+  //           "Folder: 3",
+  //           "- temp_data.bin 4194304",
+  //           "- logs [FOLDER 5]",
+  //           "Folder: 4",
+  //           "- draft1.doc 1572864",
+  //           "- draft2.doc 2097152",
+  //           "Folder: 5",
+  //           "- debug.log 3145728",
+  //           "- error.log 262144",
+  //         ],
+  //         expectedOutput: 16766848,
+  //         description: "Nested folders with mixed content",
+  //       },
+  //       {
+  //         input: [
+  //           /** edge cases test */ "Folder: 0",
+  //           "- TEMPORARY.dat 1024",
+  //           "- not_temporary.txt 2048",
+  //           "- backup [FOLDER 1]",
+  //           "- delete [FOLDER 2]",
+  //           "Folder: 1",
+  //           "- temp_delete [FOLDER 3]",
+  //           "- important.sys 4096",
+  //           "- temporary [FOLDER 4]",
+  //           "Folder: 2",
+  //           "- file1.txt 8192",
+  //           "- subfolder [FOLDER 5]",
+  //           "- temporary_delete [FOLDER 6]",
+  //           "Folder: 3",
+  //           "- delete.tmp 16384",
+  //           "- data.bin 32768",
+  //           "Folder: 4",
+  //           "- cache.tmp 65536",
+  //           "- DELETE.log 131072",
+  //           "Folder: 5",
+  //           "- temp.dat 262144",
+  //           "- backup.sys 524288",
+  //           "Folder: 6",
+  //           "- temporary.log 1048576",
+  //           "- delete.dat 2097152",
+  //           "- nested [FOLDER 7]",
+  //           "Folder: 7",
+  //           "- final_delete.txt 4194304",
+  //           "- TEMPORARY_FINAL.dat 8388608",
+  //         ],
+  //         expectedOutput: 16776192,
+  //         description: "",
+  //       },
+  //     ],
+  //     templateCodes: [
+  //       {
+  //         code: `def solution(data):
+  //     # insert your code below
+  // `,
+  //         language: LanguageName.python,
+  //       },
+  //       {
+  //         code: `#include <iostream>
+  // #include <string>
+  // #include <unordered_map>
+  // #include <vector>
 
-double solution(const vector<string>& input) {
-    // Insert your code below here
-    
-    } 
-        `,
-        language: LanguageName.cpp,
-      },
-    ],
-  },
+  // using namespace std;
+
+  // double solution(const vector<string>& input) {
+  //     // Insert your code below here
+
+  //     }
+  //         `,
+  //         language: LanguageName.cpp,
+  //       },
+  //     ],
+  //   },
   {
     name: "Time To Play Fair",
     difficulty: QuestionDifficulty.easy,
@@ -647,9 +647,11 @@ vector<int> solution(const vector<string>& input) {
       {
         input: [
           /** Simple test: small matrix, clear path */
-          [[2,1,1],
-          [1,1,0],
-          [0,1,1]],
+          [
+            [2, 1, 1],
+            [1, 1, 0],
+            [0, 1, 1],
+          ],
         ],
         expectedOutput: 4,
         description: "",
@@ -657,11 +659,13 @@ vector<int> solution(const vector<string>& input) {
       {
         input: [
           /** Medium test: larger matrix, negative impact of wrong implementation */
-          [[2,1,1,1,1],
-          [1,1,0,1,1],
-          [0,0,0,2,1],
-          [1,1,1,1,1],
-          [1,1,1,1,1]],
+          [
+            [2, 1, 1, 1, 1],
+            [1, 1, 0, 1, 1],
+            [0, 0, 0, 2, 1],
+            [1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1],
+          ],
         ],
         expectedOutput: 1150,
         description: "",
@@ -669,11 +673,13 @@ vector<int> solution(const vector<string>& input) {
       {
         input: [
           /** Hard test: edge cases with large numbers and precision */
-          [[2,1,1,1,1],
-          [1,1,0,1,1],
-          [0,0,0,0,1],
-          [1,0,0,0,1],
-          [1,1,1,1,1]],
+          [
+            [2, 1, 1, 1, 1],
+            [1, 1, 0, 1, 1],
+            [0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1],
+          ],
         ],
         expectedOutput: -1,
         description: "",
