@@ -73,47 +73,72 @@ export default async function QuestionPage({
   }
 
   return (
-    <div
-      style={{
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-        width: "100vw",
-      }}
-    >
-      {userData && <AuthStateInitializer />}
-      {question && (
-        <>
-          <QuestionStateInitializer
-            question={{
-              ...question,
-              testCases: question.testCases.map((tc) => ({
-                input: JSON.parse(tc.input),
-                expectedOutput: JSON.parse(tc.expectedOutput),
-                description: tc.description,
-              })),
-            }}
-            questionList={allQuestionsMeta}
-          />
-          <CodeStateInitializer
-            question={{
-              ...question,
-              testCases: question.testCases.map((tc) => ({
-                input: JSON.parse(tc.input),
-                expectedOutput: JSON.parse(tc.expectedOutput),
-                description: tc.description,
-              })),
-            }}
-          />
-        </>
-      )}
-      {chat && (
-        <AssistantStateInitializer chatid={chat.id} messages={messages} />
-      )}
-      {session?.user?.isWalkthroughEnabled !== false && <Walkthrough />}
-      <Navbar auth0User={session?.user} />
-      <QuestionLayout />
-    </div>
+    <>
+      {/* Mobile Warning Screen - Show only on small screens */}
+      <div className="md:hidden min-h-screen flex items-center justify-center bg-background p-6">
+        <div className="text-center space-y-4">
+          <h1 className="text-2xl font-bold text-primary">
+            Large Screen Required
+          </h1>
+          <p className="text-lg">
+            The coding interface is designed for larger devices such as laptops
+            and desktops. Please access this page on a larger screen for the
+            best experience.
+          </p>
+          <a
+            href="/"
+            className="inline-block mt-4 bg-primary text-white px-6 py-2 rounded-full hover:bg-primary/90 transition-colors"
+          >
+            Return Home
+          </a>
+        </div>
+      </div>
+
+      {/* Main Interface - Hide on mobile, show on md and larger screens */}
+      <div className="hidden md:block">
+        <div
+          style={{
+            padding: "20px",
+            display: "flex",
+            flexDirection: "column",
+            height: "100vh",
+            width: "100vw",
+          }}
+        >
+          {userData && <AuthStateInitializer />}
+          {question && (
+            <>
+              <QuestionStateInitializer
+                question={{
+                  ...question,
+                  testCases: question.testCases.map((tc) => ({
+                    input: JSON.parse(tc.input),
+                    expectedOutput: JSON.parse(tc.expectedOutput),
+                    description: tc.description,
+                  })),
+                }}
+                questionList={allQuestionsMeta}
+              />
+              <CodeStateInitializer
+                question={{
+                  ...question,
+                  testCases: question.testCases.map((tc) => ({
+                    input: JSON.parse(tc.input),
+                    expectedOutput: JSON.parse(tc.expectedOutput),
+                    description: tc.description,
+                  })),
+                }}
+              />
+            </>
+          )}
+          {chat && (
+            <AssistantStateInitializer chatid={chat.id} messages={messages} />
+          )}
+          {session?.user?.isWalkthroughEnabled !== false && <Walkthrough />}
+          <Navbar auth0User={session?.user} />
+          <QuestionLayout />
+        </div>
+      </div>
+    </>
   );
 }
