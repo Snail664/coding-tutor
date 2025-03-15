@@ -25,7 +25,7 @@ export default function NavbarHelpModal() {
               coding in an efficient and enjoyable manner.
             </p>
           </section>
-          <section className="mt-8">
+          {/* <section className="mt-8">
             <h2 className="text-2xl font-bold">Shortcuts</h2>
             <ul className="list-disc pl-8 mt-2">
               <li>
@@ -35,7 +35,7 @@ export default function NavbarHelpModal() {
                 <strong>Command+R</strong>: Run code
               </li>
             </ul>
-          </section>
+          </section> */}
         </div>
       </DialogContent>
     </Dialog>
