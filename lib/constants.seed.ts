@@ -97,7 +97,7 @@ char* solution(const vector<string>& input) {
           "Star B: 1.0, 0.0, 2.0, 0.0",
           "Star C: 1.0, 2.0, 1.0, 0.0",
         ],
-        expectedOutput: "2.0",
+        expectedOutput: 2,
         description: "",
       },
       {
