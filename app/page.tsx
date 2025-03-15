@@ -74,20 +74,7 @@ export default async function Page() {
         id="questions-section"
         className="flex items-start justify-center py-5"
       >
-        <div className="w-full max-w-5xl mx-auto px-6">
-          <div className="grid grid-cols-12 gap-6">
-            {/* Left Sidebar Space */}
-            <div className="col-span-0 md:col-span-3"></div>
-
-            {/* Questions List */}
-            <div className="col-span-12 md:col-span-7 md:ml-1">
-              <FilterableQuestions questions={transformedQuestions} />
-            </div>
-
-            {/* Right Sidebar Space */}
-            <div className="col-span-0 md:col-span-2"></div>
-          </div>
-        </div>
+        <FilterableQuestions questions={transformedQuestions} />
       </section>
     </div>
   );
