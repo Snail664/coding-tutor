@@ -5,7 +5,7 @@ const DynamicText = () => {
   const lines = [
     "Level up your coding skills with Codey the AI Tutor! 🚀",
     "No more sifting through StackOverflow forums or cookie-cutter chatbots! 🔍",
-    "Get step-by-step guidance through problems while making you think and learn independently!"
+    "Get step-by-step guidance through problems while letting you think and learn independently!"
   ];
 
   const [visibleLines, setVisibleLines] = useState<string[]>([]);
@@ -23,7 +23,7 @@ const DynamicText = () => {
   }, [currentIndex, lines]);
 
   return (
-    <p className="text-xl text-muted-foreground mb-12">
+    <p>
       {visibleLines.map((line, index) => (
         <span key={index} className="block opacity-0 animate-fade-in">{line}</span>
       ))}

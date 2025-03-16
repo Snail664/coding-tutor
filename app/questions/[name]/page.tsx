@@ -1,7 +1,6 @@
 import { getSession } from "@auth0/nextjs-auth0";
 import { prisma } from "@/lib/prisma";
 import Walkthrough from "@/components/features/Walkthrough";
-import Navbar from "@/components/Navbar";
 import AuthStateInitializer from "@/components/features/AuthStateInitializer";
 import QuestionLayout from "@/components/features/QuestionLayout";
 import QuestionStateInitializer from "@/components/QuestionStateInitializer";
@@ -112,7 +111,6 @@ export default async function QuestionPage({
         <AssistantStateInitializer chatid={chat.id} messages={messages} />
       )}
       {session?.user?.isWalkthroughEnabled !== false && <Walkthrough />}
-      <Navbar auth0User={session?.user} />
       <QuestionLayout />
     </div>
   );

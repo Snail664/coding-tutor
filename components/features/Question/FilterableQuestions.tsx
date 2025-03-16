@@ -87,7 +87,7 @@ export default function FilterableQuestions({ questions }: Props) {
   const hasActiveFilters = selectedDifficulty !== null || selectedTopics.length > 0;
 
   return (
-    <div className="w-full max-w-md ml-[28px]">
+    <div className="w-full max-w-md px-5">
       {/* Search Bar + Filter Button */}
       <div className="flex items-center gap-2 mb-4">
         <div className="relative flex-1">
