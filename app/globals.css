@@ -53,3 +53,29 @@ body {
 .animate-fade-in {
   animation: fadeIn 0.8s ease-out forwards;
 }
+
+.dynamic-text-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.dynamic-text-container > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+@media (max-width: 640px) {
+  .dynamic-text-container {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* Adjust based on your navbar height */
+}

@@ -4,6 +4,7 @@ import FilterableQuestions from "@/components/features/Question/FilterableQuesti
 import DynamicText from "@/app/dynamictext";
 import FeaturesShowcase from "@/components/features/FeaturesShowcase";
 import PricingSection from "@/components/features/PricingSection";
+import ConditionalFooter from "@/components/layout/ConditionalFooter";
 
 interface Question {
   name: string;
@@ -33,47 +34,52 @@ export default async function Page() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section with Search */}
-      <section className="min-h-[400px] pt-50 flex items-center justify-center relative bg-gradient-to-b from-primary/5 to-transparent">
+      <section className="min-h-[370px] pt-40 flex items-center justify-center relative bg-gradient-to-b from-primary/5 to-transparent">
         <div className="w-full max-w-4xl mx-auto px-6 text-center">
-          <h1 className="text-5xl font-extrabold text-primary drop-shadow-lg mb-4">
+          <h1 className="text-5xl font-extrabold text-primary drop-shadow-lg mb-6">
             Ask Codey
           </h1>
 
-          <DynamicText />
+          <div className="dynamic-text-container">
+            <DynamicText />
+          </div>
           
           {!session && (
-            <a
-              href="/api/auth/login"
-              className="inline-block mt-6 bg-primary dark:bg-gray-800 text-white font-bold py-3 px-8 rounded-full shadow-xl hover:bg-primary/90 dark:hover:bg-gray-700 transition-all transform hover:scale-105"
-            >
-              Get Started
-            </a>
+            <div className="mt-4">
+              <a
+                href="/api/auth/login"
+                className="inline-block bg-primary dark:bg-gray-800 text-white font-bold py-3 px-8 rounded-full shadow-xl hover:bg-primary/90 dark:hover:bg-gray-700 transition-all transform hover:scale-105"
+              >
+                Get Started
+              </a>
+            </div>
           )}
         </div>
       </section>
 
       {/* Questions Section - Only visible when logged in */}
       {session && (
-        <section id="questions-section" className="flex items-start justify-center py-5">
-          <div className="flex items-start justify-center">
+        <>
+          <section id="questions-section" className="flex items-start justify-center py-0 -mt-3">
             <FilterableQuestions questions={transformedQuestions} />
-          </div>
-        </section>
+          </section>
+          <footer className="py-4">
+            <ConditionalFooter forceShow={true} />
+          </footer>
+        </>
       )}
       
-      {/* Features Showcase - for logged out users - hover:scale-105*/}
+      {/* Features Showcase - for logged out users */}
       {!session && (
         <>
-          <FeaturesShowcase />
-          <div id="pricing">
+          <section id="features">
+            <FeaturesShowcase />
+          </section>
+          <div id="pricing" className="flex justify-center w-full">
             <PricingSection />
           </div>
         </>
       )}
-      
-      <footer className="py-6">
-        <p className="text-center text-sm text-gray-500">Some Questions adapted from <a className="underline text-blue-500" href="https://codingquest.io" target="_blank">Coding Quest</a></p>
-      </footer>
     </div>
   );
 }

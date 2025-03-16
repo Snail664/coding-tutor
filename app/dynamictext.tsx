@@ -22,12 +22,27 @@ const DynamicText = () => {
     }
   }, [currentIndex, lines]);
 
+  // Calculate the height needed for all lines - reduced spacing
+  const totalHeight = lines.length * 2; // Less space between lines
+
   return (
-    <p>
+    <div style={{ minHeight: `${totalHeight}em` }} className="relative w-full">
       {visibleLines.map((line, index) => (
-        <span key={index} className="block opacity-0 animate-fade-in">{line}</span>
+        <div 
+          key={index} 
+          className="animate-in fade-in duration-700 text-gray-700 dark:text-gray-300 px-2"
+          style={{ 
+            position: 'relative', 
+            marginBottom: '0.5rem',
+            lineHeight: '1.3',
+            maxWidth: '100%',
+            wordWrap: 'break-word'
+          }}
+        >
+          {line}
+        </div>
       ))}
-    </p>
+    </div>
   );
 };
 

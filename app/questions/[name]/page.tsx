@@ -8,6 +8,7 @@ import AssistantStateInitializer from "@/components/AssistantStateInitializer";
 import { MessageT } from "@/lib/types";
 import CodeStateInitializer from "@/components/CodeStateInitializer";
 import { notFound } from "next/navigation";
+import ConditionalFooter from "@/components/layout/ConditionalFooter";
 
 export default async function QuestionPage({
   params,
@@ -112,6 +113,9 @@ export default async function QuestionPage({
       )}
       {session?.user?.isWalkthroughEnabled !== false && <Walkthrough />}
       <QuestionLayout />
+      <footer className="py-4">
+        <ConditionalFooter isHomePage={false} />
+      </footer>
     </div>
   );
 }

@@ -9,6 +9,7 @@ import Chat from "./Chat";
 import SettingsButton from "./SettingsButton";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 interface NavbarProps {
   auth0User?: Claims;
@@ -18,16 +19,65 @@ interface NavbarProps {
 export default function Navbar({ auth0User, hideMiddle }: NavbarProps) {
   const pathname = usePathname();
   const isQuestionPage = pathname?.includes('/questions/');
+  const isHomePage = pathname === '/';
+  
+  // Add smooth scrolling behavior
+  useEffect(() => {
+    // Add smooth scrolling to all anchor links
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest('a');
+      
+      if (anchor && anchor.getAttribute('href')?.startsWith('#')) {
+        e.preventDefault();
+        const targetId = anchor.getAttribute('href');
+        const targetElement = document.querySelector(targetId as string);
+        
+        if (targetElement) {
+          // Scroll to the target element with smooth behavior
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          
+          // Update URL without page reload
+          window.history.pushState(null, '', targetId);
+        }
+      }
+    };
+    
+    // Add event listener to the document
+    document.addEventListener('click', handleAnchorClick);
+    
+    // Clean up event listener on component unmount
+    return () => {
+      document.removeEventListener('click', handleAnchorClick);
+    };
+  }, []);
   
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6">
       <div className="flex h-16 items-center justify-between">
-        {/* Left - Logo */}
+        {/* Left - Logo and Section Links */}
         <div className="flex items-center">
-          <Link href="/" className="text-xl font-bold text-primary flex items-center">
-            <span className="bg-primary text-white px-2 py-1 rounded mr-1">C</span>
-            <span>odeyAI</span>
-          </Link>
+          <div className="flex items-center">
+            <Link href="/" className="text-xl font-bold text-primary flex items-center">
+              <span className="bg-primary dark:bg-white text-white dark:text-black px-2 py-1 rounded mr-1">C</span>
+              <span>odeyAI</span>
+            </Link>
+          </div>
+
+          {/* Section Links - Only show on desktop AND only on homepage */}
+          {isHomePage && (
+            <div className="hidden lg:flex items-center ml-8 space-x-6">
+              <a className="text-muted-foreground hover:text-primary transition-colors text-sm" href="#features">
+                Features  
+              </a>
+              <a className="text-muted-foreground hover:text-primary transition-colors text-sm" href="#pricing">
+                Pricing
+              </a>
+            </div>
+          )}
         </div>
 
         {/* Middle - Ask Codey - Only show on question pages */}
