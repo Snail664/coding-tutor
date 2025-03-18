@@ -21,11 +21,11 @@ export default function NavbarHelpModal() {
           <section className="mt-4">
             <h2 className="text-2xl font-bold">About</h2>
             <p className="mt-2">
-              Coding Tutor is an AI-powered platform that helps you to learn
-              coding in an efficient and enjoyable manner.
+              Ask Codey is an AI-powered platform that helps you to learn coding
+              in an efficient and enjoyable manner.
             </p>
           </section>
-          <section className="mt-8">
+          {/* <section className="mt-8">
             <h2 className="text-2xl font-bold">Shortcuts</h2>
             <ul className="list-disc pl-8 mt-2">
               <li>
@@ -35,7 +35,7 @@ export default function NavbarHelpModal() {
                 <strong>Command+R</strong>: Run code
               </li>
             </ul>
-          </section>
+          </section> */}
         </div>
       </DialogContent>
     </Dialog>

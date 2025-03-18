@@ -1,6 +1,0 @@
-{
-  "testCases": [],
-  "numPassed": 0,
-  "numFailed": 0,
-  "stderr": "  File \"/piston/jobs/46fa74c0-c289-4489-9e0c-1eab7cb7d470/script\", line 16\n    min_cost = min(total_costs.values()\n                  ^\nSyntaxError: '(' was never closed\n"
-}

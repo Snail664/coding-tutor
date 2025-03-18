@@ -20,17 +20,20 @@ export default async function Page() {
     include: {
       tags: {
         select: {
-          name: true
-        }
-      }
+          name: true,
+        },
+      },
     },
     cacheStrategy: { ttl: 3600, swr: 30 },
   });
 
-  const transformedQuestions = questions.map(q => ({
+  const transformedQuestions = questions.map((q) => ({
     name: q.name,
     difficulty: q.difficulty,
-    tags: (q as Question).tags?.map((tag: { name: string }) => ({ name: tag.name })) || []
+    tags:
+      (q as Question).tags?.map((tag: { name: string }) => ({
+        name: tag.name,
+      })) || [],
   }));
 
   return (

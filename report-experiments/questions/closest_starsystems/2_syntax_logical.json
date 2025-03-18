@@ -1,6 +1,0 @@
-{
-  "testCases": [],
-  "numPassed": 0,
-  "numFailed": 0,
-  "stderr": "  File \"/piston/jobs/51424956-375e-45a1-9089-480fde2fe031/script\", line 17\n    x1, y1, z1 = stars_dict[star_names[i]]\n    ^\nIndentationError: expected an indented block after 'while' statement on line 16\n"
-}

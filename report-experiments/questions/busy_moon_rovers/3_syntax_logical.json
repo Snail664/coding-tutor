@@ -1,6 +1,0 @@
-{
-  "testCases": [],
-  "numPassed": 0,
-  "numFailed": 0,
-  "stderr": "  File \"/piston/jobs/8cd71ce6-ac93-4bc5-96d2-a15a817ecaee/script\", line 23\n    i++\n       ^\nSyntaxError: invalid syntax\n"
-}

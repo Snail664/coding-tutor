@@ -3,8 +3,21 @@
 import React, { useState } from "react";
 import DifficultyTag from "./QuestionDifficultyTag";
 import { QuestionDifficulty } from "@prisma/client";
-import { Search as SearchIcon, Filter as FilterIcon, Eye as EyeIcon, EyeOff as EyeOffIcon, ChevronDown } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuPortal } from "@/components/ui/dropdown-menu";
+import {
+  Search as SearchIcon,
+  Filter as FilterIcon,
+  Eye as EyeIcon,
+  EyeOff as EyeOffIcon,
+  ChevronDown,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuPortal,
+} from "@/components/ui/dropdown-menu";
 import TopicTag from "./QuestionTopicTag";
 import { Input } from "@/components/ui/input";
 
@@ -20,7 +33,9 @@ interface Props {
 
 export default function FilterableQuestions({ questions }: Props) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null);
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(
+    null
+  );
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
   const [topicsCondition, setTopicsCondition] = useState<"is" | "is not">("is");
   const [showTags, setShowTags] = useState(true);
@@ -29,51 +44,60 @@ export default function FilterableQuestions({ questions }: Props) {
   const [topicsSearchTerm, setTopicsSearchTerm] = useState("");
 
   // Get all unique topics
-  const allTopics = Array.from(new Set(
-    questions.flatMap(q => q.tags?.map(tag => tag.name) || [])
-  )).sort();
+  const allTopics = Array.from(
+    new Set(questions.flatMap((q) => q.tags?.map((tag) => tag.name) || []))
+  ).sort();
 
   // Filter topics based on search term
-  const filteredTopics = allTopics.filter(topic => 
+  const filteredTopics = allTopics.filter((topic) =>
     topic.toLowerCase().includes(topicsSearchTerm.toLowerCase())
   );
 
   // Filter questions based on search term, difficulty, and topics
-  const filteredQuestions = questions.filter((question) => {
-    const matchesSearch = question.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDifficulty = selectedDifficulty
-      ? question.difficulty.toLowerCase() === selectedDifficulty.toLowerCase()
-      : true;
-    
-    // Topics filter logic
-    let matchesTopics = true;
-    if (selectedTopics.length > 0 && question.tags) {
-      if (topicsCondition === "is") {
-        // At least one of the selected topics must match
-        matchesTopics = selectedTopics.some(topic => 
-          question.tags?.some(tag => tag.name === topic)
-        );
-      } else {
-        // None of the selected topics should match
-        matchesTopics = !selectedTopics.some(topic => 
-          question.tags?.some(tag => tag.name === topic)
-        );
+  const filteredQuestions = questions
+    .filter((question) => {
+      const matchesSearch = question.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesDifficulty = selectedDifficulty
+        ? question.difficulty.toLowerCase() === selectedDifficulty.toLowerCase()
+        : true;
+
+      // Topics filter logic
+      let matchesTopics = true;
+      if (selectedTopics.length > 0 && question.tags) {
+        if (topicsCondition === "is") {
+          // At least one of the selected topics must match
+          matchesTopics = selectedTopics.some((topic) =>
+            question.tags?.some((tag) => tag.name === topic)
+          );
+        } else {
+          // None of the selected topics should match
+          matchesTopics = !selectedTopics.some((topic) =>
+            question.tags?.some((tag) => tag.name === topic)
+          );
+        }
       }
-    }
-    
-    return matchesSearch && matchesDifficulty && matchesTopics;
-  }).sort((a, b) => {
-    // First sort by difficulty (easy -> medium -> hard)
-    const difficultyOrder = { easy: 1, medium: 2, hard: 3 };
-    const diffCompare = difficultyOrder[a.difficulty.toLowerCase() as keyof typeof difficultyOrder] - 
-                       difficultyOrder[b.difficulty.toLowerCase() as keyof typeof difficultyOrder];
-    
-    // If same difficulty, sort alphabetically by name
-    if (diffCompare === 0) {
-      return a.name.localeCompare(b.name);
-    }
-    return diffCompare;
-  });
+
+      return matchesSearch && matchesDifficulty && matchesTopics;
+    })
+    .sort((a, b) => {
+      // First sort by difficulty (easy -> medium -> hard)
+      const difficultyOrder = { easy: 1, medium: 2, hard: 3 };
+      const diffCompare =
+        difficultyOrder[
+          a.difficulty.toLowerCase() as keyof typeof difficultyOrder
+        ] -
+        difficultyOrder[
+          b.difficulty.toLowerCase() as keyof typeof difficultyOrder
+        ];
+
+      // If same difficulty, sort alphabetically by name
+      if (diffCompare === 0) {
+        return a.name.localeCompare(b.name);
+      }
+      return diffCompare;
+    });
 
   const handleReset = () => {
     setSearchTerm("");
@@ -84,7 +108,8 @@ export default function FilterableQuestions({ questions }: Props) {
   };
 
   // Check if any filters are active
-  const hasActiveFilters = selectedDifficulty !== null || selectedTopics.length > 0;
+  const hasActiveFilters =
+    selectedDifficulty !== null || selectedTopics.length > 0;
 
   return (
     <div className="w-full max-w-md px-5">
@@ -373,14 +398,21 @@ export default function FilterableQuestions({ questions }: Props) {
           {filteredQuestions.length > 0 ? (
             <ul className="divide-y divide-gray-300">
               {filteredQuestions.map((question) => (
-                <li key={question.name} className="hover:bg-background transition">
+                <li
+                  key={question.name}
+                  className="hover:bg-background transition"
+                >
                   <a
                     href={`/questions/${question.name}`}
                     className="p-4 flex flex-col"
                   >
                     <div className="flex justify-between items-center">
-                      <span className="text-primary font-medium">{question.name}</span>
-                      <DifficultyTag difficulty={question.difficulty as QuestionDifficulty} />
+                      <span className="text-primary font-medium">
+                        {question.name}
+                      </span>
+                      <DifficultyTag
+                        difficulty={question.difficulty as QuestionDifficulty}
+                      />
                     </div>
                     {question.tags && question.tags.length > 0 && showTags && (
                       <div className="mt-2 flex flex-wrap gap-1">
@@ -400,18 +432,18 @@ export default function FilterableQuestions({ questions }: Props) {
                 onClick={handleReset}
                 className="mt-2 flex items-center gap-1 text-sm text-primary hover:underline"
               >
-                <svg 
-                  aria-hidden="true" 
-                  focusable="false" 
-                  data-prefix="far" 
-                  data-icon="arrow-rotate-left" 
-                  className="h-3 w-3" 
-                  role="img" 
-                  xmlns="http://www.w3.org/2000/svg" 
+                <svg
+                  aria-hidden="true"
+                  focusable="false"
+                  data-prefix="far"
+                  data-icon="arrow-rotate-left"
+                  className="h-3 w-3"
+                  role="img"
+                  xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
                 >
-                  <path 
-                    fill="currentColor" 
+                  <path
+                    fill="currentColor"
                     d="M40 224c-13.3 0-24-10.7-24-24V56c0-13.3 10.7-24 24-24s24 10.7 24 24v80.1l20-23.5C125 63.4 186.9 32 256 32c123.7 0 224 100.3 224 224s-100.3 224-224 224c-50.4 0-97-16.7-134.4-44.8c-10.6-8-12.7-23-4.8-33.6s23-12.7 33.6-4.8C179.8 418.9 216.3 432 256 432c97.2 0 176-78.8 176-176s-78.8-176-176-176c-54.3 0-102.9 24.6-135.2 63.4l-.1 .2 0 0L93.1 176H184c13.3 0 24 10.7 24 24s-10.7 24-24 24H40z"
                   ></path>
                 </svg>

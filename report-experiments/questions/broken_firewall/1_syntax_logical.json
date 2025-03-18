@@ -1,6 +1,0 @@
-{
-  "testCases": [],
-  "numPassed": 0,
-  "numFailed": 0,
-  "stderr": "  File \"/piston/jobs/f6a32ccd-07e8-4a36-a9c0-71a7b3a76665/script\", line 10\n    hex_str = hex_str(: : -1)\n                      ^\nSyntaxError: invalid syntax\n"
-}
