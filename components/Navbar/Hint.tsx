@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAppDispatch } from "@/store";
 import { getHintThunk } from "@/slices/AssistantSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import AssistantSpeaking from "./AssistantSpeaking";
 
 export default function HintButton() {
@@ -38,8 +38,8 @@ export default function HintButton() {
     }
   }, [assistantPopupText]);
 
-  // handle hint button click
-  const onHint = () => {
+  // handle hint button click - wrapped in useCallback to avoid recreating on every render
+  const onHint = useCallback(() => {
     if (!user) {
       toast({
         title: "Error",
@@ -48,7 +48,7 @@ export default function HintButton() {
       return;
     }
     dispatch(getHintThunk());
-  };
+  }, [user, toast, dispatch]);
 
   // keyboard shorcut
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function HintButton() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [user, onHint]);
+  }, [onHint]);
 
   return (
     <>

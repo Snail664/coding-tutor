@@ -13,9 +13,9 @@ export default function FeaturesShowcase() {
   }, []);
   
   return (
-    <section className="py-16 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+    <section className="py-20 bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-primary mb-12">
+        <h2 className="text-4xl font-bold text-primary mb-12">
           Features
         </h2>
         
@@ -36,7 +36,7 @@ export default function FeaturesShowcase() {
               {activeFeature === 'hints' && (
                 <div className="p-6 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
                   <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Our automatic hints system provides just-in-time guidance when you're stuck on a problem.
+                    Our automatic hints system provides just-in-time guidance when you&apos;re stuck on a problem.
                   </p>
                 </div>
               )}
@@ -76,7 +76,7 @@ export default function FeaturesShowcase() {
               {activeFeature === 'feedback' && (
                 <div className="p-6 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
                   <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Our proactive feedback aims to automatically detect and offer help if you're struggling and reinforce concepts when you get something right.
+                    Our proactive feedback aims to automatically detect and offer help if you&apos;re struggling and reinforce concepts when you get something right.
                   </p>
                 </div>
               )}

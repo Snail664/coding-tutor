@@ -16,7 +16,7 @@ interface NavbarProps {
   hideMiddle?: boolean;
 }
 
-export default function Navbar({ auth0User, hideMiddle }: NavbarProps) {
+export default function Navbar({ auth0User }: NavbarProps) {
   const pathname = usePathname();
   const isQuestionPage = pathname?.includes('/questions/');
   const isHomePage = pathname === '/';
@@ -67,8 +67,8 @@ export default function Navbar({ auth0User, hideMiddle }: NavbarProps) {
             </Link>
           </div>
 
-          {/* Section Links - Only show on desktop AND only on homepage */}
-          {isHomePage && (
+          {/* Section Links - Only show on desktop AND only on homepage AND only when not logged in */}
+          {isHomePage && !auth0User && (
             <div className="hidden lg:flex items-center ml-8 space-x-6">
               <a className="text-muted-foreground hover:text-primary transition-colors text-sm" href="#features">
                 Features  
@@ -93,7 +93,7 @@ export default function Navbar({ auth0User, hideMiddle }: NavbarProps) {
         <div className="flex items-center space-x-3">
           <NavbarHelpModal />
           <ThemeSelectButton />
-          <SettingsButton />
+          {auth0User && <SettingsButton />}
           {auth0User ? (
             <NavbarUserModal
               name={auth0User.name ?? ""}
