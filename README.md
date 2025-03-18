@@ -46,3 +46,4 @@ pnpm dev
 bun dev
 ```
 Open your browser and navigate to either the `AUTH0_BASE_URL` you set or the default [http://localhost:port](http://localhost:port) with your browser to see the result.
+
