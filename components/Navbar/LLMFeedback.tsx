@@ -1,6 +1,4 @@
 import { BotMessageSquare, User } from "lucide-react";
-import Markdown, { Components } from "react-markdown";
-import rehypeRaw from 'rehype-raw';
 
 // LLMFeedback.tsx
 interface LLMFeedbackProps {
@@ -8,19 +6,14 @@ interface LLMFeedbackProps {
   LLMResponse?: string;
 }
 
-export default function LLMFeedback({ userQuestion, LLMResponse }: LLMFeedbackProps) {
+export default function LLMFeedback({
+  userQuestion,
+  LLMResponse,
+}: LLMFeedbackProps) {
   const processedResponse = LLMResponse?.replace(
-    /\[([^\]]+)\]\(QUESTION_LINK:([^)]+)\)/g, 
+    /\[([^\]]+)\]\(QUESTION_LINK:([^)]+)\)/g,
     (_, text, questionName) => `[${text}](/questions/${questionName})`
   );
-
-  const components: Components = {
-    a: ({ children, ...props }) => (
-      <a {...props} className="text-primary hover:text-primary/80 underline">
-        {children}
-      </a>
-    )
-  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -35,8 +28,8 @@ export default function LLMFeedback({ userQuestion, LLMResponse }: LLMFeedbackPr
       {processedResponse && (
         <div className="flex gap-2">
           <BotMessageSquare className="w-5 h-5 mt-1 text-primary" />
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
-            <Markdown rehypePlugins={[rehypeRaw]} components={components}>{processedResponse}</Markdown>
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3 whitespace-pre-wrap">
+            {processedResponse}
           </div>
         </div>
       )}

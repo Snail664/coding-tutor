@@ -135,21 +135,34 @@ export function base64ToAudioUrl(base64Audio: string): string {
 
 export function parseJSON(str: string) {
   try {
+    // First, escape newlines in string literals
+    const escapedStr = str.replace(/"([^"]*)"/g, (match) => {
+      return match.replace(/\n/g, "\\n");
+    });
+
     // Find the first '{' and last '}'
-    const start = str.indexOf("{");
-    const end = str.lastIndexOf("}") + 1;
+    const start = escapedStr.indexOf("{");
+    const end = escapedStr.lastIndexOf("}") + 1;
 
     if (start === -1 || end === 0) {
       throw new Error("No JSON object found in string");
     }
 
     // Extract just the JSON part
-    const jsonStr = str.substring(start, end);
+    const jsonStr = escapedStr.substring(start, end);
 
     // Parse and return the JSON
-    return JSON.parse(jsonStr);
+    const parsed = JSON.parse(jsonStr);
+
+    // Convert escaped newlines back to actual newlines in the reply
+    if (parsed.reply) {
+      parsed.reply = parsed.reply.replace(/\\n/g, "\n");
+    }
+
+    return parsed;
   } catch (error) {
     console.error("Error parsing JSON:", error);
+    console.log("Original string:", str);
     return null;
   }
 }

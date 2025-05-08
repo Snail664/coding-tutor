@@ -86,7 +86,10 @@ export async function POST(request: Request) {
       { role: "user", content: data.userQuestion },
     ];
 
-    console.log("Sending request to OpenAI with messages:", messages);
+    console.log(
+      "Sending request to OpenAI with messages:",
+      JSON.stringify(messages, null, 2)
+    );
 
     // Get completion from OpenAI using the configured instance
     const completion = await openai.chat.completions.create({
@@ -97,15 +100,28 @@ export async function POST(request: Request) {
     });
 
     const response = completion.choices[0]?.message?.content || "";
-    console.log("Received response from OpenAI:", response);
+    console.log("Raw response from OpenAI:", response);
+
+    // Try to parse the response as JSON if it looks like JSON
+    let parsedResponse;
+    try {
+      if (response.trim().startsWith("{") || response.trim().startsWith("[")) {
+        parsedResponse = JSON.parse(response);
+        console.log("Successfully parsed JSON response:", parsedResponse);
+      }
+    } catch (parseError) {
+      console.error("JSON parsing error:", parseError);
+      console.log("Failed to parse response as JSON, returning as plain text");
+    }
 
     if (!response) {
       console.log("No response from OpenAI");
       throw new Error("No response from OpenAI");
     }
 
+    // Return either the parsed JSON or the raw response
     return NextResponse.json({
-      response: response,
+      response: parsedResponse || response,
     });
   } catch (error: unknown) {
     console.error("Error in general chat endpoint:", error);
