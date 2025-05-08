@@ -348,7 +348,7 @@ export const startPolling = createAsyncThunk<void, void, { state: RootState }>(
         dispatch(setIsPolling(false));
       } else {
         // Continue polling after delay
-        setTimeout(poll, 5000); // Poll every 5 seconds
+        setTimeout(poll, 1000); // Poll every 1 seconds
       }
     };
 
