@@ -37,6 +37,7 @@ export default function QuestionLayout() {
           display: "flex",
           flexDirection: "row",
           overflow: "hidden",
+          width: "100%",
         }}
       >
         <SplitPane

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Poppins } from 'next/font/google';
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import "./markdown.css";
 import Providers from "./providers";
@@ -20,9 +20,9 @@ const geistMono = localFont({
 });
 
 const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-poppins',
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins",
 });
 
 export const metadata: Metadata = {
@@ -36,7 +36,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getSession();
-  
+
   return (
     <html lang="en">
       <body
@@ -47,12 +47,10 @@ export default async function RootLayout({
           <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-gray-200 dark:border-gray-800">
             <Navbar auth0User={session?.user} hideMiddle={true} />
           </header>
-          
+
           {/* Main Content with top padding for navbar */}
-          <main className="pt-16">
-            {children}
-          </main>
-          
+          <main className="pt-16 overflow-x-hidden">{children}</main>
+
           <Toaster />
         </Providers>
       </body>
