@@ -63,21 +63,19 @@ export default async function Page() {
       </section>
 
       {/* Questions Section - Only visible when logged in */}
-      {session && (
-        <>
-          <section
-            id="questions-section"
-            className="py-12 border-b border-gray-200 dark:border-gray-800"
-          >
-            <div className="flex items-start justify-center">
-              <FilterableQuestions questions={transformedQuestions} />
-            </div>
-          </section>
-          <footer className="py-4">
-            <ConditionalFooter forceShow={true} />
-          </footer>
-        </>
-      )}
+      <>
+        <section
+          id="questions-section"
+          className="py-12 border-b border-gray-200 dark:border-gray-800"
+        >
+          <div className="flex items-start justify-center">
+            <FilterableQuestions questions={transformedQuestions} />
+          </div>
+        </section>
+        <footer className="py-4">
+          <ConditionalFooter forceShow={true} />
+        </footer>
+      </>
 
       {/* Features Showcase - for logged out users */}
       {/* {!session && (
