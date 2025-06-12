@@ -2,11 +2,11 @@ import { getSession } from "@auth0/nextjs-auth0";
 import { prisma } from "@/lib/prisma";
 import FilterableQuestions from "@/components/features/Question/FilterableQuestions";
 import DynamicText from "@/app/dynamictext";
-import FeaturesShowcase from "@/components/features/FeaturesShowcase";
-import PricingSection from "@/components/features/PricingSection";
+// import FeaturesShowcase from "@/components/features/FeaturesShowcase";
+// import PricingSection from "@/components/features/PricingSection";
 import ConditionalFooter from "@/components/layout/ConditionalFooter";
-import { Github } from "lucide-react";
-import Link from "next/link";
+// import { Github } from "lucide-react";
+//import Link from "next/link";
 
 interface Question {
   name: string;
