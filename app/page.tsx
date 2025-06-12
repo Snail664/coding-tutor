@@ -12,7 +12,7 @@ interface Question {
   name: string;
   difficulty: string;
   tags?: { name: string }[];
-} 
+}
 
 export default async function Page() {
   const session = await getSession();
@@ -48,7 +48,7 @@ export default async function Page() {
           <div className="dynamic-text-container">
             <DynamicText />
           </div>
-          
+
           {!session && (
             <div className="mt-4 pb-8">
               <a
@@ -65,7 +65,10 @@ export default async function Page() {
       {/* Questions Section - Only visible when logged in */}
       {session && (
         <>
-          <section id="questions-section" className="py-12 border-b border-gray-200 dark:border-gray-800">
+          <section
+            id="questions-section"
+            className="py-12 border-b border-gray-200 dark:border-gray-800"
+          >
             <div className="flex items-start justify-center">
               <FilterableQuestions questions={transformedQuestions} />
             </div>
@@ -75,71 +78,131 @@ export default async function Page() {
           </footer>
         </>
       )}
-      
+
       {/* Features Showcase - for logged out users */}
-      {!session && (
+      {/* {!session && (
         <>
-          <section id="features" className="border-b border-gray-200 dark:border-gray-800">
+          <section
+            id="features"
+            className="border-b border-gray-200 dark:border-gray-800"
+          >
             <FeaturesShowcase />
           </section>
-          <section id="pricing" className="border-b border-gray-200 dark:border-gray-800">
+          <section
+            id="pricing"
+            className="border-b border-gray-200 dark:border-gray-800"
+          >
             <PricingSection />
           </section>
         </>
-      )}
-      
+      )} */}
+
       {/* Main Footer */}
-      <footer className="py-16 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+      {/* <footer className="py-16 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {/* Brand Logo and Slogan */}
             <div>
               <Link href="/" className="flex items-center gap-1 mb-4">
-                <span className="bg-primary dark:bg-white text-white dark:text-black px-2 py-1 rounded h-8 w-8 flex items-center justify-center">C</span>
+                <span className="bg-primary dark:bg-white text-white dark:text-black px-2 py-1 rounded h-8 w-8 flex items-center justify-center">
+                  C
+                </span>
                 <span className="font-bold text-xl">odeyAI</span>
               </Link>
               <p className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400">
-                Your next-gen AI-powered coding mentor, guiding you step by step to mastery—<strong> anytime, anywhere. </strong>
+                Your next-gen AI-powered coding mentor, guiding you step by step
+                to mastery—<strong> anytime, anywhere. </strong>
               </p>
             </div>
-
-            {/* Company Links */}
             <div>
               <h3 className="font-semibold mb-3">Company</h3>
               <ul className="space-y-2">
-                <li><a className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors" href="#">About Us</a></li>
-                <li><a className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
-                <li><a className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+                <li>
+                  <a
+                    className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
+                    href="#"
+                  >
+                    About Us
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
+                    href="#"
+                  >
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
+                    href="#"
+                  >
+                    Terms of Service
+                  </a>
+                </li>
               </ul>
             </div>
-
-            {/* Product Links */}
             <div>
               <h3 className="font-semibold mb-3">Product</h3>
               <ul className="space-y-2">
-                <li><a className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors" href="#">Documentation</a></li>
-                <li><a className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors" href="#">Pricing</a></li>
-                <li><a className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors" href="#">Blog</a></li>
+                <li>
+                  <a
+                    className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
+                    href="#"
+                  >
+                    Documentation
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
+                    href="#"
+                  >
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
+                    href="#"
+                  >
+                    Blog
+                  </a>
+                </li>
               </ul>
             </div>
-
-            {/* Support Links */}
             <div>
               <h3 className="font-semibold mb-3">Support</h3>
               <ul className="space-y-2">
-                <li><a className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors" href="#">FAQ</a></li>
-                <li><a className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors" href="#">Contact Us</a></li>
+                <li>
+                  <a
+                    className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
+                    href="#"
+                  >
+                    FAQ
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
+                    href="#"
+                  >
+                    Contact Us
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
-          
-          {/* Bottom Section with Copyright and Social Links */}
           <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground text-gray-600 dark:text-gray-400 mb-4 md:mb-0">
               © {new Date().getFullYear()} CodeyAI - All rights reserved.
             </p>
             <div className="flex space-x-6">
-              <a href="#" aria-label="GitHub" className="text-muted-foreground hover:text-primary text-gray-600 dark:text-gray-400 transition-colors">
+              <a
+                href="#"
+                aria-label="GitHub"
+                className="text-muted-foreground hover:text-primary text-gray-600 dark:text-gray-400 transition-colors"
+              >
                 <Github size={20} />
               </a>
               <a
@@ -177,7 +240,7 @@ export default async function Page() {
             </div>
           </div>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 }
