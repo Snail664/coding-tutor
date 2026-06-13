@@ -1,0 +1,63 @@
+# Fly.io app config for self-hosted Piston (code execution engine).
+#
+# Setup (one-time):
+#   1. Install flyctl: https://fly.io/docs/flyctl/install/
+#   2. fly auth login
+#   3. fly launch --no-deploy --copy-config --name <your-piston-app-name>
+#      (run from this piston/ directory; choose a region close to your users)
+#   4. fly volumes create piston_data --size 1 --region <region>
+#   5. fly deploy
+#
+# After deploy, your Piston instance is reachable at:
+#   https://<your-piston-app-name>.fly.dev
+#
+# Set this as PISTON_API_URL in your Vercel project's environment variables
+# (Production + Preview), then redeploy the Next.js app.
+#
+# Installing language packages on the deployed instance (one-time, after first deploy):
+#   curl -X POST https://<your-piston-app-name>.fly.dev/api/v2/packages \
+#     -H "Content-Type: application/json" \
+#     -d '{"language":"python","version":"3.10.0"}'
+#   curl -X POST https://<your-piston-app-name>.fly.dev/api/v2/packages \
+#     -H "Content-Type: application/json" \
+#     -d '{"language":"gcc","version":"10.2.0"}'
+
+app = "coding-tutor-piston"
+primary_region = "sin"
+
+[build]
+  image = "ghcr.io/engineer-man/piston"
+
+[env]
+  PISTON_LOG_LEVEL = "INFO"
+
+[[mounts]]
+  source = "piston_data"
+  destination = "/piston/packages"
+
+[[services]]
+  internal_port = 2000
+  protocol = "tcp"
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "5s"
+    grace_period = "30s"
+
+[[vm]]
+  size = "shared-cpu-2x"
+  memory = "1gb"
+
+[experimental]
+  privileged = true

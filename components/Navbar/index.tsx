@@ -117,11 +117,11 @@ export default function Navbar({ auth0User }: NavbarProps) {
 // Authentication Buttons
 const AuthButtons = () => (
   <div className="flex items-center">
-    <Link
+    <a
       href="/api/auth/login"
       className="px-4 py-2 text-sm font-medium bg-primary dark:bg-gray-800 text-white rounded-lg hover:bg-primary/90 dark:hover:bg-gray-700 transition-colors"
     >
       Login
-    </Link>
+    </a>
   </div>
 );

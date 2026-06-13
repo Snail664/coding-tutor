@@ -39,6 +39,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# piston self-hosted data
+/piston/data
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

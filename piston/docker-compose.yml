@@ -1,0 +1,13 @@
+services:
+  piston:
+    image: ghcr.io/engineer-man/piston
+    container_name: piston_api
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - "2000:2000"
+    volumes:
+      - ./data/packages:/piston/packages
+    tmpfs:
+      - /piston/jobs:exec
+      - /tmp:exec

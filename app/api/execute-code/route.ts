@@ -11,8 +11,9 @@ export async function GET() {
 // Handle POST requests (if needed)
 export async function POST(request: Request) {
   const data = await request.json();
+  const pistonUrl = process.env.PISTON_API_URL || "http://localhost:2000";
   const pistonResponse = await axios.post(
-    "https://emkc.org/api/v2/piston/execute",
+    `${pistonUrl}/api/v2/execute`,
     {
       language: data["language"],
       version: data["version"],
