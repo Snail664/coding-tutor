@@ -28,7 +28,13 @@ export async function rateLimitMiddleware(
     return { error: false, remaining: DAILY_LIMITS[type] };
   }
 
-  const count = await getRateLimitCount(session.user.sub, type);
+  let count: number;
+  try {
+    count = await getRateLimitCount(session.user.sub, type);
+  } catch (error) {
+    console.error("Rate limit check failed, allowing request:", error);
+    return { error: false, remaining: DAILY_LIMITS[type] };
+  }
 
   if (count > DAILY_LIMITS[type]) {
     return {

@@ -40,17 +40,10 @@ curl -X POST http://localhost:2000/api/v2/execute \
 
 ## Production (Fly.io)
 
-See [`fly.toml`](./fly.toml) for the app config and deploy steps. In short:
+The production Piston instance is deployed separately via the
+[`piston-server`](https://github.com/) repo (its own Fly.io app, deployed
+from GitHub). See that repo's README for deploy steps.
 
-```bash
-cd piston
-fly auth login
-fly launch --no-deploy --copy-config --name <your-piston-app-name>
-fly volumes create piston_data --size 1 --region <region>
-fly deploy
-```
-
-Then install the same language packages against the deployed URL
-(`https://<your-piston-app-name>.fly.dev`), and set `PISTON_API_URL` to that
-URL in your Vercel project's Environment Variables (Production + Preview),
-then redeploy.
+Once deployed, set `PISTON_API_URL` to the deployed URL
+(e.g. `https://coding-tutor-piston.fly.dev`) in this project's Vercel
+Environment Variables (Production + Preview), then redeploy.

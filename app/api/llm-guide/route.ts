@@ -5,7 +5,7 @@ import { LLM, Message, LLMError } from "@/lib/llm";
 
 const llm = new LLM({
   provider: "anthropic",
-  model: "claude-3-5-sonnet-20240620",
+  model: "claude-sonnet-4-6",
 });
 
 export async function GET() {

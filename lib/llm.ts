@@ -83,7 +83,7 @@ export class LLM {
     // Set up fallback configuration
     if (config.provider === "openai") {
       this.fallbackProvider = "anthropic";
-      this.fallbackModel = "claude-3-sonnet-20240620";
+      this.fallbackModel = "claude-sonnet-4-6";
     } else {
       this.fallbackProvider = "openai";
       this.fallbackModel = "gpt-4o-2024-08-06";

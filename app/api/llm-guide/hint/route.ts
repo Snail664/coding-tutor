@@ -10,7 +10,7 @@ const openai = new OpenAI({ apiKey: OPEN_AI_API_KEY });
 
 const llm = new LLM({
   provider: "anthropic",
-  model: "claude-3-5-sonnet-20240620",
+  model: "claude-sonnet-4-6",
 });
 
 // Handle GET requests
